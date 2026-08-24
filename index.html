@@ -30,7 +30,7 @@
 
   header{position:sticky;top:0;z-index:40;background:linear-gradient(135deg,var(--green),var(--green-dark));
     color:#fff;padding:12px 18px;box-shadow:0 4px 20px rgba(21,128,61,.28)}
-  .head-top{display:flex;align-items:center;gap:16px;max-width:1180px;margin:0 auto}
+  .head-top{display:flex;align-items:center;gap:14px;max-width:1180px;margin:0 auto;flex-wrap:wrap;row-gap:10px}
   .logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0}
   .brandcol{display:flex;flex-direction:column;gap:1px}
   .wordmark{position:relative;display:inline-block;font-weight:900;font-size:29px;line-height:1;letter-spacing:-1.4px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.18);padding-right:8px}
@@ -38,15 +38,14 @@
   .wm-too::after{content:"";position:absolute;left:1px;right:5px;bottom:-3px;height:3px;border-radius:3px;background:#1fae4d}
   .wm-leaf{position:absolute;top:-11px;right:-4px;transform:rotate(20deg);filter:drop-shadow(0 1px 1px rgba(0,0,0,.18))}
   .logo-txt span{font-size:10.5px;opacity:.92;font-weight:600;letter-spacing:.4px}
-  .search{flex:1;min-width:0;display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;
+  .search{order:5;flex:1 1 100%;width:100%;display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;
     padding:0 14px;height:46px;box-shadow:0 4px 12px rgba(0,0,0,.12)}
   .search svg{flex-shrink:0;color:var(--muted)}
   .search input{border:none;outline:none;flex:1;font-size:14.5px;color:var(--ink);background:transparent}
   .search input::placeholder{color:#9aa4a0}
-  .head-actions{display:flex;align-items:center;gap:8px;flex-shrink:1;min-width:0;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
-  .head-actions::-webkit-scrollbar{display:none}
+  .head-actions{display:flex;align-items:center;gap:8px;flex:1 1 auto;min-width:0;flex-wrap:wrap;justify-content:flex-end;row-gap:8px}
   .h-btn{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);
-    border-radius:12px;padding:9px 13px;color:#fff;font-size:13.5px;font-weight:600;transition:.18s;white-space:nowrap;flex-shrink:0}
+    border-radius:12px;padding:9px 13px;color:#fff;font-size:13.5px;font-weight:600;transition:.18s}
   .h-btn:hover{background:rgba(255,255,255,.28)}
   .h-btn svg{flex-shrink:0}
   .cart-badge{position:relative}
@@ -55,7 +54,7 @@
     place-items:center;padding:0 4px;border:2px solid var(--green-dark)}
   .head-sub{max-width:1180px;margin:9px auto 2px;display:flex;align-items:center;gap:7px;font-size:12.5px;opacity:.95}
 
-  .catbar{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:70px;z-index:30}
+  .catbar{background:var(--card);border-bottom:1px solid var(--line);position:static;z-index:30}
   .catbar-inner{max-width:1180px;margin:0 auto;display:flex;gap:9px;overflow-x:auto;padding:12px 18px;scrollbar-width:none}
   .catbar-inner::-webkit-scrollbar{display:none}
   .chip{display:flex;align-items:center;gap:7px;white-space:nowrap;background:var(--green-soft);
@@ -231,6 +230,23 @@
   .padmin .pdel{color:#cbd0cd;font-size:18px;flex-shrink:0;width:34px;height:34px;border-radius:8px}
   .padmin .pdel:hover{color:#ef4444;background:#fef2f2}
 
+  .modal-card.wide{width:1060px;max-width:96vw;height:92vh;max-height:92vh;max-height:calc(var(--vh,1vh)*92)}
+  .otabs{display:flex;gap:8px;padding:0 24px 14px;flex-wrap:wrap;position:sticky;top:0;background:var(--card);z-index:10}
+  .otab{display:flex;align-items:center;gap:7px;background:#f1f4f2;border-radius:11px;padding:9px 16px;font-size:13.5px;font-weight:600;color:var(--muted);transition:.16s}
+  .otab:hover{background:#e6ebe8}
+  .otab.on{background:var(--green);color:#fff;box-shadow:0 5px 12px rgba(245,114,36,.28)}
+  .otab .n{background:rgba(0,0,0,.1);border-radius:20px;padding:1px 8px;font-size:12px;font-weight:800}
+  .otab.on .n{background:rgba(255,255,255,.28)}
+  .ogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:13px;align-content:start}
+  .ocard{background:#fbfdfc;border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column}
+  .ocard.new{border-color:var(--green);background:var(--green-soft)}
+  .ocard .oid{font-size:14px;font-weight:800}
+  .ocard .oitems{font-size:12.5px;color:var(--muted);line-height:1.6;margin:8px 0;flex:1}
+  .ocard .oaddr{font-size:11.5px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 9px;margin-bottom:10px;line-height:1.5}
+  .ocard .oamt{font-size:17px;font-weight:800;color:var(--green-dark)}
+  .oacts{display:flex;gap:8px;margin-top:10px}
+  .oacts button{flex:1;border-radius:10px;padding:9px;font-size:13px;font-weight:700;color:#fff}
+  @media(max-width:768px){ .otabs{padding:0 16px 12px} .ogrid{grid-template-columns:1fr} }
   .confirm{text-align:center;padding:34px 26px}
   .confirm .check{width:82px;height:82px;border-radius:50%;background:var(--green-soft);display:grid;
     place-items:center;margin:0 auto 18px;font-size:42px;animation:pop .4s ease}
@@ -267,7 +283,7 @@
     .logo-txt{display:none} .wordmark{font-size:24px}
     .head-top{gap:10px;flex-wrap:wrap;row-gap:9px}
     .search{order:5;flex-basis:100%;width:100%}
-    .head-actions{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;gap:6px;flex:1 1 auto;min-width:0;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
+    .head-actions{flex-wrap:wrap;justify-content:flex-end;gap:6px;row-gap:6px;flex:1 1 auto;min-width:0}
     .head-actions::-webkit-scrollbar{display:none}
     .h-btn{white-space:nowrap;flex-shrink:0}
     .head-sub{display:none}
@@ -360,7 +376,7 @@
     </div>
     <div class="head-actions">
       <button class="h-btn sell-btn" onclick="openSellPage()" title="Sell on T.T"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 13h6"/></svg><span>Sell</span></button>
-      <button id="jobBtn" class="h-btn" style="background:#fff;color:var(--green-dark);font-weight:700" onclick="openJobApply()" title="Apply for Job"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg><span id="jobBtnLabel">Job</span></button>
+      <button id="jobBtn" class="h-btn" style="position:relative;background:#fff;color:var(--green-dark);font-weight:700" onclick="openJobApply()" title="Apply for Job"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg><span id="jobBtnLabel">Job</span><span class="mcount" id="jobCount" style="display:none">0</span></button>
       <button id="msgsBtn" class="h-btn" style="display:none;position:relative;background:#fff;color:var(--green-dark);font-weight:700" onclick="openMessages()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H7l-3 3z"/></svg><span>Msgs</span><span class="mcount" id="msgCount" style="display:none">0</span></button>
       <button id="billBtn" class="h-btn" style="display:none;background:#fff;color:var(--green-dark);font-weight:700" onclick="openBilling()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h10l3 3v17l-2.2-1.2L15 22l-2-1.2L11 22l-2-1.2L6.9 22 6 21V2z"/><path d="M9 8h7M9 12h7M9 16h4"/></svg><span>Bill/Invoice</span></button>
       <button id="ordersBtn" class="h-btn" style="display:none;position:relative;background:#fff;color:var(--green-dark);font-weight:700" onclick="openOrders()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18l-1.4 11H4.4z"/><path d="M8 6a4 4 0 0 1 8 0"/></svg><span>Orders</span><span class="mcount" id="ordCount" style="display:none">0</span></button>
@@ -386,6 +402,8 @@
     <a style="color:#fff;cursor:pointer;font-weight:600" onclick="openJobApply()">💼 Apply for Job</a>
     <span style="opacity:.55">·</span>
     <a style="color:#fff;cursor:pointer;font-weight:600" onclick="openHelpInfo()">Help &amp; Support</a>
+    <span style="opacity:.55">·</span>
+    <a id="hdrMail" style="color:#fff;font-weight:600" href="mailto:teetoo@teetoo9.com">&#128231; teetoo@teetoo9.com</a>
     <span style="opacity:.55">·</span>
     <a style="color:#fff;cursor:pointer;font-weight:600" onclick="openHelp()">💬 Chat to TT Services (Live)</a>
   </div>
@@ -463,7 +481,7 @@
         <div class="field" id="fPass">
           <label>Password</label>
           <input id="inPass" type="password" placeholder="Min 4 characters" />
-          <div class="err" id="passErr">Password must be at least 4 characters</div>
+          <div class="err" id="passErr">Password kam se kam 6 characters</div>
         </div>
         <button class="btn-primary" id="authSubmit" onclick="submitAuth()">Login</button>
       </form>
@@ -761,9 +779,11 @@
       <div class="field" id="jfFather"><label>Father Name</label><input id="jFather" placeholder="Walid ka naam"><div class="err">Required</div></div>
       <div class="field" id="jfCity"><label>City</label><input id="jCity" placeholder="e.g. Islamabad"><div class="err">Required</div></div>
       <div class="field" id="jfId"><label>Professional ID Card Number</label><input id="jIdCard" placeholder="ID card number"><div class="err">Required</div></div>
-      <div class="field" id="jfGender"><label>Gender</label><select id="jGender"><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option></select><div class="err">Required</div></div>
-      <div class="field" id="jfQual"><label>Qualification</label><input id="jQual" placeholder="e.g. Matric, Intermediate, BA"><div class="err">Required</div></div>
-      <div class="field" id="jfExp"><label>Experience</label><input id="jExp" placeholder="e.g. 2 years / Fresher"><div class="err">Required</div></div>
+      <div class="row2">
+        <div class="field" id="jfGender" style="flex:1"><label>Gender</label><select id="jGender"><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select><div class="err">Required</div></div>
+        <div class="field" id="jfEdu" style="flex:1"><label>Education</label><input id="jEdu" placeholder="e.g. Matric, FA, BA"><div class="err">Required</div></div>
+      </div>
+      <div class="field" id="jfExp"><label>Experience</label><input id="jExp" placeholder="e.g. 2 saal sales ka tajurba / Fresh"><div class="err">Required</div></div>
       <button class="btn-primary" onclick="submitJobApply()">Submit Application</button>
     </div>
   </div>
@@ -810,6 +830,7 @@
     <div class="modal-head"><h2>Help &amp; Support</h2><p>Apna message likhein — admin tak pohnch jayega</p><button class="x" onclick="closeModal('helpModal')">×</button></div>
     <div class="modal-body">
       <div id="hpThread"></div>
+      <div id="hpContact" style="background:var(--green-soft);border:1px solid var(--green-light);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:13px;line-height:1.7"></div>
       <div class="field"><label>Aap ka naam / number (optional)</label><input id="hpName" placeholder="e.g. Ali · 03xx-xxxxxxx"></div>
       <div class="field" id="hpMsgF"><label>Message / Complaint</label><textarea id="hpMsg" rows="4" placeholder="Apni baat ya shikayat likhein..."></textarea><div class="err">Message likhein</div></div>
       <button class="btn-primary" onclick="sendHelpMsg()">Send Message</button>
@@ -817,9 +838,10 @@
   </div>
 </div>
 <div class="modal" id="ordersModal">
-  <div class="modal-card">
-    <div class="modal-head"><h2>Customer Orders</h2><p>Orders ko accept ya cancel karein</p><button class="x" onclick="closeModal('ordersModal')">×</button></div>
-    <div class="modal-body"><div id="ordersList"></div></div>
+  <div class="modal-card wide">
+    <div class="modal-head"><h2>Customer Orders</h2><p>Pending orders ko accept ya cancel karein</p><button class="x" onclick="closeModal('ordersModal')">×</button></div>
+    <div class="otabs" id="ordTabs"></div>
+    <div class="modal-body" style="padding-top:0"><div id="ordersList"></div></div>
   </div>
 </div>
 <div class="modal" id="msgsModal">
@@ -846,7 +868,7 @@
       Cart
     </button>
     <button class="nav-item" id="navJob" onclick="openJobApply()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg><span id="navJobLabel">Job</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg><span id="navJobLabel">Job</span><span class="ncount" id="navJobCount">0</span>
     </button>
     <button class="nav-item" onclick="openAccount()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>
@@ -855,6 +877,17 @@
   </div>
 </nav>
 
+<div class="modal" id="empModal">
+  <div class="modal-card" style="width:640px">
+    <div class="modal-head">
+      <h2 id="empTitle">Employee</h2>
+      <p id="empSub"></p>
+      <button class="x" onclick="closeModal('empModal')">&times;</button>
+    </div>
+    <div class="modal-body" id="empBody"></div>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -862,7 +895,7 @@
 try{ firebase.initializeApp({apiKey:"AIzaSyAKQ9jxx707Uq9uiU3YbCpVR6YP-vqfano",authDomain:"teetoo-61aeb.firebaseapp.com",projectId:"teetoo-61aeb",storageBucket:"teetoo-61aeb.firebasestorage.app",messagingSenderId:"823453128850",appId:"1:823453128850:web:ca691f2f24dcca1b2dae4b"}); window.db=firebase.firestore(); window.fbAuth=firebase.auth(); }catch(e){ window.db=null; window.fbAuth=null; console.warn("Firebase init failed",e); }
 </script>
 <script>
-const CURRENCY='Rs', DELIVERY_FEE=99, FREE_OVER=2000, ADMIN_EMAIL='admin@tt.app';
+const CURRENCY='Rs', DELIVERY_FEE=99, FREE_OVER=2000, ADMIN_EMAIL='teetoo@teetoo9.com';
 const DEFAULT_CATEGORIES=[
   {id:'all',name:'All',ic:'🛒'},{id:'fruits',name:'Fruits & Veg',ic:'🥦'},{id:'dairy',name:'Dairy & Eggs',ic:'🥛'},
   {id:'bakery',name:'Bakery',ic:'🍞'},{id:'meat',name:'Meat & Fish',ic:'🍗'},{id:'beverages',name:'Beverages',ic:'🧃'},
@@ -1028,47 +1061,88 @@ function switchTab(mode){
   clearAuthErrors();
 }
 function clearAuthErrors(){ ['fName','fEmail','fAddr','fPass'].forEach(f=>$('#'+f).classList.remove('invalid')); }
+function authEmailFor(key){ return String(key)+'@teetoo9.com'; }
+function upsertLocalUser(u){ var i=users.findIndex(function(x){ return x.email===u.email; }); if(i>=0) users[i]=u; else users.push(u); LS.set('tt_users',users); }
+function clearAuthInputs(){ $('#inName').value=''; $('#inEmail').value=''; $('#inPass').value=''; if($('#inAddr'))$('#inAddr').value=''; if($('#inRef'))$('#inRef').value=''; }
+function authBusy(b){ var btn=document.getElementById('authSubmit'); if(!btn)return; btn.disabled=b; btn.textContent=b?'Ruko…':(authMode==='register'?'Create Account':'Login'); }
+function authFail(field,msg){ var e=document.getElementById(field==='email'?'emailErr':'passErr'); if(e)e.textContent=msg; var f=document.getElementById(field==='email'?'fEmail':'fPass'); if(f)f.classList.add('invalid'); }
+function fallbackProfile(key,uid){ return {name:'User '+String(key).slice(-4),email:key,phone:String(key),provider:'phone',uid:uid,refCode:'TT'+String(key).slice(-6)}; }
+function loadOwnProfile(key,uid){
+  if(!window.db){ var f=fallbackProfile(key,uid); upsertLocalUser(f); return Promise.resolve(f); }
+  return window.db.collection('users').doc(String(key)).get().then(function(d){
+    var u=d.exists?d.data():fallbackProfile(key,uid);
+    u.uid=uid; delete u.password; upsertLocalUser(u); return u;
+  }).catch(function(){ var f=fallbackProfile(key,uid); upsertLocalUser(f); return f; });
+}
 function submitAuth(){
   clearAuthErrors();
-  const name=$('#inName').value.trim();
-  const raw=$('#inEmail').value.trim();
-  const addr=($('#inAddr')?$('#inAddr').value.trim():'');
-  const pass=$('#inPass').value;
-  const isAdminId=raw.toLowerCase()===ADMIN_EMAIL;
-  const phoneDigits=raw.replace(/\D/g,'');
-  const key=isAdminId?ADMIN_EMAIL:phoneDigits;
-  let bad=false;
+  var name=$('#inName').value.trim();
+  var raw=$('#inEmail').value.trim();
+  var addr=($('#inAddr')?$('#inAddr').value.trim():'');
+  var pass=$('#inPass').value;
+  var isAdminId=raw.toLowerCase()===ADMIN_EMAIL;
+  var phoneDigits=raw.replace(/\D/g,'');
+  var key=isAdminId?ADMIN_EMAIL:phoneDigits;
+  var bad=false;
   if(authMode==='register'){
     if(!name){ $('#fName').classList.add('invalid'); bad=true; }
-    if(phoneDigits.length<10){ $('#emailErr').textContent='Sahi phone number likhein'; $('#fEmail').classList.add('invalid'); bad=true; }
+    if(phoneDigits.length<10){ authFail('email','Sahi phone number likhein'); bad=true; }
     if(!addr){ $('#fAddr').classList.add('invalid'); bad=true; }
   } else {
-    if(!(isAdminId||phoneDigits.length>=10)){ $('#emailErr').textContent='Apna phone number likhein'; $('#fEmail').classList.add('invalid'); bad=true; }
+    if(!(isAdminId||phoneDigits.length>=10)){ authFail('email','Apna phone number likhein'); bad=true; }
   }
-  if(pass.length<4){ $('#passErr').textContent='Password kam se kam 4 characters'; $('#fPass').classList.add('invalid'); bad=true; }
+  if(pass.length<6){ authFail('pass','Password kam se kam 6 characters'); bad=true; }
   if(bad) return;
-  if(isAdminId && authMode!=='register'){
-    if(!window.fbAuth){ $('#passErr').textContent='Admin login abhi available nahi (connection issue)'; $('#fPass').classList.add('invalid'); return; }
+  if(!window.fbAuth){ authFail('pass','Internet ya connection ka masla — dobara koshish karein'); return; }
+
+  if(isAdminId && authMode==='register'){ authFail('email','Ye admin ka email hai — is se register nahi ho sakta'); return; }
+
+  if(isAdminId){
+    authBusy(true);
     window.fbAuth.signInWithEmailAndPassword(ADMIN_EMAIL, pass).then(function(){
-      session=ADMIN_EMAIL; LS.set('tt_session',session); toast('🛠️','Admin logged in');
-      $('#inName').value=$('#inEmail').value=$('#inPass').value=''; if($('#inAddr'))$('#inAddr').value=''; if($('#inRef'))$('#inRef').value=''; finishAuth();
-    }).catch(function(){
-      $('#passErr').textContent='Ghalat admin password'; $('#fPass').classList.add('invalid');
+      session=ADMIN_EMAIL; LS.set('tt_session',session); authBusy(false);
+      toast('🛠️','Admin logged in'); clearAuthInputs(); finishAuth();
+    }).catch(function(){ authBusy(false); authFail('pass','Ghalat admin password'); });
+    return;
+  }
+
+  var authEmail=authEmailFor(key);
+  authBusy(true);
+
+  if(authMode==='register'){
+    window.fbAuth.createUserWithEmailAndPassword(authEmail,pass).then(function(cred){
+      var refInput=($('#inRef')?$('#inRef').value.trim().toUpperCase():'');
+      var nu={name:name,email:key,phone:phoneDigits,address:addr,provider:'phone',uid:cred.user.uid,
+              refCode:'TT'+phoneDigits.slice(-6),refCount:0,referredBy:refInput||''};
+      upsertLocalUser(nu); fbSaveUser(nu);
+      session=key; LS.set('tt_session',session); authBusy(false);
+      if(refInput) toast('🎉','Referral code laga diya');
+      else toast('🌿','Welcome to T.T, '+name.split(' ')[0]+'!');
+      clearAuthInputs(); finishAuth();
+    }).catch(function(e){
+      authBusy(false); var c=(e&&e.code)||'';
+      if(c==='auth/email-already-in-use') authFail('email','Ye phone pehle se registered hai — Login karein');
+      else if(c==='auth/weak-password') authFail('pass','Password kam se kam 6 characters');
+      else if(c==='auth/network-request-failed') authFail('pass','Internet ka masla — dobara koshish karein');
+      else authFail('pass','Register nahi ho saka — dobara koshish karein');
     });
     return;
   }
-  if(authMode==='register'){
-    if(isAdminId){ $('#emailErr').textContent='Ye admin ka email hai — is se register nahi ho sakta'; $('#fEmail').classList.add('invalid'); return; }
-    if(users.some(u=>u.email===key)){ $('#emailErr').textContent='Ye phone pehle se registered hai'; $('#fEmail').classList.add('invalid'); return; }
-    var refCode='TT'+phoneDigits.slice(-6); var refInput=($('#inRef')?$('#inRef').value.trim().toUpperCase():''); var nu={name:name,email:key,phone:phoneDigits,address:addr,password:pass,provider:'phone',refCode:refCode,refCount:0,referredBy:''}; if(refInput){ var referrer=users.find(function(x){return (x.refCode||'').toUpperCase()===refInput;}); var jobReferrer=jobs.find(function(x){return (x.refCode||'').toUpperCase()===refInput;}); if(referrer&&referrer.email!==key){ referrer.refCount=(referrer.refCount||0)+1; nu.referredBy=refInput; fbSaveUser(referrer); toast('🎉','Referral apply! '+(referrer.name||'Dost')+' ko credit mila'); } else if(jobReferrer){ jobReferrer.refCount=(jobReferrer.refCount||0)+1; nu.referredBy=refInput; LS.set('tt_jobs',jobs); fbSaveJob(jobReferrer); toast('🎉','Referral apply! '+(jobReferrer.name||'Dost')+' ko credit mila'); } } users.push(nu); LS.set('tt_users',users); fbSaveUser(nu);
-    session=key; LS.set('tt_session',session); toast('🌿','Welcome to T.T, '+name.split(' ')[0]+'!');
-  } else {
-    const u=users.find(u=>u.email===key);
-    if(!u||u.password!==pass){ $('#passErr').textContent='Ghalat phone ya password'; $('#fPass').classList.add('invalid'); return; }
-    session=key; LS.set('tt_session',session);
-    toast(key===ADMIN_EMAIL?'🛠️':'👋',(key===ADMIN_EMAIL?'Admin logged in':'Welcome back, '+u.name.split(' ')[0]+'!'));
-  }
-  $('#inName').value=$('#inEmail').value=$('#inPass').value=''; if($('#inAddr'))$('#inAddr').value=''; if($('#inRef'))$('#inRef').value=''; finishAuth();
+
+  window.fbAuth.signInWithEmailAndPassword(authEmail,pass).then(function(cred){
+    return loadOwnProfile(key,cred.user.uid);
+  }).then(function(u){
+    session=key; LS.set('tt_session',session); authBusy(false);
+    toast('👋','Welcome back, '+((u&&u.name)?u.name.split(' ')[0]:'')+'!');
+    clearAuthInputs(); finishAuth();
+  }).catch(function(e){
+    authBusy(false); var c=(e&&e.code)||'';
+    if(c==='auth/user-not-found') authFail('pass','Ye number registered nahi — pehle Register karein');
+    else if(c==='auth/wrong-password'||c==='auth/invalid-credential'||c==='auth/invalid-login-credentials') authFail('pass','Ghalat phone ya password');
+    else if(c==='auth/too-many-requests') authFail('pass','Bohat zyada koshishein — thori der baad try karein');
+    else if(c==='auth/network-request-failed') authFail('pass','Internet ka masla — dobara koshish karein');
+    else authFail('pass','Login nahi ho saka — dobara koshish karein');
+  });
 }
 
 function googleFlow(){ $('#gfEmail').classList.remove('invalid'); $('#gEmail').value=''; $('#gName').value=''; openModal('googleModal'); }
@@ -1103,8 +1177,8 @@ function finishPhoneSignup(){
   session=otpPhone; LS.set('tt_session',session); closeModal('phoneModal'); toast('🌿','Account created — welcome!'); finishAuth();
 }
 function finishAuth(){ updateAcctLabel(); closeModal('authModal'); closeModal('googleModal'); closeModal('phoneModal'); if(pendingCheckout){ pendingCheckout=false; startCheckout(); } }
-function logout(){ session=null; LS.set('tt_session',null); if(window.fbAuth&&fbAdminAuthed){ try{window.fbAuth.signOut();}catch(e){} } updateAcctLabel(); closeModal('acctModal'); toast('👋','Logged out successfully'); }
-function updateAcctLabel(){ const u=currentUser(); $('#acctLabel').textContent=u?(isAdmin()?'Admin':u.name.split(' ')[0]):'Login'; const ea=document.getElementById('editAds'); if(ea)ea.style.display=isAdmin()?'block':'none'; const bb=document.getElementById('billBtn'); if(bb)bb.style.display=isAdmin()?'flex':'none'; const mb=document.getElementById('msgsBtn'); if(mb)mb.style.display=isAdmin()?'flex':'none'; var ob=document.getElementById('ordersBtn'); if(ob)ob.style.display=isAdmin()?'flex':'none'; var sb=document.getElementById('salesBtn'); if(sb)sb.style.display=isAdmin()?'flex':'none'; var pb=document.getElementById('purchaseBtn'); if(pb)pb.style.display=isAdmin()?'flex':'none'; var jb=document.getElementById('jobBtn'); if(jb){ jb.style.display='flex'; jb.title=isAdmin()?'Employees':'Apply for Job'; } var jbl=document.getElementById('jobBtnLabel'); if(jbl) jbl.textContent=isAdmin()?'Employee':'Job'; var njl=document.getElementById('navJobLabel'); if(njl) njl.textContent=isAdmin()?'Employee':'Job'; updateMsgBadge(); if(typeof updateOrdersBadge==='function')updateOrdersBadge(); }
+function logout(){ session=null; LS.set('tt_session',null); if(window.fbAuth){ try{window.fbAuth.signOut();}catch(e){} } updateAcctLabel(); closeModal('acctModal'); toast('👋','Logged out successfully'); }
+function updateAcctLabel(){ const u=currentUser(); $('#acctLabel').textContent=u?(isAdmin()?'Admin':u.name.split(' ')[0]):'Login'; const ea=document.getElementById('editAds'); if(ea)ea.style.display=isAdmin()?'block':'none'; const bb=document.getElementById('billBtn'); if(bb)bb.style.display=isAdmin()?'flex':'none'; const mb=document.getElementById('msgsBtn'); if(mb)mb.style.display=isAdmin()?'flex':'none'; var ob=document.getElementById('ordersBtn'); if(ob)ob.style.display=isAdmin()?'flex':'none'; var sb=document.getElementById('salesBtn'); if(sb)sb.style.display=isAdmin()?'flex':'none'; var pb=document.getElementById('purchaseBtn'); if(pb)pb.style.display=isAdmin()?'flex':'none'; var jb=document.getElementById('jobBtn'); if(jb){ jb.style.display='flex'; jb.title=isAdmin()?'Employees':'Apply for Job'; } var jbl=document.getElementById('jobBtnLabel'); if(jbl) jbl.textContent=isAdmin()?'Employee':'Job'; var njl=document.getElementById('navJobLabel'); if(njl) njl.textContent=isAdmin()?'Employee':'Job'; updateMsgBadge(); if(typeof updateOrdersBadge==='function')updateOrdersBadge(); if(typeof updateJobsBadge==='function')updateJobsBadge(); }
 
 function openAcctPanel(){ renderAcct(); openModal('acctModal'); }
 function renderAcct(){
@@ -1211,14 +1285,18 @@ function deleteProduct(id){
 
 function fbSaveProduct(p){ if(window.db&&p){ try{ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }catch(e){ console.warn('fb save',e); } } }
 function fbDeleteProduct(id){ if(window.db){ try{ window.db.collection('products').doc(String(id)).delete(); }catch(e){ console.warn('fb del',e); } } }
-function fbInitSync(){ if(!window.db) return; window.db.collection('products').onSnapshot(function(snap){ if(snap.empty){ catalog.forEach(function(p){ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }); return; } catalog=snap.docs.map(function(d){ return d.data(); }).sort(function(a,b){ var ao=(typeof a.ord==='number'?a.ord:(a.id||0)); var bo=(typeof b.ord==='number'?b.ord:(b.id||0)); return ao-bo; }); LS.set('tt_products',catalog); if(typeof renderGrid==='function') renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('products sync',err); }); if(window.db) window.db.collection('messages').onSnapshot(function(snap){ messages=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id)>String(b.id)?1:-1;}); LS.set('tt_messages',messages); updateMsgBadge(); var mm=document.getElementById('msgsModal'); if(mm&&mm.classList.contains('show'))renderMessages(); var hm=document.getElementById('helpModal'); if(hm&&hm.classList.contains('show')&&typeof renderHpThread==='function')renderHpThread(); }, function(e){console.warn('msg sync',e);}); if(window.db) window.db.collection('orders').onSnapshot(function(snap){ allOrders=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(b.id)>String(a.id)?1:-1;}); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); if(typeof updateOrdersBadge==='function')updateOrdersBadge(); var om=document.getElementById('ordersModal'); if(om&&om.classList.contains('show')&&typeof renderOrders==='function')renderOrders(); var sm=document.getElementById('salesModal'); if(sm&&sm.classList.contains('show')&&typeof renderSales==='function')renderSales(); }, function(e){console.warn('order sync',e);}); if(window.db) window.db.collection('users').onSnapshot(function(snap){ users=snap.docs.map(function(d){return d.data();}); if(!users.some(function(u){return u.email===ADMIN_EMAIL;})) users.push({name:'Store Admin',email:ADMIN_EMAIL,provider:'admin'}); LS.set('tt_users',users); updateAcctLabel(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('users sync',e);}); if(window.db) window.db.collection('banners').onSnapshot(function(snap){ if(snap.empty){ banners.forEach(function(b){ if(!b.id)b.id='B'+Date.now()+Math.floor(Math.random()*999); fbSaveBanner(b); }); if(typeof renderCarousel==='function')renderCarousel(); return; } banners=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id||'')<String(b.id||'')?1:-1;}); var _defH=['UP TO 80% OFF','FREE DELIVERY','END OF MONTH SALE']; banners=banners.filter(function(b){ if(!b.img&&_defH.indexOf(b.h2)>=0){ if(b.id&&typeof fbDeleteBanner==='function')fbDeleteBanner(b.id); return false; } return true; }); LS.set('tt_banners',banners); if(typeof renderCarousel==='function')renderCarousel(); var _bm=document.getElementById('bannerMgrModal'); if(_bm&&_bm.classList.contains('show')&&typeof renderBannerMgr==='function')renderBannerMgr(); }, function(e){console.warn('banners sync',e);}); if(window.db) window.db.collection('settings').doc('main').onSnapshot(function(d){ if(d.exists){ settings=Object.assign(settings,d.data()); LS.set('tt_settings',settings); if(typeof applySettings==='function')applySettings(); } }, function(e){console.warn('settings sync',e);}); if(window.db) window.db.collection('invoices').onSnapshot(function(snap){ invoices=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id)>String(b.id)?1:-1;}); LS.set('tt_invoices',invoices); var _bm=document.getElementById('billModal'); if(_bm&&_bm.classList.contains('show')&&typeof renderBillInvoices==='function')renderBillInvoices(); var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('inv sync',e);}); if(window.db) window.db.collection('purchases').onSnapshot(function(snap){ purchases=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return (a.serial||0)-(b.serial||0);}); LS.set('tt_purchases',purchases); var _pm=document.getElementById('purchaseModal'); if(_pm&&_pm.classList.contains('show')&&typeof renderPurchases==='function')renderPurchases(); }, function(e){console.warn('pur sync',e);}); if(window.db) window.db.collection('jobApplications').onSnapshot(function(snap){ jobs=snap.docs.map(function(d){return d.data();}); LS.set('tt_jobs',jobs); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); var jm=document.getElementById('jobsAdminModal'); if(jm&&jm.classList.contains('show')&&typeof renderJobsAdmin==='function')renderJobsAdmin(); }, function(e){console.warn('jobs sync',e);}); if(window.db) window.db.collection('categories').onSnapshot(function(snap){ if(snap.empty){ CATEGORIES.forEach(function(c){ window.db.collection('categories').doc(String(c.id)).set(JSON.parse(JSON.stringify(c))); }); return; } var list=snap.docs.map(function(d){return d.data();}); if(!list.some(function(c){return c.id==='all';})) list.unshift({id:'all',name:'All',ic:'🛒'}); CATEGORIES=list; LS.set('tt_categories',CATEGORIES); if(typeof renderCats==='function')renderCats(); if(typeof renderGrid==='function')renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('categories sync',err); }); }
+function fbInitSync(){ if(!window.db) return; window.db.collection('products').onSnapshot(function(snap){ if(snap.empty){ catalog.forEach(function(p){ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }); return; } catalog=snap.docs.map(function(d){ return d.data(); }).sort(function(a,b){ var ao=(typeof a.ord==='number'?a.ord:(a.id||0)); var bo=(typeof b.ord==='number'?b.ord:(b.id||0)); return ao-bo; }); LS.set('tt_products',catalog); if(typeof renderGrid==='function') renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('products sync',err); }); if(window.db) window.db.collection('messages').onSnapshot(function(snap){ messages=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id)>String(b.id)?1:-1;}); LS.set('tt_messages',messages); updateMsgBadge(); var mm=document.getElementById('msgsModal'); if(mm&&mm.classList.contains('show'))renderMessages(); var hm=document.getElementById('helpModal'); if(hm&&hm.classList.contains('show')&&typeof renderHpThread==='function')renderHpThread(); }, function(e){console.warn('msg sync',e);}); if(window.db) window.db.collection('orders').onSnapshot(function(snap){ allOrders=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(b.id)>String(a.id)?1:-1;}); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); if(typeof updateOrdersBadge==='function')updateOrdersBadge(); var om=document.getElementById('ordersModal'); if(om&&om.classList.contains('show')&&typeof renderOrders==='function')renderOrders(); var sm=document.getElementById('salesModal'); if(sm&&sm.classList.contains('show')&&typeof renderSales==='function')renderSales(); }, function(e){console.warn('order sync',e);}); if(window.db) window.db.collection('users').onSnapshot(function(snap){ users=snap.docs.map(function(d){return d.data();}); if(!users.some(function(u){return u.email===ADMIN_EMAIL;})) users.push({name:'Store Admin',email:ADMIN_EMAIL,provider:'admin'}); LS.set('tt_users',users); updateAcctLabel(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('users sync',e);}); if(window.db) window.db.collection('banners').onSnapshot(function(snap){ if(snap.empty){ banners.forEach(function(b){ if(!b.id)b.id='B'+Date.now()+Math.floor(Math.random()*999); fbSaveBanner(b); }); if(typeof renderCarousel==='function')renderCarousel(); return; } banners=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id||'')<String(b.id||'')?1:-1;}); var _defH=['UP TO 80% OFF','FREE DELIVERY','END OF MONTH SALE']; banners=banners.filter(function(b){ if(!b.img&&_defH.indexOf(b.h2)>=0){ if(b.id&&typeof fbDeleteBanner==='function')fbDeleteBanner(b.id); return false; } return true; }); LS.set('tt_banners',banners); if(typeof renderCarousel==='function')renderCarousel(); var _bm=document.getElementById('bannerMgrModal'); if(_bm&&_bm.classList.contains('show')&&typeof renderBannerMgr==='function')renderBannerMgr(); }, function(e){console.warn('banners sync',e);}); if(window.db) window.db.collection('settings').doc('main').onSnapshot(function(d){ if(d.exists){ settings=Object.assign(settings,d.data()); LS.set('tt_settings',settings); if(typeof applySettings==='function')applySettings(); } }, function(e){console.warn('settings sync',e);}); if(window.db) window.db.collection('invoices').onSnapshot(function(snap){ invoices=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id)>String(b.id)?1:-1;}); LS.set('tt_invoices',invoices); var _bm=document.getElementById('billModal'); if(_bm&&_bm.classList.contains('show')&&typeof renderBillInvoices==='function')renderBillInvoices(); var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('inv sync',e);}); if(window.db) window.db.collection('purchases').onSnapshot(function(snap){ purchases=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return (a.serial||0)-(b.serial||0);}); LS.set('tt_purchases',purchases); var _pm=document.getElementById('purchaseModal'); if(_pm&&_pm.classList.contains('show')&&typeof renderPurchases==='function')renderPurchases(); }, function(e){console.warn('pur sync',e);}); if(window.db) window.db.collection('jobApplications').onSnapshot(function(snap){ jobs=snap.docs.map(function(d){return d.data();}); LS.set('tt_jobs',jobs); if(typeof updateJobsBadge==='function')updateJobsBadge(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); var jm=document.getElementById('jobsAdminModal'); if(jm&&jm.classList.contains('show')&&typeof renderJobsAdmin==='function')renderJobsAdmin(); }, function(e){console.warn('jobs sync',e);}); if(window.db) window.db.collection('categories').onSnapshot(function(snap){ if(snap.empty){ CATEGORIES.forEach(function(c){ window.db.collection('categories').doc(String(c.id)).set(JSON.parse(JSON.stringify(c))); }); return; } var list=snap.docs.map(function(d){return d.data();}); if(!list.some(function(c){return c.id==='all';})) list.unshift({id:'all',name:'All',ic:'🛒'}); CATEGORIES=list; LS.set('tt_categories',CATEGORIES); if(typeof renderCats==='function')renderCats(); if(typeof renderGrid==='function')renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('categories sync',err); }); }
 function toggleWish(id){ const i=wishlist.indexOf(id); if(i>=0)wishlist.splice(i,1); else wishlist.push(id); LS.set('tt_wishlist',wishlist); renderGrid(); renderCats(); toast(i>=0?'🤍':'❤️',(i>=0?'Removed from':'Added to')+' wishlist'); }
 function voucherDiscount(){ if(!voucher)return 0; const v=VOUCHERS[voucher]; if(!v)return 0; const sub=cartSubtotal(); if(v.min&&sub<v.min)return 0; return v.type==='pct'?Math.round(sub*v.off/100):v.off; }
 function updateCoTotal(){ const disc=voucherDiscount(); const tot=Math.max(0,cartTotal()-disc); const ct=document.getElementById('coTotal'); if(ct)ct.textContent=money(tot); const dr=document.getElementById('coDiscRow'); if(dr){ if(disc>0){dr.style.display='flex';document.getElementById('coDisc').textContent='- '+money(disc);}else{dr.style.display='none';} } }
 function applyVoucher(){ const code=($('#coVoucher').value||'').trim().toUpperCase(); const msg=$('#voucherMsg'); if(!code){voucher=null;msg.textContent='';updateCoTotal();return;} const v=VOUCHERS[code]; if(!v){voucher=null;msg.style.color='#dc2626';msg.textContent='Invalid code';updateCoTotal();return;} if(v.min&&cartSubtotal()<v.min){voucher=null;msg.style.color='#dc2626';msg.textContent='Minimum order Rs '+v.min+' for this code';updateCoTotal();return;} voucher=code; msg.style.color='#16a34a'; msg.textContent='Applied! '+(v.type==='pct'?v.off+'% off':'Rs '+v.off+' off'); updateCoTotal(); }
 let billItems=[];
 function esc(t){return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function openHelp(){ var cu=(typeof currentUser==='function')?currentUser():null; $('#hpName').value=(cu&&cu.name&&cu.name!=='Store Admin')?cu.name:''; $('#hpMsg').value=''; $('#hpMsgF').classList.remove('invalid'); renderHpThread(); openModal('helpModal'); }
+function renderHpContact(){ var el=document.getElementById('hpContact'); if(!el)return; var em=supportEmail(); var ph=(settings.help||'').trim();
+  el.innerHTML='<b style="color:var(--green-dark)">Shikayat ya mashwara?</b><br>Neeche form se bhejein, ya seedha email karein:<br>'
+    +'<a href="mailto:'+esc(em)+'?subject=TEETOO%20-%20Complaint%20/%20Feedback" style="color:var(--green-dark);font-weight:700;text-decoration:underline">\ud83d\udce7 '+esc(em)+'</a>'
+    +(ph?'<br><a href="tel:'+esc(ph)+'" style="color:var(--green-dark);font-weight:700">\ud83d\udcde '+esc(ph)+'</a>':''); }
+function openHelp(){ var cu=(typeof currentUser==='function')?currentUser():null; $('#hpName').value=(cu&&cu.name&&cu.name!=='Store Admin')?cu.name:''; $('#hpMsg').value=''; $('#hpMsgF').classList.remove('invalid'); renderHpContact(); renderHpThread(); openModal('helpModal'); }
 function sendHelpMsg(){ const msg=$('#hpMsg').value.trim(); if(!msg){ $('#hpMsgF').classList.add('invalid'); return; } var cu=(typeof currentUser==='function')?currentUser():null; const m={id:'M'+Date.now(),name:($('#hpName').value.trim()||(cu?cu.name:'')||'Anonymous'),email:(cu?cu.email:''),msg:msg,date:new Date().toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),read:false}; messages.push(m); LS.set('tt_messages',messages); fbSaveMessage(m); $('#hpMsg').value=''; renderHpThread(); toast('✅','Message bhej diya! TT Services jald reply karegi.'); updateMsgBadge(); }
 function renderHpThread(){ var el=document.getElementById('hpThread'); if(!el)return; var cu=(typeof currentUser==='function')?currentUser():null; if(!cu||!cu.email){ el.innerHTML='<div style="font-size:12px;color:var(--muted);margin-bottom:6px">TT Services se live baat karein. Neeche message likhein.</div>'; return; } var mine=messages.filter(function(m){return m.email===cu.email;}); if(!mine.length){ el.innerHTML='<div style="font-size:12px;color:var(--muted);margin-bottom:6px">TT Services se live baat karein. Neeche apna pehla message likhein.</div>'; return; } el.innerHTML='<div style="font-size:12px;color:var(--green-dark);font-weight:700;margin-bottom:6px">Chat with TT Services</div><div style="max-height:220px;overflow:auto;margin-bottom:10px;display:flex;flex-direction:column;gap:8px;padding:4px">'+mine.map(function(m){ var you='<div style="align-self:flex-end;max-width:82%;background:var(--green);color:#fff;padding:8px 12px;border-radius:14px 14px 4px 14px;font-size:13px">'+esc(m.msg)+'<div style="font-size:10px;opacity:.85;margin-top:2px">'+m.date+'</div></div>'; var r=m.reply?'<div style="align-self:flex-start;max-width:82%;background:#eef2f0;color:var(--ink);padding:8px 12px;border-radius:14px 14px 14px 4px;font-size:13px"><b style="font-size:11px;color:var(--green-dark)">TT Services</b><br>'+esc(m.reply)+'<div style="font-size:10px;color:var(--muted);margin-top:2px">'+(m.replyDate||'')+'</div></div>':''; return you+r; }).join('')+'</div>'; }
 function replyMsg(i){ var m=messages[i]; if(!m)return; var inp=document.getElementById('rep'+i); var txt=((inp&&inp.value)||'').trim(); if(!txt){ toast('✍️','Reply likhein'); return; } m.reply=txt; m.replyDate=new Date().toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); m.read=true; LS.set('tt_messages',messages); fbSaveMessage(m); renderMessages(); updateMsgBadge(); toast('✅','Reply bhej diya'); }
@@ -1240,12 +1318,50 @@ function fbSaveInvoice(inv){ if(window.db&&inv){ try{ window.db.collection('invo
 function renderBillInvoices(){ var el=document.getElementById('billInvList'); if(!el)return; if(!invoices.length){ el.innerHTML='<div style="text-align:center;color:var(--muted);padding:12px;font-size:13px">Abhi koi invoice nahi bani.</div>'; return; } el.innerHTML=invoices.map(function(v,idx){return {v:v,idx:idx};}).reverse().map(function(o){ var v=o.v; return '<div class="order"><div class="order-top"><b>'+v.id+'</b><button class="add" style="width:auto;padding:5px 12px;font-size:12px" onclick="viewInvoice('+o.idx+')">View / Print</button></div><div class="items">'+v.items.map(function(i){return i.name+' \u00d7'+i.qty;}).join('  \u00b7  ')+'</div><div class="ordfoot"><span>'+v.date+' \u00b7 '+esc(v.cust||'')+'</span><b>'+money(v.tot)+'</b></div></div>'; }).join(''); }
 function invoicesSection(){ if(!invoices.length) return `<div class="acct-sec"><h4>Invoice History</h4><div class="empty" style="padding:20px"><div class="big">🧾</div><h3>No invoices yet</h3><p>Billing se invoice banayen — yahan save hongi.</p></div></div>`; var tot=invoices.reduce(function(s,v){return s+(v.tot||0);},0); var body=invoices.map(function(v,idx){return {v:v,idx:idx};}).reverse().map(function(o){ var v=o.v; return `<div class="order"><div class="order-top"><b>${v.id}</b><button class="add" style="width:auto;padding:5px 12px;font-size:12px" onclick="viewInvoice(${o.idx})">View / Print</button></div><div class="items">${v.items.map(function(i){return i.name+' ×'+i.qty;}).join('  ·  ')}</div><div class="ordfoot"><span>${v.date} · ${v.cust}</span><b>${money(v.tot)}</b></div></div>`; }).join(''); return `<div class="acct-sec"><h4>Invoice History <span style="text-transform:none;letter-spacing:0;color:var(--muted)">${invoices.length} bills · ${money(tot)}</span></h4>${body}</div>`; }
 function doPrintInvoice(){ window.print(); }
-function fbSaveUser(u){ if(!u||u.email===ADMIN_EMAIL) return; if(window.db){ try{ window.db.collection('users').doc(String(u.email)).set(JSON.parse(JSON.stringify(u))); }catch(e){ console.warn('fb user',e); } } }
+function fbSaveUser(u){ if(!u||u.email===ADMIN_EMAIL) return; if(window.db){ try{ var c=JSON.parse(JSON.stringify(u)); delete c.password; window.db.collection('users').doc(String(u.email)).set(c); }catch(e){ console.warn('fb user',e); } } }
 function fbSaveOrder(order,email){ if(window.db&&order){ try{ window.db.collection('orders').doc(String(order.id)).set(Object.assign({userEmail:email||''},JSON.parse(JSON.stringify(order)))); }catch(e){ console.warn('fb order',e); } } }
-function updateOrdersBadge(){ var b=document.getElementById('ordCount'); if(!b)return; var n=allOrders.filter(function(o){var s=(o.status||'Confirmed');return s!=='Accepted'&&s!=='Cancelled';}).length; b.style.display=n?'grid':'none'; b.textContent=n; }
-function openOrders(){ renderOrders(); openModal('ordersModal'); }
+function updateOrdersBadge(){ var b=document.getElementById('ordCount'); if(!b)return; var n=isAdmin()?allOrders.filter(function(o){ return !o.read; }).length:0; b.style.display=n?'grid':'none'; b.textContent=n; }
+function openOrders(){ renderOrders(); openModal('ordersModal'); markOrdersRead(); }
+function markOrdersRead(){ var ch=false; allOrders.forEach(function(o){ if(!o.read){ o.read=true; ch=true; if(window.db){ try{ window.db.collection('orders').doc(String(o.id)).set({read:true},{merge:true}); }catch(e){} } } }); Object.keys(ordersAll).forEach(function(em){ (ordersAll[em]||[]).forEach(function(x){ x.read=true; }); }); if(ch)LS.set('tt_orders',ordersAll); updateOrdersBadge(); }
 function ordStatusStyle(s){ if(s==='Accepted')return {c:'#16a34a',bg:'#dcfce7'}; if(s==='Cancelled')return {c:'#dc2626',bg:'#fee2e2'}; return {c:'#d97706',bg:'#fef3c7'}; }
-function renderOrders(){ var el=document.getElementById('ordersList'); if(!el)return; if(!allOrders.length){ el.innerHTML='<div class="empty" style="padding:26px"><div class="big">📦</div><h3>No orders yet</h3><p>Customers ke orders yahan aayenge.</p></div>'; return; } var pend=allOrders.filter(function(o){var s=(o.status||'Confirmed');return s!=='Accepted'&&s!=='Cancelled';}).length; var tot=allOrders.reduce(function(s,o){return s+(o.total||0);},0); var head='<div style="display:flex;gap:8px;margin-bottom:12px"><div style="flex:1;background:#fef3c7;border-radius:12px;padding:10px;text-align:center"><b style="display:block;font-size:18px;color:#d97706">'+pend+'</b><small style="color:#92600a">Pending</small></div><div style="flex:1;background:#f0fdf4;border-radius:12px;padding:10px;text-align:center"><b style="display:block;font-size:18px;color:#16a34a">'+allOrders.length+'</b><small style="color:#15803d">Total</small></div><div style="flex:1;background:#eff6ff;border-radius:12px;padding:10px;text-align:center"><b style="display:block;font-size:15px;color:#1e40af">'+money(tot)+'</b><small style="color:#1e40af">Sales</small></div></div>'; el.innerHTML=head+allOrders.map(function(o,i){ var s=o.status||'Confirmed'; var stl=ordStatusStyle(s); var items=(o.items||[]).map(function(x){return (x.emoji||'')+' '+x.name+' ×'+x.qty;}).join('  ·  '); return '<div class="order"><div class="order-top"><b>'+o.id+'</b><span style="font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;color:'+stl.c+';background:'+stl.bg+'">'+s+'</span></div><div class="items">'+items+'</div><div class="ordfoot"><span>'+(o.date||'')+' · '+esc(o.userEmail||o.phone||'')+'</span><b>'+money(o.total||0)+'</b></div>'+(o.address?'<div style="font-size:11.5px;color:var(--muted);margin-top:5px">📍 '+esc(o.address)+(o.phone?' · 📞 '+esc(o.phone):'')+'</div>':'')+'<div style="display:flex;gap:8px;margin-top:10px"><button class="add" style="flex:1;margin:0;background:'+(s==='Accepted'?'#9ca3af':'#16a34a')+'" onclick="acceptOrder('+i+')">✓ Accept</button><button class="add" style="flex:1;margin:0;background:'+(s==='Cancelled'?'#9ca3af':'#dc2626')+'" onclick="cancelOrder('+i+')">✕ Cancel</button></div></div>'; }).join(''); }
+var ordTab='pending';
+function setOrdTab(t){ ordTab=t; renderOrders(); }
+function ordBuckets(){ var b={pending:[],accepted:[],cancelled:[]};
+  allOrders.forEach(function(o){ var st=o.status||'Confirmed';
+    if(st==='Accepted') b.accepted.push(o); else if(st==='Cancelled') b.cancelled.push(o); else b.pending.push(o); });
+  return b; }
+function renderOrders(){
+  var el=document.getElementById('ordersList'); if(!el) return;
+  var b=ordBuckets();
+  var tabs=document.getElementById('ordTabs');
+  if(tabs){ tabs.innerHTML=[['pending','⏳ Pending',b.pending.length],['accepted','✅ Accepted',b.accepted.length],['cancelled','✕ Cancelled',b.cancelled.length]]
+    .map(function(t){ return '<button class="otab '+(ordTab===t[0]?'on':'')+'" onclick="setOrdTab(\''+t[0]+'\')">'+t[1]+'<span class="n">'+t[2]+'</span></button>'; }).join(''); }
+  var list=b[ordTab]||[];
+  var tot=allOrders.reduce(function(a,o){ return a+(((o.status||'')==='Cancelled')?0:(o.total||0)); },0);
+  var head='<div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">'
+    +'<div style="flex:1;min-width:130px;background:#fef3c7;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:19px;color:#d97706">'+b.pending.length+'</b><small style="color:#92600a">Pending</small></div>'
+    +'<div style="flex:1;min-width:130px;background:#f0fdf4;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:19px;color:#16a34a">'+b.accepted.length+'</b><small style="color:#15803d">Accepted</small></div>'
+    +'<div style="flex:1;min-width:130px;background:#fee2e2;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:19px;color:#dc2626">'+b.cancelled.length+'</b><small style="color:#991b1b">Cancelled</small></div>'
+    +'<div style="flex:1;min-width:150px;background:#eff6ff;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:16px;color:#1e40af">'+money(tot)+'</b><small style="color:#1e40af">Net Sale</small></div></div>';
+  if(!list.length){ var msg={pending:['⏳','Koi pending order nahi','Naye orders yahan aayenge.'],accepted:['✅','Abhi koi accept nahi hua','Pending tab se orders accept karein.'],cancelled:['✕','Koi cancelled order nahi','Achi baat hai.']}[ordTab];
+    el.innerHTML=head+'<div class="empty" style="padding:40px 20px"><div class="big">'+msg[0]+'</div><h3>'+msg[1]+'</h3><p>'+msg[2]+'</p></div>'; return; }
+  el.innerHTML=head+'<div class="ogrid">'+list.map(function(o){
+    var st=o.status||'Confirmed'; var stl=ordStatusStyle(st);
+    var items=(o.items||[]).map(function(x){ return (x.emoji||'')+' '+esc(x.name||'')+' ×'+x.qty; }).join('<br>');
+    var acts='';
+    if(ordTab==='pending') acts='<div class="oacts"><button style="background:#16a34a" onclick="setOrderStatus(\''+o.id+'\',\'Accepted\')">✓ Accept</button><button style="background:#dc2626" onclick="setOrderStatus(\''+o.id+'\',\'Cancelled\')">✕ Cancel</button></div>';
+    else if(ordTab==='accepted') acts='<div class="oacts"><button style="background:#dc2626" onclick="setOrderStatus(\''+o.id+'\',\'Cancelled\')">✕ Cancel karein</button></div>';
+    else acts='<div class="oacts"><button style="background:#16a34a" onclick="setOrderStatus(\''+o.id+'\',\'Accepted\')">✓ Wapas Accept karein</button></div>';
+    return '<div class="ocard'+(o.read?'':' new')+'">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="oid">'+o.id+(o.read?'':' <span style="font-size:10px;background:#dc2626;color:#fff;padding:2px 7px;border-radius:6px;vertical-align:middle">NEW</span>')+'</span>'
+      +'<span style="font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;color:'+stl.c+';background:'+stl.bg+'">'+st+'</span></div>'
+      +'<div style="font-size:11.5px;color:var(--muted);margin-top:3px">'+esc(o.date||'')+'</div>'
+      +'<div class="oitems">'+(items||'—')+'</div>'
+      +(o.address?'<div class="oaddr">📍 '+esc(o.address)+(o.phone?'<br>📞 '+esc(o.phone):'')+'</div>':'')
+      +'<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:12px;color:var(--muted)">'+esc(o.pay||'')+'</span><span class="oamt">'+money(o.total||0)+'</span></div>'
+      +acts+'</div>';
+  }).join('')+'</div>';
+}
 function setOrderStatus(id,status){ var o=allOrders.find(function(x){return String(x.id)===String(id);}); if(o)o.status=status; Object.keys(ordersAll).forEach(function(em){ (ordersAll[em]||[]).forEach(function(x){ if(String(x.id)===String(id))x.status=status; }); }); LS.set('tt_orders',ordersAll); if(window.db){ try{ window.db.collection('orders').doc(String(id)).set({status:status},{merge:true}); }catch(e){ console.warn('order status',e); } } renderOrders(); updateOrdersBadge(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); toast(status==='Accepted'?'✅':'❌','Order '+id+' '+status); }
 function acceptOrder(i){ var o=allOrders[i]; if(o)setOrderStatus(o.id,'Accepted'); }
 function cancelOrder(i){ var o=allOrders[i]; if(o)setOrderStatus(o.id,'Cancelled'); }
@@ -1270,7 +1386,7 @@ function placeOrder(){
   if(selectedPay==='Wallet' && $('#wlNum').value.replace(/\D/g,'').length<10){ toast('📱','Enter wallet number'); return; }
   const u=currentUser();
   const items=Object.entries(cart).map(([id,q])=>{ const p=findP(id); return p?{name:p.name,emoji:p.emoji||'📦',qty:q,price:p.price}:null; }).filter(Boolean);
-  const order={id:'TT'+Date.now().toString().slice(-7),date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),items,total:Math.max(0,cartTotal()-voucherDiscount()),pay:selectedPay,voucher:voucher||undefined,status:'Confirmed',address:addr,phone};
+  const order={id:'TT'+Date.now().toString().slice(-7),date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),items,total:Math.max(0,cartTotal()-voucherDiscount()),pay:selectedPay,voucher:voucher||undefined,status:'Confirmed',read:false,address:addr,phone};
   if(!ordersAll[u.email]) ordersAll[u.email]=[];
   ordersAll[u.email].push(order); LS.set('tt_orders',ordersAll); fbSaveOrder(order,u.email);
   cart={}; LS.set('tt_cart',cart); updateCartUI(); closeModal('checkoutModal'); $('#confId').textContent='#'+order.id; openModal('confirmModal');
@@ -1310,7 +1426,7 @@ const DEFAULT_BANNERS=[
  {st:'🥦 Farm Fresh Daily',h2:'END OF MONTH SALE',p:'Fresh fruits, veggies &amp; daily needs',badge:'Explore',em:'🥦',bg:'linear-gradient(120deg,#15803d,#22c55e 60%,#4ade80)'}
 ];
 let banners=LS.get('tt_banners',null); if(!Array.isArray(banners)){banners=[];LS.set('tt_banners',banners);}
-let wishlist=LS.get('tt_wishlist',[]); let voucher=null; let invoices=LS.get('tt_invoices',[]); let messages=LS.get('tt_messages',[]); let allOrders=[]; let settings=LS.get('tt_settings',{help:'0300-1234567',store:'TEETOO'}); let purchases=LS.get('tt_purchases',[]); let jobs=LS.get('tt_jobs',[]);
+let wishlist=LS.get('tt_wishlist',[]); let voucher=null; let invoices=LS.get('tt_invoices',[]); let messages=LS.get('tt_messages',[]); let allOrders=[]; let settings=LS.get('tt_settings',{help:'0300-1234567',store:'TEETOO',commission:5,email:'teetoo@teetoo9.com'}); let purchases=LS.get('tt_purchases',[]); let jobs=LS.get('tt_jobs',[]);
 const VOUCHERS={'TT50':{off:50,type:'flat',min:500},'SAVE10':{off:10,type:'pct'},'FRESH100':{off:100,type:'flat',min:1000},'GROCERY15':{off:15,type:'pct',min:800}};
 const BANNER_BG=[['Purple + Orange','linear-gradient(120deg,#7e22ce,#c026d3 55%,#f57224)'],['Orange','linear-gradient(120deg,#c2410c,#f57224 60%,#fb923c)'],['Green','linear-gradient(120deg,#15803d,#22c55e 60%,#4ade80)'],['Blue','linear-gradient(120deg,#1e40af,#3b82f6 60%,#60a5fa)'],['Pink','linear-gradient(120deg,#be185d,#ec4899 60%,#f9a8d4)'],['Dark','linear-gradient(120deg,#111827,#374151 60%,#6b7280)']];
 function renderCarousel(){const box=document.getElementById('slides');if(!box)return;var _car=document.getElementById('carousel');if(!banners.length){ if(typeof isAdmin==='function'&&isAdmin()){ if(_car)_car.style.display=''; box.innerHTML='<div class="slide" style="background:#334155;align-items:center;justify-content:center;text-align:center"><div><h2 style="max-width:100%">No banner yet</h2><p style="max-width:100%">Upar right me &quot;✎ Edit ads&quot; se apni photo/banner add karein</p></div></div>'; cCount=1;cSlide=0;box.style.transform='translateX(0%)';renderDots(); } else { if(_car)_car.style.display='none'; } return; } if(_car)_car.style.display='';box.innerHTML=banners.map(function(b){ if(b.img){ return '<div class="slide" style="background:#fff;padding:0"><img src="'+b.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain"></div>'; } return '<div class="slide" style="background:'+b.bg+'"><div class="st">'+(b.st||'')+'</div><h2>'+(b.h2||'')+'</h2><p>'+(b.p||'')+'</p>'+(b.badge?'<span class="badge">'+b.badge+'</span>':'')+'<span class="em">'+(b.em||'🛍️')+'</span></div>'; }).join('');cCount=banners.length;if(cSlide>=cCount)cSlide=0;box.style.transform='translateX(-'+(cSlide*100)+'%)';renderDots();}
@@ -1334,22 +1450,22 @@ function renderPurchases(){ var el=$('#purHist'); if(!el)return; if(!purchases.l
 function fbSavePurchase(p){ if(window.db&&p){ try{ window.db.collection('purchases').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }catch(e){ console.warn('fb pur',e); } } }
 function openSales(){ renderSales(); openModal('salesModal'); }
 function renderSales(){ var el=document.getElementById('salesList'); if(!el)return; var total=allOrders.reduce(function(s,o){return s+(o.total||0);},0); var count=allOrders.length; var map={}; var units=0; allOrders.forEach(function(o){ (o.items||[]).forEach(function(it){ var k=it.name||'Item'; if(!map[k])map[k]={name:k,emoji:it.emoji||'📦',qty:0,val:0}; map[k].qty+=(it.qty||0); map[k].val+=(it.price||0)*(it.qty||0); units+=(it.qty||0); }); }); var rows=Object.keys(map).map(function(k){return map[k];}).sort(function(a,b){return b.val-a.val;}); var stockVal=catalog.reduce(function(s,p){return s+(p.price||0);},0); var head='<div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:12px;padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:#6b21a8;font-weight:600">Stock Value (site ke saare items)</span><b style="font-size:18px;color:#7c3aed">'+money(stockVal)+'</b></div><div style="display:flex;gap:8px;margin-bottom:14px"><div style="flex:1;background:#f0fdf4;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:19px;color:#15803d">'+money(total)+'</b><small style="color:#15803d">Total Sale</small></div><div style="flex:1;background:#eff6ff;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:19px;color:#1e40af">'+count+'</b><small style="color:#1e40af">Orders</small></div><div style="flex:1;background:#fef3c7;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:19px;color:#d97706">'+units+'</b><small style="color:#92600a">Items sold</small></div></div>'; if(!rows.length){ el.innerHTML=head+'<div class="empty" style="padding:20px"><div class="big">📊</div><h3>No sales yet</h3><p>Jab orders aayenge, har item ki value yahan dikhegi.</p></div>'+saleBillsHtml(); return; } var body='<div style="font-size:12px;color:var(--muted);margin:2px 0 8px;text-transform:uppercase;letter-spacing:.5px">Har item ki value</div>'+rows.map(function(r){ return '<div class="padmin"><div class="pe" style="background:var(--green-soft);font-size:18px">'+r.emoji+'</div><div class="pinfo"><b>'+r.name+'</b><small>'+r.qty+' sold</small></div><b style="color:var(--green-dark);white-space:nowrap">'+money(r.val)+'</b></div>'; }).join(''); el.innerHTML=head+body+saleBillsHtml(); }
-function openHelpInfo(){ toast('💬','Help & Support: '+(settings.help||'')); }
+function openHelpInfo(){ openHelp(); }
 function openHelpFromAcct(){ closeModal('acctModal'); openHelp(); }
-function applySettings(){ try{ document.title=(settings.store||'TEETOO')+' — Fresh Grocery'; }catch(e){} }
+function applySettings(){ try{ document.title=(settings.store||'TEETOO')+' — Fresh Grocery'; }catch(e){} var hm=document.getElementById('hdrMail'); if(hm){ hm.href='mailto:'+supportEmail(); hm.innerHTML='\ud83d\udce7 '+esc(supportEmail()); } if(typeof renderHpContact==='function')renderHpContact(); }
 function fbSaveSettings(){ if(window.db){ try{ window.db.collection('settings').doc('main').set(JSON.parse(JSON.stringify(settings))); }catch(e){ console.warn('fb settings',e); } } }
-function saveSettings(){ var h=document.getElementById('setHelp'); var st=document.getElementById('setStore'); settings.help=((h&&h.value)||'').trim(); settings.store=((st&&st.value)||'').trim(); LS.set('tt_settings',settings); fbSaveSettings(); applySettings(); toast('✅','Settings save ho gayi'); }
-function settingsSection(){ return '<div class="acct-sec"><h4>Store Settings</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="field"><label>Help &amp; Support Number</label><input id="setHelp" value="'+esc(settings.help||'')+'" placeholder="0300-1234567"></div><div class="field"><label>Store Name</label><input id="setStore" value="'+esc(settings.store||'')+'" placeholder="TEETOO"></div><button class="btn-primary" style="margin-top:6px" onclick="saveSettings()">Save Settings</button></div></div>'; }
+function saveSettings(){ var h=document.getElementById('setHelp'); var st=document.getElementById('setStore'); var cm=document.getElementById('setComm'); var em=document.getElementById('setEmail'); if(em){ settings.email=(em.value||'').trim(); } settings.help=((h&&h.value)||'').trim(); settings.store=((st&&st.value)||'').trim(); if(cm){ var cv=parseFloat(cm.value); settings.commission=(isNaN(cv)||cv<0)?0:cv; } LS.set('tt_settings',settings); fbSaveSettings(); applySettings(); if(typeof renderAcct==='function'){var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show'))renderAcct();} toast('✅','Settings save ho gayi'); }
+function settingsSection(){ return '<div class="acct-sec"><h4>Store Settings</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="field"><label>Help &amp; Support Number</label><input id="setHelp" value="'+esc(settings.help||'')+'" placeholder="0300-1234567"></div><div class="field"><label>Store Name</label><input id="setStore" value="'+esc(settings.store||'')+'" placeholder="TEETOO"></div><div class="field"><label>Support Email</label><input id="setEmail" type="email" value="'+esc(supportEmail())+'" placeholder="teetoo@teetoo9.com"></div><div class="field"><label>Employee Commission (%)</label><input id="setComm" type="number" min="0" step="0.1" value="'+esc(String(commissionPct()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Har employee ki sale par itne percent commission bane gi.</div></div><button class="btn-primary" style="margin-top:6px" onclick="saveSettings()">Save Settings</button></div></div>'; }
 function copyRefMy(){ var u=currentUser(); if(!u)return; var code=u.refCode||('TT'+String(u.phone||'').slice(-6)); try{ navigator.clipboard.writeText(code); }catch(e){} toast('📋','Code copy: '+code); }
 function referralSection(){ var u=currentUser(); if(!u||isAdmin())return ''; var code=u.refCode||('TT'+String(u.phone||'').slice(-6)); var cnt=u.refCount||0; return '<div class="acct-sec"><h4>Refer &amp; Earn</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line);text-align:center"><div style="font-size:12px;color:var(--muted)">Aap ka referral code</div><div style="font-size:24px;font-weight:800;letter-spacing:2px;color:var(--green-dark);margin:6px 0">'+esc(code)+'</div><button class="add" style="width:auto;padding:6px 16px;margin:0 auto" onclick="copyRefMy()">Copy code</button><div style="margin-top:12px;font-size:13px">Total referrals: <b style="color:var(--green-dark);font-size:16px">'+cnt+'</b></div><div style="font-size:11.5px;color:var(--muted);margin-top:6px">Ye code doston ko dein \u2014 jab wo is se register karenge, aap ka count barhega.</div></div></div>'; }
-function customerChatSection(){ return '<div class="acct-sec"><h4>Help</h4><button class="add" style="width:100%;background:var(--green);display:flex;align-items:center;justify-content:center;gap:8px" onclick="openHelpFromAcct()">💬 Chat to TT Services — Live</button><div style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px">Aapka message seedha admin ko jayega · Help: '+esc(settings.help||'')+'</div></div>'; }
+function customerChatSection(){ return '<div class="acct-sec"><h4>Help</h4><button class="add" style="width:100%;background:var(--green);display:flex;align-items:center;justify-content:center;gap:8px" onclick="openHelpFromAcct()">💬 Chat to TT Services — Live</button><div style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px">Aapka message seedha admin ko jayega<br>\ud83d\udcde '+esc(settings.help||'')+' &nbsp;·&nbsp; <a href="mailto:'+esc(supportEmail())+'" style="color:var(--green-dark);font-weight:600">\ud83d\udce7 '+esc(supportEmail())+'</a></div></div>'; }
 function myJobApp(){ var u=currentUser(); if(u){ var byMail=jobs.find(function(j){return j.email&&j.email===u.email;}); if(byMail)return byMail; if(u.phone){ var byPh=jobs.find(function(j){return j.phone&&j.phone===u.phone;}); if(byPh)return byPh; } } return null; }
 function jobApplySection(){ if(isAdmin())return ''; var app=myJobApp(); return '<div class="acct-sec"><h4>Apply for Job</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line);text-align:center">'+(app?'<div style="font-size:12px;color:var(--green-dark);font-weight:700;margin-bottom:8px">✅ Application submitted — '+esc(app.date||'')+'</div>':'<div style="font-size:12.5px;color:var(--muted);margin-bottom:10px">Hamare saath kaam karne ke liye apply karein — naam, phone, address, father name, city aur professional ID card number chahiye.</div>')+'<button class="add" style="width:auto;padding:8px 20px;margin:0 auto;background:var(--green);color:#fff" onclick="openJobApply()">'+(app?'✏️ Update Application':'💼 Apply Now')+'</button></div></div>'; }
-function openJobApply(){ if(isAdmin()){ closeModal('acctModal'); openJobsAdmin(); return; } var u=currentUser(); var app=myJobApp(); $('#jName').value=app?(app.name||''):(u?u.name||'':''); $('#jPhone').value=app?(app.phone||''):(u?u.phone||'':''); $('#jAddr').value=app?(app.address||''):(u?u.address||'':''); $('#jFather').value=app?(app.father||''):''; $('#jCity').value=app?(app.city||''):''; $('#jIdCard').value=app?(app.idCard||''):''; $('#jGender').value=app?(app.gender||''):''; $('#jQual').value=app?(app.qualification||''):''; $('#jExp').value=app?(app.experience||''):''; ['jfName','jfPhone','jfAddr','jfFather','jfCity','jfId','jfGender','jfQual','jfExp'].forEach(function(id){ var el=document.getElementById(id); if(el)el.classList.remove('invalid'); }); closeModal('acctModal'); closeModal('authModal'); openModal('jobModal'); }
+function openJobApply(){ if(isAdmin()){ closeModal('acctModal'); openJobsAdmin(); return; } if(!currentUser()){ closeModal('acctModal'); toast('\ud83d\udd12','Pehle login karein \u2014 job apply karne ke liye account zaroori hai'); openAuth(); return; } var u=currentUser(); var app=myJobApp(); $('#jName').value=app?(app.name||''):(u?u.name||'':''); $('#jPhone').value=app?(app.phone||''):(u?u.phone||'':''); $('#jAddr').value=app?(app.address||''):(u?u.address||'':''); $('#jFather').value=app?(app.father||''):''; $('#jCity').value=app?(app.city||''):''; $('#jIdCard').value=app?(app.idCard||''):''; $('#jGender').value=app?(app.gender||''):''; $('#jEdu').value=app?(app.education||''):''; $('#jExp').value=app?(app.experience||''):''; ['jfName','jfPhone','jfAddr','jfFather','jfCity','jfId','jfGender','jfEdu','jfExp'].forEach(function(id){ var el=document.getElementById(id); if(el)el.classList.remove('invalid'); }); closeModal('acctModal'); closeModal('authModal'); openModal('jobModal'); }
 function submitJobApply(){
   if(isAdmin()){ toast('💼','Admin job apply nahi kar sakte'); return; }
-  var name=$('#jName').value.trim(), phone=$('#jPhone').value.trim().replace(/[^0-9]/g,''), addr=$('#jAddr').value.trim(), father=$('#jFather').value.trim(), city=$('#jCity').value.trim(), idc=$('#jIdCard').value.trim(), gender=$('#jGender').value.trim(), qual=$('#jQual').value.trim(), exp=$('#jExp').value.trim();
-  ['jfName','jfPhone','jfAddr','jfFather','jfCity','jfId','jfGender','jfQual','jfExp'].forEach(function(id){ var el=document.getElementById(id); if(el)el.classList.remove('invalid'); });
+  var name=$('#jName').value.trim(), phone=$('#jPhone').value.trim().replace(/[^0-9]/g,''), addr=$('#jAddr').value.trim(), father=$('#jFather').value.trim(), city=$('#jCity').value.trim(), idc=$('#jIdCard').value.trim(), gen=$('#jGender').value, edu=$('#jEdu').value.trim(), exp=$('#jExp').value.trim();
+  ['jfName','jfPhone','jfAddr','jfFather','jfCity','jfId','jfGender','jfEdu','jfExp'].forEach(function(id){ var el=document.getElementById(id); if(el)el.classList.remove('invalid'); });
   var bad=false;
   if(!name){ document.getElementById('jfName').classList.add('invalid'); bad=true; }
   if(!phone||phone.length<10){ document.getElementById('jfPhone').classList.add('invalid'); bad=true; }
@@ -1357,13 +1473,13 @@ function submitJobApply(){
   if(!father){ document.getElementById('jfFather').classList.add('invalid'); bad=true; }
   if(!city){ document.getElementById('jfCity').classList.add('invalid'); bad=true; }
   if(!idc){ document.getElementById('jfId').classList.add('invalid'); bad=true; }
-  if(!gender){ document.getElementById('jfGender').classList.add('invalid'); bad=true; }
-  if(!qual){ document.getElementById('jfQual').classList.add('invalid'); bad=true; }
+  if(!gen){ document.getElementById('jfGender').classList.add('invalid'); bad=true; }
+  if(!edu){ document.getElementById('jfEdu').classList.add('invalid'); bad=true; }
   if(!exp){ document.getElementById('jfExp').classList.add('invalid'); bad=true; }
   if(bad){ toast('⚠️','Saari fields zaroori hain'); return; }
   var u=currentUser();
   var existing=jobs.find(function(j){return j.phone===phone;})||myJobApp();
-  var app={ id: existing?existing.id:('JOB'+Date.now()), email:(u&&u.email)||'', name:name, phone:phone, address:addr, father:father, city:city, idCard:idc, gender:gender, qualification:qual, experience:exp, refCode: existing?(existing.refCode||('JT'+phone.slice(-6))):('JT'+phone.slice(-6)), refCount: existing?(existing.refCount||0):0, date:new Date().toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) };
+  var app={ id: existing?existing.id:('JOB'+Date.now()), email:(u&&u.email)||'', name:name, phone:phone, address:addr, father:father, city:city, idCard:idc, gender:gen, education:edu, experience:exp, refCode: existing?(existing.refCode||('JT'+phone.slice(-6))):('JT'+phone.slice(-6)), refCount: existing?(existing.refCount||0):0, date:new Date().toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}), read:false };
   if(existing){ Object.assign(existing,app); } else { jobs.push(app); }
   LS.set('tt_jobs',jobs); fbSaveJob(app);
   closeModal('jobModal'); toast('✅','Application submit ho gayi — aap ka referral code: '+app.refCode);
@@ -1388,17 +1504,71 @@ function jobsBodyHtml(){
         return '<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:4px 0"><span style="color:var(--ink)">👤 '+esc(ru.name||ru.email)+' <span style="color:#9ca3af">('+ordCount+' orders)</span></span><b style="color:#0f766e">'+money(amt)+'</b></div>';
       }).join('')+'</div>';
     }
-    return '<div class="padmin" style="align-items:flex-start;flex-wrap:wrap"><div class="pe" style="background:var(--green-soft);color:var(--green-dark);font-size:13px;font-weight:800">'+ini+'</div><div class="pinfo"><b>'+esc(j.name||'')+'</b><small style="display:block">'+esc(j.phone||'-')+' · Father: '+esc(j.father||'-')+' · '+esc(j.city||'-')+'</small><small style="display:block">ID: '+esc(j.idCard||'-')+' · '+esc(j.address||'-')+'</small><small style="display:block">'+esc(j.gender||'-')+' · '+esc(j.qualification||'-')+' · Exp: '+esc(j.experience||'-')+'</small><small style="display:block;color:#9ca3af">Code: '+esc(j.refCode||'-')+' · '+esc(j.date||'')+'</small></div><div style="text-align:right;white-space:nowrap"><div style="font-size:12.5px;color:var(--green-dark);font-weight:800">'+cnt+' clients</div><div style="font-size:12px;color:#0f766e;font-weight:700;margin-top:2px">'+money(salesAmt)+' sale</div></div>'+breakdown+'</div>';
+    return '<div class="padmin" onclick="openEmpDetail(\''+esc(j.id||'')+'\')" style="align-items:flex-start;cursor:pointer;'+(j.read?'':'border-color:var(--green);background:var(--green-soft)')+'"><div class="pe" style="background:var(--green-soft);color:var(--green-dark);font-size:13px;font-weight:800">'+ini+'</div><div class="pinfo"><b>'+esc(j.name||'')+(j.read?'':' <span style="font-size:10px;background:#dc2626;color:#fff;padding:2px 7px;border-radius:6px;vertical-align:middle">NEW</span>')+'</b><small style="display:block">'+esc(j.phone||'-')+' · '+esc(j.city||'-')+'</small><small style="display:block;color:#9ca3af">Code: '+esc(j.refCode||'-')+'</small></div><div style="text-align:right;white-space:nowrap"><div style="font-size:12.5px;color:var(--green-dark);font-weight:800">'+cnt+' clients</div><div style="font-size:12px;color:#0f766e;font-weight:700;margin-top:2px">'+money(salesAmt)+' sale</div><div style="font-size:11px;color:var(--muted);margin-top:3px">Detail ›</div></div></div>';
   }).join('');
   var totClients=jobs.reduce(function(s,j){return s+jobReferredUsers(j.refCode).length;},0);
   var totSale=jobs.reduce(function(s,j){return s+jobSalesAmt(j.refCode);},0);
   var head='<div style="display:flex;gap:8px;margin-bottom:14px"><div style="flex:1;background:#f0fdf4;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:19px;color:#15803d">'+jobs.length+'</b><small style="color:#15803d">Applicants</small></div><div style="flex:1;background:#eff6ff;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:19px;color:#1e40af">'+totClients+'</b><small style="color:#1e40af">Clients</small></div><div style="flex:1;background:#fef3c7;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:16px;color:#d97706">'+money(totSale)+'</b><small style="color:#92600a">Sale</small></div></div>';
   return head+rows;
 }
+function supportEmail(){ return (settings.email||'teetoo@teetoo9.com').trim(); }
+function commissionPct(){ var p=parseFloat(settings.commission); return (isNaN(p)||p<0)?0:p; }
+function empItemsMap(email){ var m={}; userOrders(email).forEach(function(o){ if((o.status||'')==='Cancelled')return; (o.items||[]).forEach(function(it){ var k=it.name||'Item'; m[k]=(m[k]||0)+(it.qty||0); }); }); return m; }
+function empItemsText(email){ var m=empItemsMap(email); var ks=Object.keys(m); if(!ks.length) return '\u2014'; return ks.map(function(k){ return esc(k)+' \u00d7'+m[k]; }).join(' \u00b7 '); }
+function empItemCount(code){ var n=0; jobReferredUsers(code).forEach(function(u){ var m=empItemsMap(u.email); Object.keys(m).forEach(function(k){ n+=m[k]; }); }); return n; }
+function openEmpDetail(id){ var j=jobs.find(function(x){ return String(x.id)===String(id); }); if(!j) return; renderEmpDetail(j); openModal('empModal'); }
+function renderEmpDetail(j){
+  var code=j.refCode||''; var clients=jobReferredUsers(code); var sale=jobSalesAmt(code);
+  var pct=commissionPct(); var comm=Math.round(sale*pct/100); var items=empItemCount(code);
+  var ini=(j.name||'J').split(' ').map(function(w){return w[0]||'';}).slice(0,2).join('').toUpperCase();
+  var t=document.getElementById('empTitle'); if(t)t.textContent=j.name||'Employee';
+  var sb=document.getElementById('empSub'); if(sb)sb.textContent='Employee ki performance aur commission';
+  var head='<div style="display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)">'
+    +'<div class="avatar" style="width:48px;height:48px;background:var(--green-soft);color:var(--green-dark);font-size:16px">'+ini+'</div>'
+    +'<div style="flex:1;min-width:0"><b style="font-size:15px">'+esc(j.name||'')+'</b>'
+    +'<div style="font-size:12px;color:var(--muted)">'+esc(j.phone||'-')+' \u00b7 '+esc(j.city||'-')+'</div></div>'
+    +'<div style="text-align:right;white-space:nowrap"><div style="font-size:11px;color:var(--muted)">Referral code</div>'
+    +'<div style="font-size:15px;font-weight:800;color:var(--green-dark)">'+esc(code||'-')+'</div>'
+    +'<div style="font-size:11px;color:var(--muted);margin-top:2px">ID '+esc(j.idCard||'-')+'</div></div></div>'
+    +'<div style="display:flex;flex-wrap:wrap;gap:8px;padding-top:12px">'
+    +'<span style="font-size:11.5px;background:var(--green-soft);color:var(--green-dark);padding:4px 10px;border-radius:8px;font-weight:600">'+esc(j.gender||'-')+'</span>'
+    +'<span style="font-size:11.5px;background:#eff6ff;color:#1e40af;padding:4px 10px;border-radius:8px;font-weight:600">\ud83c\udf93 '+esc(j.education||'-')+'</span>'
+    +'<span style="font-size:11.5px;background:#fef3c7;color:#92600a;padding:4px 10px;border-radius:8px;font-weight:600">\ud83d\udcbc '+esc(j.experience||'-')+'</span>'
+    +'<span style="font-size:11.5px;background:#f1f5f9;color:#475569;padding:4px 10px;border-radius:8px;font-weight:600">\ud83d\udccd '+esc(j.address||'-')+'</span></div>';
+  var stats='<div class="acct-stats" style="padding:14px 0 4px;flex-wrap:wrap">'
+    +'<div class="stat" style="min-width:120px"><b>'+clients.length+'</b><small>Clients</small></div>'
+    +'<div class="stat" style="min-width:120px"><b>'+money(sale)+'</b><small>Total Sale</small></div>'
+    +'<div class="stat" style="min-width:120px"><b>'+items+'</b><small>Items</small></div>'
+    +'<div class="stat" style="min-width:120px;background:#fef3c7"><b style="color:#b45309">'+money(comm)+'</b><small>Commission '+pct+'%</small></div></div>';
+  var rows=clients.map(function(u){
+    var amt=userSaleAmt(u.email);
+    var oc=userOrders(u.email).filter(function(o){ return (o.status||'')!=='Cancelled'; }).length;
+    var c=Math.round(amt*pct/100);
+    return '<tr style="border-bottom:1px solid var(--line)">'
+      +'<td style="padding:10px 8px 10px 0;vertical-align:top"><b style="font-size:13px">'+esc(u.name||u.email)+'</b>'
+      +'<div style="font-size:11px;color:var(--muted)">'+esc(u.phone||u.email||'')+'</div></td>'
+      +'<td style="padding:10px 8px;vertical-align:top;white-space:nowrap"><b style="color:var(--green-dark);font-size:13px">'+money(amt)+'</b>'
+      +'<div style="font-size:11px;color:var(--muted)">'+oc+' orders</div>'
+      +'<div style="font-size:11px;color:#b45309;font-weight:700">+'+money(c)+'</div></td>'
+      +'<td style="padding:10px 0 10px 8px;vertical-align:top;font-size:12px;color:var(--muted);line-height:1.5">'+empItemsText(u.email)+'</td></tr>';
+  }).join('');
+  var table=clients.length
+    ? '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;margin-top:14px;min-width:420px"><thead><tr style="border-bottom:2px solid var(--line)">'
+      +'<th style="text-align:left;padding:8px 8px 8px 0;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)">Client</th>'
+      +'<th style="text-align:left;padding:8px;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)">Sale</th>'
+      +'<th style="text-align:left;padding:8px 0 8px 8px;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)">Items</th>'
+      +'</tr></thead><tbody>'+rows+'</tbody></table></div>'
+    : '<div class="empty" style="padding:26px"><div class="big">\ud83d\udc65</div><h3>Koi client nahi</h3><p>Jab is code se log register karenge, yahan nazar aayenge.</p></div>';
+  document.getElementById('empBody').innerHTML=head+stats+table;
+}
 function jobsSection(){
   return '<div class="acct-sec"><h4>Employees <span style="text-transform:none;letter-spacing:0;color:var(--muted)">'+jobs.length+' total</span></h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="plist">'+jobsBodyHtml()+'</div></div></div>';
 }
-function openJobsAdmin(){ renderJobsAdmin(); openModal('jobsAdminModal'); }
+function updateJobsBadge(){ var n=isAdmin()?jobs.filter(function(j){ return !j.read; }).length:0;
+  var b=document.getElementById('jobCount'); if(b){ b.style.display=n?'grid':'none'; b.textContent=n; }
+  var nb=document.getElementById('navJobCount'); if(nb){ nb.style.display=n?'grid':'none'; nb.textContent=n; } }
+function markJobsRead(){ var ch=false; jobs.forEach(function(j){ if(!j.read){ j.read=true; ch=true; fbSaveJob(j); } }); if(ch)LS.set('tt_jobs',jobs); updateJobsBadge(); }
+function openJobsAdmin(){ renderJobsAdmin(); openModal('jobsAdminModal'); markJobsRead(); }
 function renderJobsAdmin(){ var el=document.getElementById('jobsAdminList'); if(el) el.innerHTML=jobsBodyHtml(); }
 function moveProduct(id,dir){
   var sorted=catalog.slice().sort(function(a,b){var ao=(typeof a.ord==='number'?a.ord:(a.id||0));var bo=(typeof b.ord==='number'?b.ord:(b.id||0));return ao-bo;});
@@ -1424,12 +1594,25 @@ function goSlide(i){cSlide=(i+cCount)%cCount;const s=document.getElementById('sl
 function moveSlide(d){goSlide(cSlide+d);restartCarousel();}
 function restartCarousel(){clearInterval(cTimer);cTimer=setInterval(()=>goSlide(cSlide+1),3800);}
 renderCarousel(); restartCarousel();
-renderCats(); renderGrid(); updateCartUI(); updateAcctLabel();
+renderCats(); renderGrid(); updateCartUI(); updateAcctLabel(); applySettings();
 fbInitSync();
 if(window.fbAuth){
   window.fbAuth.onAuthStateChanged(function(user){
     fbAdminAuthed = !!(user && user.email===ADMIN_EMAIL);
-    if(!fbAdminAuthed && session===ADMIN_EMAIL){ session=null; LS.set('tt_session',null); }
+    if(!user){
+      session=null; LS.set('tt_session',null); updateAcctLabel(); return;
+    }
+    if(!fbAdminAuthed){
+      var em=String(user.email||'');
+      if(/@teetoo9\.com$/i.test(em)){
+        var k=em.split('@')[0];
+        loadOwnProfile(k,user.uid).then(function(){
+          session=k; LS.set('tt_session',session); updateAcctLabel();
+          var am=document.getElementById('acctModal');
+          if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct();
+        });
+      } else if(session===ADMIN_EMAIL){ session=null; LS.set('tt_session',null); }
+    }
     updateAcctLabel();
   });
 }

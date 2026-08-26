@@ -230,15 +230,59 @@
   .padmin .pdel{color:#cbd0cd;font-size:18px;flex-shrink:0;width:34px;height:34px;border-radius:8px}
   .padmin .pdel:hover{color:#ef4444;background:#fef2f2}
 
-  .modal-card.full{width:100vw!important;max-width:100vw!important;height:100vh;height:calc(var(--vh,1vh)*100);max-height:none;border-radius:0}
+  .modal:has(> .modal-card.full){padding:0;place-items:stretch;grid-template-columns:minmax(0,1fr)}
+  .modal-card.full{width:100%!important;max-width:100%!important;height:100%;max-height:none;border-radius:0;margin:0}
   .modal.show .modal-card.full{transform:none}
   .modal-card.full .modal-head{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--line)}
   .modal-card.full .modal-head .htxt{flex:1;min-width:0}
   .modal-card.full .modal-head h2{font-size:19px}
   .modal-card.full .modal-head .x{position:static;top:auto;right:auto;box-shadow:none}
   .modal-card.full .modal-body{padding:20px}
-  .mwrap{max-width:1100px;margin:0 auto}
-  .adm2{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:22px;align-items:start}
+  .mwrap{max-width:100%;width:100%;margin:0}
+  /* right side admin rail */
+  #admRail{position:fixed;left:0;top:96px;z-index:45;display:none;flex-direction:column;gap:7px;
+    background:var(--card);border:1px solid var(--line);border-left:none;border-radius:0 16px 16px 0;
+    padding:12px 10px;box-shadow:6px 8px 24px rgba(16,40,28,.14);max-height:calc(100vh - 150px);overflow-y:auto;scrollbar-width:thin}
+  #admRail.on{display:flex}
+  #admRail::-webkit-scrollbar{width:5px}
+  #admRail::-webkit-scrollbar-thumb{background:#d5ddd8;border-radius:9px}
+  .rbtn{display:flex;align-items:center;gap:11px;background:var(--green-soft);border:1px solid var(--green-light);
+    border-radius:12px;padding:12px 15px;font-size:13.5px;font-weight:700;color:var(--green-dark);white-space:nowrap;
+    position:relative;transition:.15s;min-width:158px}
+  .rbtn:hover{background:var(--green);color:#fff;border-color:var(--green)}
+  .rbtn .em{font-size:18px;line-height:1}
+  .rbtn .rc{position:absolute;top:-5px;right:-5px;background:#dc2626;color:#fff;font-size:10px;font-weight:800;
+    min-width:17px;height:17px;border-radius:99px;display:none;place-items:center;padding:0 4px}
+  #railToggle{position:fixed;left:0;top:56px;z-index:46;display:none;background:var(--green);color:#fff;border:none;
+    border-radius:0 10px 10px 0;padding:9px 13px;font-size:13px;font-weight:800;box-shadow:4px 4px 12px rgba(0,0,0,.18);cursor:pointer}
+  #railToggle.on{display:block}
+  @media(max-width:900px){
+    #admRail{top:auto;bottom:96px;max-height:56vh;padding:9px 7px}
+    .rbtn{min-width:0;font-size:12.5px;padding:10px 12px}
+    .rbtn .lbl{display:none}
+    .rbtn .em{font-size:17px}
+  }
+  /* products page */
+  .ptbl{width:100%;border-collapse:collapse}
+  .ptbl th{text-align:left;padding:10px 8px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:2px solid var(--line);white-space:nowrap}
+  .ptbl td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+  .ptbl tr:hover{background:#fbfdfc}
+  .ptbl tr.ghead{background:linear-gradient(90deg,var(--green-soft),#fff)}
+  .ptbl tr.ghead:hover{background:linear-gradient(90deg,var(--green-soft),#fff)}
+  .ptbl tr.ghead td{padding:12px 8px;border-bottom:2px solid var(--green-light);font-weight:800;font-size:13.5px;color:var(--green-dark)}
+  .ptbl tr.gsub{background:#fbfdfc}
+  .ptbl tr.gsub:hover{background:#fbfdfc}
+  .ptbl tr.gsub td{padding:9px 8px;border-bottom:2px solid var(--line);font-size:12.5px;color:var(--muted)}
+  .ptbl tr.gsub b{color:var(--green-dark)}
+  .pcat{border:1px solid var(--line);border-radius:8px;padding:3px 6px;font-size:11px;background:#fff;color:var(--muted);max-width:150px}
+  .pthumb{width:44px;height:44px;border-radius:10px;object-fit:cover;display:grid;place-items:center;font-size:22px;flex-shrink:0}
+  .qtybox{display:flex;align-items:center;gap:5px}
+  .qtybox input{width:66px;padding:7px;border:1.5px solid var(--line);border-radius:9px;font-size:13px;text-align:center;background:#fff}
+  .qtybox input:focus{border-color:var(--green-600);outline:none}
+  .qtybox .sv{background:var(--green);color:#fff;border-radius:8px;padding:6px 10px;font-size:11.5px;font-weight:700}
+  .picon{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-size:15px}
+  @media(max-width:768px){ .ptbl .hidesm{display:none} .ptbl td,.ptbl th{padding:8px 5px} }
+  .adm2{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:24px;align-items:start}
   .admcard{background:#fbfdfc;border:1px solid var(--line);border-radius:14px;padding:16px}
   .admcard h4{font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:12px}
   .egrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;align-content:start}
@@ -248,7 +292,7 @@
   .backbtn:hover{background:#e2e8e5;transform:translateX(-2px)}
   @media(max-width:768px){ .modal-card.full .modal-head{padding:12px 14px;gap:10px} .modal-card.full .modal-head h2{font-size:16px} .modal-card.full .modal-head p{display:none} .modal-card.full .modal-body{padding:14px} .backbtn{padding:8px 12px;font-size:12.5px} }
   .modal-card.wide{width:1060px;max-width:96vw;height:92vh;max-height:92vh;max-height:calc(var(--vh,1vh)*92)}
-  .otabs{display:flex;gap:8px;padding:14px 20px;max-width:1140px;margin:0 auto;width:100%;flex-wrap:wrap;position:sticky;top:0;background:var(--card);z-index:10}
+  .otabs{display:flex;gap:8px;padding:14px 20px;width:100%;flex-wrap:wrap;position:sticky;top:0;background:var(--card);z-index:10}
   .otab{display:flex;align-items:center;gap:7px;background:#f1f4f2;border-radius:11px;padding:9px 16px;font-size:13.5px;font-weight:600;color:var(--muted);transition:.16s}
   .otab:hover{background:#e6ebe8}
   .otab.on{background:var(--green);color:#fff;box-shadow:0 5px 12px rgba(245,114,36,.28)}
@@ -393,13 +437,15 @@
     </div>
     <div class="head-actions">
       <button class="h-btn sell-btn" onclick="openSellPage()" title="Sell on TeeToo"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 13h6"/></svg><span>Sell on TeeToo</span></button>
+      <button id="myShopBtn" class="h-btn" style="display:none;position:relative;background:#faf5ff;color:#6b21a8;font-weight:800;border:1px solid #e9d5ff" onclick="openMyShop()" title="My Shop"><span style="font-size:15px">🏪</span><span>My Shop</span><span class="mcount" id="shopNewCount" style="display:none">0</span></button>
       <button id="jobBtn" class="h-btn" style="position:relative;background:#fff;color:var(--green-dark);font-weight:700" onclick="openJobApply()" title="Apply for Job"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg><span id="jobBtnLabel">Job</span><span class="mcount" id="jobCount" style="display:none">0</span></button>
       <button id="msgsBtn" class="h-btn" style="display:none;position:relative;background:#fff;color:var(--green-dark);font-weight:700" onclick="openMessages()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H7l-3 3z"/></svg><span>Msgs</span><span class="mcount" id="msgCount" style="display:none">0</span></button>
       <button id="billBtn" class="h-btn" style="display:none;background:#fff;color:var(--green-dark);font-weight:700" onclick="openBilling()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h10l3 3v17l-2.2-1.2L15 22l-2-1.2L11 22l-2-1.2L6.9 22 6 21V2z"/><path d="M9 8h7M9 12h7M9 16h4"/></svg><span>Bill/Invoice</span></button>
       <button id="ordersBtn" class="h-btn" style="display:none;position:relative;background:#fff;color:var(--green-dark);font-weight:700" onclick="openOrders()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18l-1.4 11H4.4z"/><path d="M8 6a4 4 0 0 1 8 0"/></svg><span>Orders</span><span class="mcount" id="ordCount" style="display:none">0</span></button>
-      <button class="h-btn" onclick="openAccount()">
+      <button class="h-btn" style="position:relative" onclick="openAccount()">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>
         <span id="acctLabel" class="head-txt-hide">Login</span>
+        <span class="mcount" id="sellNewCount" style="display:none">0</span>
       </button>
       <button class="h-btn cart-badge" onclick="openCart()">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.2 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21.5 7H6"/></svg>
@@ -413,7 +459,8 @@
   </div>
   <div class="head-sub">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>
-    Deliver to: <b style="margin:0 4px">Home</b> · Free delivery over Rs 2,000
+    Deliver to: <b style="margin:0 4px" id="hsDeliver">Home</b> · <span id="hsFree">Free delivery over Rs 2,000</span>
+    <button id="hsEdit" onclick="openStoreSettings()" style="display:none;margin-left:8px;background:rgba(255,255,255,.22);color:#fff;border-radius:7px;padding:3px 9px;font-size:11px;font-weight:700">✎ Edit</button>
     <span style="flex:1"></span>
     <a style="color:#fff;cursor:pointer;font-weight:600" onclick="openSellPage()">Sell on TeeToo</a>
     <span style="opacity:.55">·</span>
@@ -438,7 +485,7 @@
     <button id="editAds" onclick="openBannerMgr()">✎ Edit ads</button>
     <div class="cdots" id="cdots"></div>
   </div>
-  <div class="strip"><span class="big">⚡ END OF MONTH</span><span class="sp"></span><span class="off">UPTO 80% OFF</span></div>
+  <div class="strip" id="promoStrip"><span class="big" id="stripBig">⚡ END OF MONTH</span><span class="sp"></span><button id="stripEdit" onclick="openStoreSettings()" style="display:none;background:rgba(255,255,255,.25);color:#fff;border-radius:7px;padding:3px 9px;font-size:11px;font-weight:700;margin-right:8px">✎ Edit</button><span class="off" id="stripOff">UPTO 80% OFF</span></div>
   <div class="sec-head">
     <h2 id="secTitle">All Products</h2>
     <div style="display:flex;align-items:center;gap:10px">
@@ -508,67 +555,9 @@
   </div>
 </div>
 
-<div class="modal" id="googleModal">
-  <div class="modal-card">
-    <div class="modal-head">
-      <h2 style="display:flex;align-items:center;gap:9px">
-        <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.1-11.3-7.6l-6.5 5C9.6 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.6l6.2 5.2C41 38.2 44 31.9 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg>
-        Sign in with Google
-      </h2>
-      <p>Choose your Google account to continue to T.T</p>
-      <button class="x" onclick="closeModal('googleModal')">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="field" id="gfEmail">
-        <label>Gmail Address</label>
-        <input id="gEmail" type="email" placeholder="yourname@gmail.com" />
-        <div class="err">Enter a valid Gmail address</div>
-      </div>
-      <div class="field" id="gfName">
-        <label>Your Name <span style="color:#9aa4a0;font-weight:400">(for new accounts)</span></label>
-        <input id="gName" type="text" placeholder="e.g. Ali Khan" />
-      </div>
-      <button class="btn-primary" onclick="googleContinue()">Continue</button>
-    </div>
-  </div>
-</div>
 
-<div class="modal" id="phoneModal">
-  <div class="modal-card">
-    <div class="modal-head">
-      <h2>📱 Sign in with Phone</h2>
-      <p id="phSub">We'll send you a verification code</p>
-      <button class="x" onclick="closeModal('phoneModal')">×</button>
-    </div>
-    <div class="modal-body">
-      <div id="phStep1">
-        <div class="field" id="phfNum">
-          <label>Phone Number</label>
-          <input id="phNum" type="tel" placeholder="03xx-xxxxxxx" />
-          <div class="err">Enter a valid phone number</div>
-        </div>
-        <button class="btn-primary" onclick="sendOtp()">Send Code</button>
-      </div>
-      <div id="phStep2" hidden>
-        <div class="otp-hint">Demo verification code: <b id="otpShown">0000</b></div>
-        <div class="field" id="phfOtp">
-          <label>Enter 4-digit Code</label>
-          <input id="otpInput" type="tel" maxlength="4" placeholder="••••" style="letter-spacing:8px;text-align:center;font-size:18px" />
-          <div class="err">Incorrect code, try again</div>
-        </div>
-        <button class="btn-primary" onclick="verifyOtp()">Verify &amp; Continue</button>
-        <div class="muted-link"><a onclick="phoneFlow()">← Change number</a></div>
-      </div>
-      <div id="phStep3" hidden>
-        <div class="field">
-          <label>What's your name?</label>
-          <input id="phName" type="text" placeholder="e.g. Ali Khan" />
-        </div>
-        <button class="btn-primary" onclick="finishPhoneSignup()">Create Account</button>
-      </div>
-    </div>
-  </div>
-</div>
+
+
 
 <div class="modal" id="acctModal">
   <div class="modal-card full" style="padding:0">
@@ -624,9 +613,10 @@
         </div>
       </div>
       <div class="row2">
-        <div class="field">
-          <label>Stock (kitne maujood hain)</label>
-          <input id="apStock" type="number" min="0" placeholder="khali = unlimited" />
+        <div class="field" id="apfStock">
+          <label>Quantity (kitne maujood hain) <span style="color:#ef4444">*</span></label>
+          <input id="apStock" type="number" min="0" placeholder="e.g. 25" />
+          <div class="err">Quantity likhna zaroori hai</div>
         </div>
         <div class="field">
           <label>Lagat / Buying cost <span style="color:#9aa4a0;font-weight:400">(Rs)</span></label>
@@ -682,27 +672,9 @@
         <div class="pay-opts" id="payOpts">
           <div class="pay-opt sel" data-pay="Cash on Delivery" onclick="selectPay(this)">
             <span class="dot"></span><span class="em">💵</span>
-            <div><b>Cash on Delivery</b><small>Pay when your order arrives</small></div>
-          </div>
-          <div class="pay-opt" data-pay="Card" onclick="selectPay(this)">
-            <span class="dot"></span><span class="em">💳</span>
-            <div><b>Credit / Debit Card</b><small>Visa, Mastercard accepted</small></div>
-          </div>
-          <div class="pay-opt" data-pay="Wallet" onclick="selectPay(this)">
-            <span class="dot"></span><span class="em">📱</span>
-            <div><b>Mobile Wallet</b><small>JazzCash / Easypaisa</small></div>
+            <div><b>Cash on Delivery</b><small>Maal pohnchne par paisay dein</small></div>
           </div>
         </div>
-      </div>
-      <div class="field" id="cardFields" style="display:none">
-        <label>Card Details</label>
-        <input id="ccNum" placeholder="Card number 1234 5678 9012 3456" maxlength="19" style="margin-bottom:8px">
-        <div class="row2"><div class="field" style="margin:0"><input id="ccExp" placeholder="MM/YY" maxlength="5"></div><div class="field" style="margin:0"><input id="ccCvv" placeholder="CVV" maxlength="4"></div></div>
-      </div>
-      <div class="field" id="walletFields" style="display:none">
-        <label>Mobile Wallet</label>
-        <select id="wlType" style="margin-bottom:8px"><option>JazzCash</option><option>Easypaisa</option></select>
-        <input id="wlNum" placeholder="Wallet mobile number 03xx-xxxxxxx">
       </div>
       <div class="field" style="margin-top:2px"><label>Voucher / Promo Code</label><div style="display:flex;gap:8px"><input id="coVoucher" placeholder="e.g. TT50, SAVE10" style="flex:1;text-transform:uppercase"><button class="add" style="width:auto;padding:0 18px" onclick="applyVoucher()">Apply</button></div><div id="voucherMsg" style="font-size:12px;margin-top:6px"></div></div>
       <div class="sumrow" id="coDiscRow" style="display:none"><span>Discount</span><span id="coDisc" style="color:var(--green)">- Rs 0</span></div>
@@ -727,7 +699,7 @@
 <div class="modal" id="sellModal">
   <div class="modal-card full">
     <div class="modal-head"><button class="backbtn" onclick="closeModal('sellModal')">&larr; Back</button><div class="htxt"><h2>Sell on TeeToo</h2><p>Apni dukaan T.T par shuru karein</p></div><button class="x" onclick="closeModal('sellModal')">&times;</button></div>
-    <div class="modal-body"><div class="mwrap" style="max-width:620px">
+    <div class="modal-body"><div class="mwrap" style="max-width:620px;margin:0 auto">
       <div id="sellStatus"></div>
       <div id="sellFormWrap">
         <div class="sell-steps">
@@ -753,7 +725,7 @@
 <div class="modal" id="bannerMgrModal">
   <div class="modal-card full">
     <div class="modal-head"><button class="backbtn" onclick="closeModal('bannerMgrModal')">← Back</button><div class="htxt"><h2>Manage Banner / Ads</h2><p>Apni photo (JPG/PNG) upload karein ya text banner banayein</p></div><button class="x" onclick="closeModal('bannerMgrModal')">×</button></div>
-    <div class="modal-body"><div class="mwrap" style="max-width:620px">
+    <div class="modal-body"><div class="mwrap" style="max-width:620px;margin:0 auto">
       <label for="bImgFile" style="display:flex;align-items:center;justify-content:center;gap:8px;background:var(--green);color:#fff;font-weight:800;padding:14px;border-radius:12px;cursor:pointer;font-size:14px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 20h16"/></svg>Upload Photo (JPG / PNG)</label>
       <input id="bImgFile" type="file" accept="image/*" style="display:none" onchange="uploadBannerImg(this)">
       <button class="add" style="margin-top:8px;background:#eef2f0;color:#334155" onclick="openAddBanner()">+ Text Banner banayein</button>
@@ -763,8 +735,9 @@
 </div>
 <div class="modal" id="salesModal">
   <div class="modal-card full">
-    <div class="modal-head"><button class="backbtn" onclick="closeModal('salesModal')">← Back</button><div class="htxt"><h2>Accounts</h2><p>Kul sale, har item ki value aur sale bills</p></div><button class="x" onclick="closeModal('salesModal')">×</button></div>
-    <div class="modal-body"><div class="mwrap"><div id="salesList"></div></div></div>
+    <div class="modal-head"><button class="backbtn" onclick="closeModal('salesModal')">← Back</button><div class="htxt"><h2>📊 Accounts</h2><p>Ledger, parties aur nafa nuqsan</p></div><button class="x" onclick="closeModal('salesModal')">×</button></div>
+    <div class="otabs" id="accTabs"></div>
+    <div class="modal-body" style="padding-top:0"><div class="mwrap"><div id="salesList"></div></div></div>
   </div>
 </div>
 <div class="modal" id="jobsAdminModal">
@@ -796,8 +769,10 @@
       <div class="admcard">
         <h4>Nayi purchase</h4>
         <div class="field"><label>Supplier / Party name (optional)</label><input id="purSup" placeholder="e.g. Karachi Wholesale"></div>
+        <div class="field"><label>Product</label><select id="purProd" onchange="onPurProd()"></select>
+          <div style="font-size:11.5px;color:var(--muted);margin-top:5px">Product chunenge to uski quantity khud barh jayegi. "Doosra" chunein to sirf kharcha ginega.</div></div>
         <div class="row2">
-          <div class="field" style="margin:0;flex:1"><label>Item name</label><input id="purItem" placeholder="e.g. Sugar 50kg bag"></div>
+          <div class="field" style="margin:0;flex:1" id="purNameWrap"><label>Item name</label><input id="purItem" placeholder="e.g. Bori / packing / mazdoori"></div>
           <div class="field" style="margin:0;max-width:70px"><label>Qty</label><input id="purQty" type="number" min="1" value="1"></div>
           <div class="field" style="margin:0;max-width:110px"><label>Unit cost</label><input id="purCost" type="number" min="0" value="0"></div>
         </div>
@@ -837,6 +812,7 @@
     <div class="modal-body"><div class="mwrap adm2">
       <div class="admcard">
         <h4>Nayi bill banayen</h4>
+        <div id="billEditBar" style="display:none"></div>
         <div class="row2">
           <div class="field" style="margin:0;flex:1"><label>Product</label><select id="billProd"></select></div>
           <div class="field" style="margin:0;max-width:80px"><label>Qty</label><input id="billQty" type="number" min="1" value="1"></div>
@@ -845,7 +821,7 @@
         <div class="field"><label>Customer name (optional)</label><input id="billCust" placeholder="Walk-in customer"></div>
         <div class="field"><label>Discount (Rs, optional)</label><input id="billDisc" type="number" min="0" value="0" oninput="renderBill()"></div>
         <div class="sumrow total" style="border-top:1px dashed #d7ddd9;margin-top:6px;padding-top:12px"><span>Total</span><span id="billTotal">Rs 0</span></div>
-        <button class="btn-primary" onclick="printInvoice()">Generate &amp; Print Invoice</button>
+        <button class="btn-primary" id="billSubmitBtn" onclick="printInvoice()">Generate &amp; Print Invoice</button>
       </div>
       <div>
         <div class="admcard" style="margin-bottom:16px"><h4>Is bill ke items</h4><div id="billList"></div></div>
@@ -858,8 +834,8 @@
   <div class="modal-card full">
     <div class="modal-head"><button class="backbtn" onclick="closeModal('invoiceModal')">&larr; Back</button><div class="htxt"><h2>Invoice</h2><p>Print ya PDF save karein</p></div><button class="x" onclick="closeModal('invoiceModal')">×</button></div>
     <div class="modal-body">
-      <div class="mwrap" style="max-width:760px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px"><div id="invoicePrint"></div></div>
-      <div class="mwrap" style="max-width:760px;display:flex;gap:10px;margin-top:16px">
+      <div class="mwrap" style="max-width:820px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px"><div id="invoicePrint"></div></div>
+      <div class="mwrap" style="max-width:820px;margin:16px auto 0;display:flex;gap:10px">
         <button class="btn-primary" style="flex:1" onclick="doPrintInvoice()">🖨️ Print / Save as PDF</button>
         <button class="add" style="width:auto;padding:0 22px" onclick="closeModal('invoiceModal')">Close</button>
       </div>
@@ -930,6 +906,49 @@
     <div class="modal-head"><button class="backbtn" onclick="closeModal('sellersModal')">&larr; Back</button><div class="htxt"><h2>&#127978; Sellers</h2><p>Applications approve karein, commission set karein aur payout dekhein</p></div><button class="x" onclick="closeModal('sellersModal')">&times;</button></div>
     <div class="otabs" id="sellTabs"></div>
     <div class="modal-body" style="padding-top:0"><div class="mwrap"><div id="sellersList"></div></div></div>
+  </div>
+</div>
+
+<button id="railToggle" onclick="toggleRail()">☰</button>
+<div id="admRail"></div>
+
+<div class="modal" id="shopModal">
+  <div class="modal-card full">
+    <div class="modal-head"><button class="backbtn" onclick="closeModal('shopModal')">← Back</button><div class="htxt"><h2>🏪 My Shop</h2><p id="shopSub">Apne products aur sales</p></div><button class="x" onclick="closeModal('shopModal')">×</button></div>
+    <div class="modal-body" style="padding-top:0"><div class="mwrap"><div id="shopBody"></div></div></div>
+  </div>
+</div>
+
+<div class="modal" id="stockAlertModal">
+  <div class="modal-card" style="width:520px">
+    <div class="modal-head"><h2>⚠️ Stock Alert</h2><p id="saSub">Kuch products khatam ho rahe hain</p><button class="x" onclick="closeModal('stockAlertModal')">&times;</button></div>
+    <div class="modal-body"><div id="saBody"></div>
+      <button class="btn-primary" style="margin-top:12px" onclick="closeModal('stockAlertModal');openProductsAdmin()">Inventory kholein</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="tickerModal">
+  <div class="modal-card" style="width:460px">
+    <div class="modal-head"><h2>✎ Top Bar &amp; Ticker</h2><p>Delivery bar aur promo strip ka text</p><button class="x" onclick="closeModal('tickerModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Deliver to</label><input id="tkDeliver" placeholder="Home"></div>
+      <div class="row2">
+        <div class="field" style="flex:1"><label>Delivery fee (Rs)</label><input id="tkFee" type="number" min="0" placeholder="99"></div>
+        <div class="field" style="flex:1"><label>Free delivery over (Rs)</label><input id="tkFree" type="number" min="0" placeholder="2000"></div>
+      </div>
+      <div style="border-top:1px solid var(--line);margin:6px 0 14px"></div>
+      <div class="field"><label>Promo ticker — left text</label><input id="tkStrip" placeholder="⚡ END OF MONTH"></div>
+      <div class="field"><label>Promo ticker — right text</label><input id="tkOff" placeholder="UPTO 80% OFF"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Leave both empty to hide the ticker completely.</div></div>
+      <button class="btn-primary" onclick="saveTicker()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="productsModal">
+  <div class="modal-card full">
+    <div class="modal-head"><button class="backbtn" onclick="closeModal('productsModal')">&larr; Back</button><div class="htxt"><h2>📦 Inventory</h2><p>Stock, price and quantity — all in one place</p></div><button class="x" onclick="closeModal('productsModal')">&times;</button></div>
+    <div class="modal-body" style="padding-top:0"><div class="mwrap"><div id="productsBody"></div></div></div>
   </div>
 </div>
 
@@ -1015,7 +1034,9 @@ function imgUrl(p){ if(p.img) return p.img; return 'https://loremflickr.com/320/
 function imgFallback(el){el.style.display='none';const e=el.parentNode.querySelector('.emoji');if(e)e.style.display='grid';}
 const LS={get:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v===null?d:v}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let catalog=LS.get('tt_products',null);
-if(!Array.isArray(catalog)||!catalog.length){catalog=DEFAULT_PRODUCTS.map(p=>({...p}));LS.set('tt_products',catalog);}
+if(!Array.isArray(catalog)||!catalog.length){catalog=DEFAULT_PRODUCTS.map(p=>({...p}));}
+catalog.forEach(function(p){ if(typeof p.stock!=='number') p.stock=50; if(typeof p.cost!=='number') p.cost=defaultCostFor(p); });
+LS.set('tt_products',catalog);
 let CATEGORIES=LS.get('tt_categories',null);
 if(!Array.isArray(CATEGORIES)||!CATEGORIES.length){CATEGORIES=DEFAULT_CATEGORIES.map(c=>({...c}));LS.set('tt_categories',CATEGORIES);}
 if(!CATEGORIES.some(c=>c.id==='all')){CATEGORIES.unshift({id:'all',name:'All',ic:'🛒'});}
@@ -1031,8 +1052,6 @@ const findP=id=>catalog.find(x=>x.id==id);
 function hasStock(p){ return p && typeof p.stock==='number'; }
 function stockLeft(p){ return hasStock(p)? Math.max(0,p.stock) : Infinity; }
 function inStock(p){ return stockLeft(p)>0; }
-function stockLabel(p){ return hasStock(p)? (p.stock+' left') : 'unlimited'; }
-
 function renderCats(){
   $('#catbar').innerHTML='<button class="chip '+(activeCat==='wishlist'?'active':'')+'" onclick="setCat(\'wishlist\')"><span class="ic">❤️</span>Wishlist</button>'+CATEGORIES.map(c=>`<button class="chip ${c.id===activeCat?'active':''}" onclick="setCat('${c.id}')"><span class="ic">${c.ic}</span>${c.name}</button>`).join('');
 }
@@ -1069,9 +1088,10 @@ function renderGrid(){
       :(qty>0
       ?`<div class="qty-inline"><button onclick="changeQty(${p.id},-1)">−</button><span>${qty} in cart</span><button onclick="changeQty(${p.id},1)">+</button></div>`
       :`<button class="add" onclick="changeQty(${p.id},1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add</button>`);
-    const lowTag=(!oos&&hasStock(p)&&p.stock<=5)?`<span style="position:absolute;bottom:8px;left:8px;z-index:2;background:#fef3c7;color:#92600a;font-size:10px;font-weight:800;padding:3px 8px;border-radius:7px">Sirf ${p.stock} bache</span>`:'';
+    const lowTag=(!oos&&hasStock(p)&&p.stock<=lowStockLimit())?`<span style="position:absolute;bottom:8px;left:8px;z-index:2;background:#fef3c7;color:#92600a;font-size:10px;font-weight:800;padding:3px 8px;border-radius:7px">Sirf ${p.stock} bache</span>`:'';
     return `<div class="card"><div class="card-img" style="background:${CAT_BG[p.cat]||'#eef2f0'}"><button class="wish ${wishlist.includes(p.id)?'on':''}" onclick="toggleWish(${p.id})" title="Wishlist">${wishlist.includes(p.id)?'❤️':'🤍'}</button><img class="pimg" src="${imgUrl(p)}" alt="${p.name}" loading="lazy" data-k="${imgKey(p)}" data-id="${p.id}" onerror="imgFallback(this)" onclick="openProductView(${p.id})" style="cursor:pointer"><span class="emoji" style="display:none">${p.emoji||'📦'}</span>${p.tag?`<span class="tag">${p.tag}</span>`:''}${off>0?`<span class="off">-${off}%</span>`:''}${lowTag}${oos?`<div style="position:absolute;inset:0;background:rgba(255,255,255,.66);display:grid;place-items:center;font-weight:800;font-size:13px;color:#64748b;letter-spacing:.5px">OUT OF STOCK</div>`:''}</div>
-      <div class="card-body"><span class="rate">⭐ ${(p.rating||4.5).toFixed(1)}</span><h3 onclick="openProductView(${p.id})" style="cursor:pointer">${p.name}</h3><div class="unit">${p.unit||''}${p.sellerId?` · <span style="color:#7c3aed;font-weight:600">${esc(p.sellerName||sellerName(p.sellerId)||'Seller')}</span>`:''}</div>
+      <div class="card-body"><span class="rate">⭐ ${(p.rating||4.5).toFixed(1)}</span><h3 onclick="openProductView(${p.id})" style="cursor:pointer">${p.name}</h3><div class="unit">${p.unit||''}</div>
+      ${p.sellerId?`<div style="display:inline-flex;align-items:center;gap:4px;background:#faf5ff;border:1px solid #e9d5ff;border-radius:7px;padding:2px 7px;margin:-4px 0 8px;font-size:10px;font-weight:700;color:#6b21a8;max-width:100%;overflow:hidden"><span style="font-size:11px">🏪</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Sold by ${esc(p.sellerName||sellerName(p.sellerId)||'Seller')}</span></div>`:''}
       <div class="price-row"><span class="price">${money(p.price)}</span>${p.old?`<span class="old">${money(p.old)}</span>`:''}</div>${ctrl}</div></div>`;
   }).join('');
 }
@@ -1094,7 +1114,7 @@ function changeQty(id,delta){
 function removeItem(id){ delete cart[id]; LS.set('tt_cart',cart); renderGrid(); updateCartUI(); renderCartBody(); }
 function cartCount(){ return Object.values(cart).reduce((a,b)=>a+b,0); }
 function cartSubtotal(){ return Object.entries(cart).reduce((s,[id,q])=>{ const p=findP(id); return s+(p?p.price*q:0); },0); }
-function deliveryFee(){ const s=cartSubtotal(); return s===0||s>=FREE_OVER?0:DELIVERY_FEE; }
+function deliveryFee(){ const s=cartSubtotal(); return s===0||s>=freeOverAmt()?0:deliveryFeeAmt(); }
 function cartTotal(){ return cartSubtotal()+deliveryFee(); }
 function updateCartUI(){ const c=cartCount(),badge=$('#cartCount'),nav=$('#navCount'); badge.style.display=c?'grid':'none'; badge.textContent=c; nav.style.display=c?'grid':'none'; nav.textContent=c; }
 function renderCartBody(){
@@ -1108,7 +1128,7 @@ function renderCartBody(){
       <div class="ci-right"><button class="ci-del" onclick="removeItem(${p.id})" title="Remove">🗑</button>
       <div class="qty-sm"><button onclick="changeQty(${p.id},-1)">−</button><span>${q}</span><button onclick="changeQty(${p.id},1)">+</button></div></div></div>`;
   }).join('');
-  const sub=cartSubtotal(),del=deliveryFee(),need=FREE_OVER-sub;
+  const sub=cartSubtotal(),del=deliveryFee(),need=freeOverAmt()-sub;
   $('#cartFoot').innerHTML=`${del>0&&need>0?`<div class="free-note">🚚 Add ${money(need)} more for FREE delivery!</div>`:''}${del===0&&sub>0?`<div class="free-note">🎉 You’ve unlocked FREE delivery!</div>`:''}
     <div class="sumrow"><span>Subtotal</span><span>${money(sub)}</span></div>
     <div class="sumrow"><span>Delivery Fee</span><span>${del===0?'FREE':money(del)}</span></div>
@@ -1216,51 +1236,20 @@ function submitAuth(){
   });
 }
 
-function googleFlow(){ $('#gfEmail').classList.remove('invalid'); $('#gEmail').value=''; $('#gName').value=''; openModal('googleModal'); }
-function googleContinue(){
-  const email=$('#gEmail').value.trim().toLowerCase(),name=$('#gName').value.trim();
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ $('#gfEmail').classList.add('invalid'); return; }
-  let u=users.find(x=>x.email===email),fresh=false;
-  if(!u){ u={name:name||email.split('@')[0],email,provider:'google'}; users.push(u); LS.set('tt_users',users); fresh=true; }
-  session=email; LS.set('tt_session',session); closeModal('googleModal');
-  toast('🔵',fresh?'Google account created!':'Signed in with Google'); finishAuth();
-}
-
-let otpCode=null,otpPhone=null;
-function phoneFlow(){ otpCode=null; otpPhone=null; $('#phNum').value=''; $('#otpInput').value=''; $('#phName').value=''; $('#phfNum').classList.remove('invalid'); $('#phfOtp').classList.remove('invalid'); showPhStep(1); $('#phSub').textContent="We'll send you a verification code"; openModal('phoneModal'); }
-function showPhStep(n){ $('#phStep1').hidden=n!==1; $('#phStep2').hidden=n!==2; $('#phStep3').hidden=n!==3; }
-function sendOtp(){
-  const phone=$('#phNum').value.replace(/\D/g,'');
-  if(phone.length<10){ $('#phfNum').classList.add('invalid'); return; }
-  otpPhone=phone; otpCode=String(Math.floor(1000+Math.random()*9000));
-  $('#otpShown').textContent=otpCode; $('#otpInput').value=''; $('#phfOtp').classList.remove('invalid');
-  $('#phSub').textContent='Code sent to '+phone; showPhStep(2);
-}
-function verifyOtp(){
-  if($('#otpInput').value.trim()!==otpCode){ $('#phfOtp').classList.add('invalid'); return; }
-  const u=users.find(x=>x.email===otpPhone);
-  if(!u){ showPhStep(3); return; }
-  session=otpPhone; LS.set('tt_session',session); closeModal('phoneModal'); toast('📱','Signed in with phone'); finishAuth();
-}
-function finishPhoneSignup(){
-  const name=$('#phName').value.trim()||('User '+otpPhone.slice(-4));
-  users.push({name,email:otpPhone,provider:'phone'}); LS.set('tt_users',users);
-  session=otpPhone; LS.set('tt_session',session); closeModal('phoneModal'); toast('🌿','Account created — welcome!'); finishAuth();
-}
-function finishAuth(){ updateAcctLabel(); closeModal('authModal'); closeModal('googleModal'); closeModal('phoneModal'); if(pendingCheckout){ pendingCheckout=false; startCheckout(); } }
+function finishAuth(){ updateAcctLabel(); closeModal('authModal'); if(pendingCheckout){ pendingCheckout=false; startCheckout(); } }
 function logout(){ session=null; LS.set('tt_session',null); if(window.fbAuth){ try{window.fbAuth.signOut();}catch(e){} } updateAcctLabel(); closeModal('acctModal'); toast('👋','Logged out successfully'); }
-function updateAcctLabel(){ const u=currentUser(); $('#acctLabel').textContent=u?(isAdmin()?'Admin':u.name.split(' ')[0]):'Login'; const ea=document.getElementById('editAds'); if(ea)ea.style.display=isAdmin()?'block':'none'; const bb=document.getElementById('billBtn'); if(bb)bb.style.display=isAdmin()?'flex':'none'; const mb=document.getElementById('msgsBtn'); if(mb)mb.style.display=isAdmin()?'flex':'none'; var ob=document.getElementById('ordersBtn'); if(ob)ob.style.display=isAdmin()?'flex':'none'; var sb=document.getElementById('salesBtn'); if(sb)sb.style.display=isAdmin()?'flex':'none'; var pb=document.getElementById('purchaseBtn'); if(pb)pb.style.display=isAdmin()?'flex':'none'; var sb2=document.getElementById('sellersBtn'); if(sb2)sb2.style.display=isAdmin()?'flex':'none'; var jb=document.getElementById('jobBtn'); if(jb){ jb.style.display='flex'; jb.title=isAdmin()?'Employees':'Apply for Job'; } var jbl=document.getElementById('jobBtnLabel'); if(jbl) jbl.textContent=isAdmin()?'Employee':'Job'; var njl=document.getElementById('navJobLabel'); if(njl) njl.textContent=isAdmin()?'Employee':'Job'; updateMsgBadge(); if(typeof updateOrdersBadge==='function')updateOrdersBadge(); if(typeof updateJobsBadge==='function')updateJobsBadge(); if(typeof updateSellersBadge==='function')updateSellersBadge(); }
+function updateAcctLabel(){ const u=currentUser(); $('#acctLabel').textContent=u?(isAdmin()?'Admin':u.name.split(' ')[0]):'Login'; const ea=document.getElementById('editAds'); if(ea)ea.style.display=isAdmin()?'block':'none'; const bb=document.getElementById('billBtn'); if(bb)bb.style.display='none'; const mb=document.getElementById('msgsBtn'); if(mb)mb.style.display='none'; var ob=document.getElementById('ordersBtn'); if(ob)ob.style.display='none'; var sb=document.getElementById('salesBtn'); if(sb)sb.style.display='none'; var pb=document.getElementById('purchaseBtn'); if(pb)pb.style.display='none'; var sb2=document.getElementById('sellersBtn'); if(sb2)sb2.style.display='none'; var jb=document.getElementById('jobBtn'); if(jb){ jb.style.display=isAdmin()?'none':'flex'; jb.title=isAdmin()?'Employees':'Apply for Job'; } var jbl=document.getElementById('jobBtnLabel'); if(jbl) jbl.textContent=isAdmin()?'Employee':'Job'; var njl=document.getElementById('navJobLabel'); if(njl) njl.textContent=isAdmin()?'Employee':'Job'; updateMsgBadge(); if(typeof updateOrdersBadge==='function')updateOrdersBadge(); if(typeof updateJobsBadge==='function')updateJobsBadge(); if(typeof updateSellersBadge==='function')updateSellersBadge(); if(typeof updateSellerBadge==='function')updateSellerBadge(); if(typeof updateShopBtn==='function')updateShopBtn(); if(typeof renderRail==='function')renderRail(); if(typeof applySettings==='function')applySettings(); }
 
-function openAcctPanel(){ renderAcct(); openModal('acctModal'); }
+function openAcctPanel(){ renderAcct(); openModal('acctModal'); if(!isAdmin()&&isApprovedSeller()) setTimeout(function(){ markSalesSeen(); },1500); }
 function renderAcct(){
   const u=currentUser();
   const _fbMine=allOrders.filter(function(o){return o.userEmail===u.email;}); const orders=_fbMine.length?_fbMine:(ordersAll[u.email]||[]).slice().reverse();
   const initials=u.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
   const spent=orders.reduce((s,o)=>s+o.total,0);
   const provLabel={email:'Email',google:'Google',phone:'Phone',admin:'Master'}[u.provider]||'Email';
-  const adminSection=isAdmin()?`<div class="acct-sec"><h4>Manage Products <span style="text-transform:none;letter-spacing:0;color:var(--muted)">${catalog.length} items</span></h4>
-    <div class="admin-panel"><button class="admin-add" onclick="openAddProduct()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add New Product</button>
-    <div class="plist">${catalog.map(p=>`<div class="padmin">${p.img?('<img src="'+p.img+'" style="width:34px;height:34px;border-radius:8px;object-fit:cover;flex-shrink:0">'):('<div class="pe" style="background:'+(CAT_BG[p.cat]||'#eef2f0')+'">'+(p.emoji||'📦')+'</div>')}<div class="pinfo"><b>${p.name}</b><small>${money(p.price)} · ${p.unit||''} · <span style="color:${hasStock(p)?(p.stock>5?'#0f766e':(p.stock>0?'#d97706':'#dc2626')):'#9ca3af'};font-weight:700">${hasStock(p)?(p.stock>0?(p.stock+' stock'):'OUT OF STOCK'):'unlimited'}</span>${(typeof p.cost==='number')?(' · lagat '+money(p.cost)):''}${p.sellerId?('<br><span style="color:#7c3aed;font-weight:700">🏪 '+esc(p.sellerName||sellerName(p.sellerId)||'Seller')+'</span>'):''}</small></div><button class="pdel" title="Ek position upar" onclick="moveProduct(${p.id},'up')" style="color:#0f766e">↑</button><button class="pdel" title="Ek position neeche" onclick="moveProduct(${p.id},'down')" style="color:#0f766e">↓</button><button class="pdel" title="Edit" onclick="openEditProduct(${p.id})" style="color:#64748b">✏️</button><button class="pdel" title="Delete" onclick="deleteProduct(${p.id})" style="color:#ef4444">🗑</button></div>`).join('')}</div></div></div>`:'';
+  const adminSection=isAdmin()?`<div class="acct-sec"><h4>Inventory</h4>
+    <div class="admin-panel"><button class="admin-add" onclick="closeModal('acctModal');openProductsAdmin()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg>Inventory kholein (${catalog.length} items)</button>
+    <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:8px">Add, edit, quantity aur tarteeb — sab wahan</div></div></div>`:'';
   const ordersHtml=orders.length?orders.map(o=>`<div class="order"><div class="order-top"><b>${o.id}</b><span class="st">${o.status}</span></div><div class="items">${o.items.map(i=>`${i.emoji} ${i.name} ×${i.qty}`).join('  ·  ')}</div><div class="ordfoot"><span>${o.date} · ${o.pay}</span><b>${money(o.total)}</b></div></div>`).join(''):`<div class="empty" style="padding:26px"><div class="big">📦</div><h3>No orders yet</h3><p>Your orders will appear here.</p></div>`;
   $('#acctContent').innerHTML=`<div class="acct-hero"><div class="avatar">${isAdmin()?'🛠️':initials}</div><div><h3>${u.name} ${isAdmin()?'<span class="admin-badge">MASTER</span>':''}</h3><p>${u.email} · <span class="prov">${provLabel}</span></p></div></div>
     <div class="acct-stats"><div class="stat"><b>${orders.length}</b><small>Orders</small></div><div class="stat"><b>${money(spent).replace('Rs ','Rs')}</b><small>${isAdmin()?'Sales':'Spent'}</small></div><div class="stat"><b>${isAdmin()?catalog.length:cartCount()}</b><small>${isAdmin()?'Products':'In Cart'}</small></div></div>
@@ -1271,7 +1260,10 @@ function renderAcct(){
     ${isAdmin()?categoriesSection():''}
     ${isAdmin()?invoicesSection():''}
     ${isAdmin()?settingsSection():''}
-    ${!isAdmin()?sellerShopSection():''}
+    ${(!isAdmin()&&mySeller())?`<div class="acct-sec"><h4>My Shop</h4><div class="admin-panel" style="background:#faf5ff;border-color:#e9d5ff;text-align:center">
+      <div style="font-size:12.5px;color:#6b21a8;margin-bottom:10px">${esc(mySeller().shop||'')} — ${mySeller().status==='approved'?'apne products aur sales dekhein':'application zer-e-ghaur hai'}</div>
+      <button class="add" style="width:auto;padding:9px 22px;margin:0 auto;background:#7c3aed;color:#fff;border-color:#7c3aed" onclick="closeModal('acctModal');openMyShop()">🏪 My Shop kholein</button>
+    </div></div>`:''}
     ${!isAdmin()?jobApplySection():''}
     ${!isAdmin()?sellerCtaSection():''}
     ${!isAdmin()?referralSection():''}
@@ -1328,30 +1320,33 @@ function openAddProduct(){
   editingId=null; $('#adminModalTitle').textContent=isAdmin()?'Add Product':'Mera naya product'; $('#apSubmit').textContent='Add Product';
   $('#apEmoji').value=''; $('#apName').value=''; $('#apPrice').value=''; $('#apOld').value=''; $('#apUnit').value=''; $('#apTag').value=''; $('#apStock').value=''; $('#apCost').value='';
   apImgData=undefined; $('#apImgPreviewWrap').style.display='none';
-  fillCatOptions(); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); openModal('adminModal');
+  fillCatOptions(); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); var _fs=document.getElementById('apfStock'); if(_fs)_fs.classList.remove('invalid'); openModal('adminModal');
 }
 function canManage(p){ if(isAdmin()) return true; var m=mySeller(); return !!(m && m.status==='approved' && String(p.sellerId||'')===String(m.id)); }
 function openEditProduct(id){
   const p=findP(id); if(!p) return;
-  if(!canManage(p)){ toast('🔒','Ye product aap ka nahi'); return; }
+  if(!canManage(p)){ toast('🔒','This product is not yours'); return; }
   editingId=id; $('#adminModalTitle').textContent='Edit Product'; $('#apSubmit').textContent='Save Changes';
   $('#apEmoji').value=p.emoji||''; $('#apName').value=p.name; $('#apPrice').value=p.price; $('#apOld').value=p.old||''; $('#apUnit').value=p.unit||''; $('#apTag').value=p.tag||''; $('#apStock').value=(typeof p.stock==='number'?p.stock:''); $('#apCost').value=(typeof p.cost==='number'?p.cost:'');
   apImgData=undefined;
   if(p.img){ $('#apImgPreview').src=p.img; $('#apImgPreviewWrap').style.display='flex'; } else { $('#apImgPreviewWrap').style.display='none'; }
-  fillCatOptions(p.cat); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); openModal('adminModal');
+  fillCatOptions(p.cat); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); var _fs=document.getElementById('apfStock'); if(_fs)_fs.classList.remove('invalid'); openModal('adminModal');
 }
 function saveProduct(){
   if(!isAdmin() && !isApprovedSeller()){ toast('🔒','Sirf approved seller ya admin product daal sakta hai'); return; }
   const name=$('#apName').value.trim(),price=parseInt($('#apPrice').value,10); let bad=false;
   if(!name){ $('#apfName').classList.add('invalid'); bad=true; } else $('#apfName').classList.remove('invalid');
   if(!price||price<1){ $('#apfPrice').classList.add('invalid'); bad=true; } else $('#apfPrice').classList.remove('invalid');
+  var _st=$('#apStock').value.trim();
+  if(_st===''||isNaN(parseInt(_st,10))||parseInt(_st,10)<0){ $('#apfStock').classList.add('invalid'); bad=true; }
+  else $('#apfStock').classList.remove('invalid');
   if(bad) return;
   const oldP=parseInt($('#apOld').value,10);
   var stRaw=$('#apStock').value.trim(); var coRaw=$('#apCost').value.trim();
-  var stVal=(stRaw==='')?undefined:Math.max(0,parseInt(stRaw,10)||0);
+  var stVal=Math.max(0,parseInt(stRaw,10)||0);
   var coVal=(coRaw==='')?undefined:Math.max(0,parseInt(coRaw,10)||0);
   const data={name,cat:$('#apCat').value,emoji:$('#apEmoji').value.trim()||'📦',price,old:(oldP&&oldP>price)?oldP:undefined,unit:$('#apUnit').value.trim()||'1 pc',tag:$('#apTag').value||undefined,stock:stVal,cost:coVal};
-  if(editingId){ const p=findP(editingId); if(p){ if(!canManage(p)){ toast('🔒','Ye product aap ka nahi'); return; } var _keepS=p.sellerId,_keepN=p.sellerName; Object.assign(p,data); if(_keepS){p.sellerId=_keepS;p.sellerName=_keepN;} if(stVal===undefined) delete p.stock; if(coVal===undefined) delete p.cost; if(apImgData===null){ delete p.img; } else if(apImgData){ p.img=apImgData; } fbSaveProduct(p); } LS.set('tt_products',catalog); closeModal('adminModal'); renderGrid(); renderAcct(); toast('✏️',name+' updated'); editingId=null; return; }
+  if(editingId){ const p=findP(editingId); if(p){ if(!canManage(p)){ toast('🔒','This product is not yours'); return; } var _keepS=p.sellerId,_keepN=p.sellerName; Object.assign(p,data); if(_keepS){p.sellerId=_keepS;p.sellerName=_keepN;}  if(coVal===undefined) delete p.cost; if(apImgData===null){ delete p.img; } else if(apImgData){ p.img=apImgData; } fbSaveProduct(p); } LS.set('tt_products',catalog); closeModal('adminModal'); renderGrid(); renderAcct(); toast('✏️',name+' updated'); editingId=null; return; }
   const np={id:(catalog.reduce((m,p)=>Math.max(m,p.id),0))+1,rating:4.5,...data};
   if(!isAdmin()){ var _ms=mySeller(); if(_ms){ np.sellerId=_ms.id; np.sellerName=_ms.shop||_ms.name||''; } }
   if(apImgData) np.img=apImgData; catalog.push(np); fbSaveProduct(np);
@@ -1359,7 +1354,7 @@ function saveProduct(){
 }
 function deleteProduct(id){
   const p=findP(id); if(!p) return;
-  if(!canManage(p)){ toast('🔒','Ye product aap ka nahi'); return; }
+  if(!canManage(p)){ toast('🔒','This product is not yours'); return; }
   if(!confirm('"'+p.name+'" ko delete karein?\nYe wapas nahi ho sakega.')) return;
   catalog=catalog.filter(x=>x.id!==id); LS.set('tt_products',catalog); fbDeleteProduct(id);
   if(cart[id]){ delete cart[id]; LS.set('tt_cart',cart); updateCartUI(); }
@@ -1369,10 +1364,27 @@ function deleteProduct(id){
 function fbSaveProduct(p){ if(window.db&&p){ try{ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }catch(e){ console.warn('fb save',e); } } }
 function fbDeleteProduct(id){ if(window.db){ try{ window.db.collection('products').doc(String(id)).delete(); }catch(e){ console.warn('fb del',e); } } }
 function fbInitSync(){ if(!window.db) return;
-  window.db.collection('products').onSnapshot(function(snap){ if(snap.empty){ catalog.forEach(function(p){ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }); return; } catalog=snap.docs.map(function(d){ return d.data(); }).sort(function(a,b){ var ao=(typeof a.ord==='number'?a.ord:(a.id||0)); var bo=(typeof b.ord==='number'?b.ord:(b.id||0)); return ao-bo; }); LS.set('tt_products',catalog); if(typeof renderGrid==='function') renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('products sync',err); });
+  window.db.collection('products').onSnapshot(function(snap){ if(snap.empty){ catalog.forEach(function(p){ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }); return; } catalog=snap.docs.map(function(d){ return d.data(); }).sort(function(a,b){ var ao=(typeof a.ord==='number'?a.ord:(a.id||0)); var bo=(typeof b.ord==='number'?b.ord:(b.id||0)); return ao-bo; }); if(typeof migrateStock==='function')migrateStock(); LS.set('tt_products',catalog); if(typeof maybeStockAlert==='function') setTimeout(maybeStockAlert,900); if(typeof renderGrid==='function') renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('products sync',err); });
   window.db.collection('banners').onSnapshot(function(snap){ if(snap.empty){ banners.forEach(function(b){ if(!b.id)b.id='B'+Date.now()+Math.floor(Math.random()*999); fbSaveBanner(b); }); if(typeof renderCarousel==='function')renderCarousel(); return; } banners=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id||'')<String(b.id||'')?1:-1;}); var _defH=['UP TO 80% OFF','FREE DELIVERY','END OF MONTH SALE']; banners=banners.filter(function(b){ if(!b.img&&_defH.indexOf(b.h2)>=0){ if(b.id&&typeof fbDeleteBanner==='function')fbDeleteBanner(b.id); return false; } return true; }); LS.set('tt_banners',banners); if(typeof renderCarousel==='function')renderCarousel(); var _bm=document.getElementById('bannerMgrModal'); if(_bm&&_bm.classList.contains('show')&&typeof renderBannerMgr==='function')renderBannerMgr(); }, function(e){console.warn('banners sync',e);});
   window.db.collection('settings').doc('main').onSnapshot(function(d){ if(d.exists){ settings=Object.assign(settings,d.data()); LS.set('tt_settings',settings); if(typeof applySettings==='function')applySettings(); } }, function(e){console.warn('settings sync',e);});
   window.db.collection('categories').onSnapshot(function(snap){ if(snap.empty){ CATEGORIES.forEach(function(c){ window.db.collection('categories').doc(String(c.id)).set(JSON.parse(JSON.stringify(c))); }); return; } var list=snap.docs.map(function(d){return d.data();}); if(!list.some(function(c){return c.id==='all';})) list.unshift({id:'all',name:'All',ic:'🛒'}); CATEGORIES=list; LS.set('tt_categories',CATEGORIES); if(typeof renderCats==='function')renderCats(); if(typeof renderGrid==='function')renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('categories sync',err); });
+}
+var _selSyncOn=false;
+function fbSellerSync(){
+  if(!window.db||_selSyncOn) return;
+  var m=(typeof mySeller==='function')?mySeller():null;
+  if(!m||m.status!=='approved') return;
+  _selSyncOn=true;
+  try{
+    window.db.collection('sellerSales').where('sellerId','==',String(m.id)).onSnapshot(function(snap){
+      mySales=snap.docs.map(function(d){return d.data();});
+      LS.set('tt_mysales',mySales);
+      if(typeof updateSellerBadge==='function')updateSellerBadge();
+      if(typeof updateShopBtn==='function')updateShopBtn();
+      var am=document.getElementById('acctModal');
+      if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct();
+    }, function(e){ console.warn('sellerSales sync',e); });
+  }catch(e){ console.warn('sellerSales',e); }
 }
 var _admSyncOn=false;
 function fbAdminSync(){ if(!window.db||_admSyncOn||!isAdmin()) return; _admSyncOn=true;
@@ -1380,7 +1392,7 @@ function fbAdminSync(){ if(!window.db||_admSyncOn||!isAdmin()) return; _admSyncO
   window.db.collection('users').onSnapshot(function(snap){ users=snap.docs.map(function(d){return d.data();}); if(!users.some(function(u){return u.email===ADMIN_EMAIL;})) users.push({name:'Store Admin',email:ADMIN_EMAIL,provider:'admin'}); LS.set('tt_users',users); updateAcctLabel(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('users sync',e);});
   window.db.collection('invoices').onSnapshot(function(snap){ invoices=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id)>String(b.id)?1:-1;}); LS.set('tt_invoices',invoices); var _bm=document.getElementById('billModal'); if(_bm&&_bm.classList.contains('show')&&typeof renderBillInvoices==='function')renderBillInvoices(); var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('inv sync',e);});
   window.db.collection('purchases').onSnapshot(function(snap){ purchases=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return (a.serial||0)-(b.serial||0);}); LS.set('tt_purchases',purchases); var _pm=document.getElementById('purchaseModal'); if(_pm&&_pm.classList.contains('show')&&typeof renderPurchases==='function')renderPurchases(); }, function(e){console.warn('pur sync',e);});
-  window.db.collection('sellers').onSnapshot(function(snap){ sellers=snap.docs.map(function(d){return d.data();}); LS.set('tt_sellers',sellers); if(typeof updateSellersBadge==='function')updateSellersBadge(); var sm=document.getElementById('sellersModal'); if(sm&&sm.classList.contains('show')&&typeof renderSellers==='function')renderSellers(); var pm=document.getElementById('sellModal'); if(pm&&pm.classList.contains('show')&&typeof renderSellPage==='function')renderSellPage(); if(typeof renderGrid==='function')renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('sellers sync',e);});
+  window.db.collection('sellers').onSnapshot(function(snap){ sellers=snap.docs.map(function(d){return d.data();}); LS.set('tt_sellers',sellers); if(typeof updateSellersBadge==='function')updateSellersBadge(); var sm=document.getElementById('sellersModal'); if(sm&&sm.classList.contains('show')&&typeof renderSellers==='function')renderSellers(); var pm=document.getElementById('sellModal'); if(pm&&pm.classList.contains('show')&&typeof renderSellPage==='function')renderSellPage(); if(typeof renderGrid==='function')renderGrid(); if(typeof fbSellerSync==='function')fbSellerSync(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('sellers sync',e);});
   window.db.collection('jobApplications').onSnapshot(function(snap){ jobs=snap.docs.map(function(d){return d.data();}); LS.set('tt_jobs',jobs); if(typeof updateJobsBadge==='function')updateJobsBadge(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); var jm=document.getElementById('jobsAdminModal'); if(jm&&jm.classList.contains('show')&&typeof renderJobsAdmin==='function')renderJobsAdmin(); }, function(e){console.warn('jobs sync',e);});
   window.db.collection('messages').onSnapshot(function(snap){ messages=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id)>String(b.id)?1:-1;}); LS.set('tt_messages',messages); updateMsgBadge(); var mm=document.getElementById('msgsModal'); if(mm&&mm.classList.contains('show'))renderMessages(); var hm=document.getElementById('helpModal'); if(hm&&hm.classList.contains('show')&&typeof renderHpThread==='function')renderHpThread(); }, function(e){console.warn('msg sync',e);});
 }
@@ -1388,7 +1400,7 @@ function toggleWish(id){ const i=wishlist.indexOf(id); if(i>=0)wishlist.splice(i
 function voucherDiscount(){ if(!voucher)return 0; const v=VOUCHERS[voucher]; if(!v)return 0; const sub=cartSubtotal(); if(v.min&&sub<v.min)return 0; return v.type==='pct'?Math.round(sub*v.off/100):v.off; }
 function updateCoTotal(){ const disc=voucherDiscount(); const tot=Math.max(0,cartTotal()-disc); const ct=document.getElementById('coTotal'); if(ct)ct.textContent=money(tot); const dr=document.getElementById('coDiscRow'); if(dr){ if(disc>0){dr.style.display='flex';document.getElementById('coDisc').textContent='- '+money(disc);}else{dr.style.display='none';} } }
 function applyVoucher(){ const code=($('#coVoucher').value||'').trim().toUpperCase(); const msg=$('#voucherMsg'); if(!code){voucher=null;msg.textContent='';updateCoTotal();return;} const v=VOUCHERS[code]; if(!v){voucher=null;msg.style.color='#dc2626';msg.textContent='Invalid code';updateCoTotal();return;} if(v.min&&cartSubtotal()<v.min){voucher=null;msg.style.color='#dc2626';msg.textContent='Minimum order Rs '+v.min+' for this code';updateCoTotal();return;} voucher=code; msg.style.color='#16a34a'; msg.textContent='Applied! '+(v.type==='pct'?v.off+'% off':'Rs '+v.off+' off'); updateCoTotal(); }
-let billItems=[];
+let billItems=[]; var editingInvId=null;
 function esc(t){return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function renderHpContact(){ var el=document.getElementById('hpContact'); if(!el)return; var em=supportEmail(); var ph=(settings.help||'').trim();
   el.innerHTML='<b style="color:var(--green-dark)">Shikayat ya mashwara?</b><br>Neeche form se bhejein, ya seedha email karein:<br>'
@@ -1403,20 +1415,75 @@ function updateMsgBadge(){ const b=document.getElementById('msgCount'); if(!b)re
 function openMessages(){ renderMessages(); openModal('msgsModal'); messages.forEach(function(m){ if(!m.read){ m.read=true; fbSaveMessage(m); } }); LS.set('tt_messages',messages); updateMsgBadge(); }
 function renderMessages(){ const el=$('#msgsList'); if(!messages.length){ el.innerHTML='<div class="empty" style="padding:26px"><div class="big">📭</div><h3>No messages yet</h3><p>Customer messages yahan aayenge.</p></div>'; return; } el.innerHTML=messages.slice().reverse().map(function(m){ var idx=messages.indexOf(m); var replyBlock=m.reply?'<div style="margin-top:8px;background:#eef2f0;border-radius:10px;padding:8px 10px;font-size:12.5px"><b style="color:var(--green-dark);font-size:11px">Aap ka reply</b><br>'+esc(m.reply)+'</div>':''; return '<div class="order" style="'+(m.read?'':'border-color:var(--green);background:var(--green-soft)')+'"><div class="order-top"><b>'+esc(m.name)+'</b><button class="ci-del" onclick="deleteMsg('+idx+')" title="Delete" style="color:#ef4444">🗑</button></div><div class="items" style="color:var(--ink);font-size:13.5px;white-space:pre-wrap">'+esc(m.msg)+'</div><div class="ordfoot"><span>'+m.date+(m.email?' · '+esc(m.email):'')+'</span></div>'+replyBlock+'<div style="display:flex;gap:6px;margin-top:8px"><input id="rep'+idx+'" placeholder="Reply likhein..." style="flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:9px;font-size:13px"><button class="add" style="width:auto;padding:6px 14px;margin:0" onclick="replyMsg('+idx+')">Send</button></div></div>'; }).join(''); }
 function deleteMsg(i){ if(!messages[i]) return; if(!confirm('Ye message delete karein?\nYe wapas nahi ho sakega.')) return; if(messages[i]&&window.db){ try{ window.db.collection('messages').doc(String(messages[i].id)).delete(); }catch(e){} } messages.splice(i,1); LS.set('tt_messages',messages); renderMessages(); updateMsgBadge(); }
-function openBilling(){ billItems=[]; $('#billProd').innerHTML=catalog.map(p=>`<option value="${p.id}">${p.name} — ${money(p.price)}</option>`).join(''); $('#billQty').value=1; $('#billCust').value=''; $('#billDisc').value='0'; renderBill(); renderBillInvoices(); openModal('billModal'); }
+function openBilling(){ editingInvId=null; billItems=[]; $('#billProd').innerHTML=catalog.map(p=>`<option value="${p.id}">${p.name} — ${money(p.price)}</option>`).join(''); $('#billQty').value=1; $('#billCust').value=''; $('#billDisc').value='0'; renderBill(); renderBillInvoices(); openModal('billModal'); }
+function editInvoice(i){
+  var v=invoices[i]; if(!v) return;
+  var missing=[]; billItems=[];
+  (v.items||[]).forEach(function(it){
+    var pr=findP(it.pid);
+    if(!pr){ missing.push(it.name); return; }
+    var ex=billItems.find(function(x){ return x.id===pr.id; });
+    if(ex) ex.qty+=(it.qty||0); else billItems.push({id:pr.id,qty:it.qty||0});
+  });
+  editingInvId=v.id;
+  $('#billCust').value=v.cust||'';
+  $('#billDisc').value=v.disc||0;
+  renderBill(); renderBillEditBar(); renderBillInvoices();
+  openModal('billModal');
+  if(missing.length) toast('\u26a0\ufe0f','Ye items ab catalog mein nahi: '+missing.join(', '));
+  else toast('\u270f\ufe0f',v.id+' edit ho rahi hai');
+}
+function cancelInvEdit(){
+  editingInvId=null; billItems=[]; $('#billCust').value=''; $('#billDisc').value='0';
+  renderBill(); renderBillEditBar(); toast('\u21a9','Edit band kar diya');
+}
+function renderBillEditBar(){
+  var el=document.getElementById('billEditBar'); if(!el) return;
+  var btn=document.getElementById('billSubmitBtn');
+  if(editingInvId){
+    el.style.display='block';
+    el.innerHTML='<div style="background:#fffbeb;border:1px dashed #fde68a;color:#b45309;border-radius:11px;padding:10px 12px;font-size:12.5px;display:flex;align-items:center;gap:10px;margin-bottom:12px">'
+      +'<b style="flex:1">\u270f\ufe0f '+esc(editingInvId)+' edit ho rahi hai</b>'
+      +'<button class="add" style="width:auto;padding:5px 12px;margin:0;font-size:12px" onclick="cancelInvEdit()">Cancel</button></div>';
+    if(btn) btn.textContent='Invoice Update karein';
+  } else {
+    el.style.display='none'; el.innerHTML='';
+    if(btn) btn.textContent='Generate & Print Invoice';
+  }
+}
 function addBillItem(){ const id=+$('#billProd').value; if(!findP(id)){ toast('🧾','Pehle product select karein'); return; } const qty=Math.max(1,parseInt($('#billQty').value,10)||1); const ex=billItems.find(x=>x.id===id); if(ex)ex.qty+=qty; else billItems.push({id,qty}); $('#billQty').value=1; renderBill(); }
 function billRemove(i){ billItems.splice(i,1); renderBill(); }
 function billQ(i,d){ billItems[i].qty=Math.max(1,billItems[i].qty+d); renderBill(); }
 function billTotalVal(){ const sub=billItems.reduce((s,it)=>{const p=findP(it.id);return s+(p?p.price*it.qty:0);},0); const d=parseInt($('#billDisc').value,10)||0; return {sub,disc:d,tot:Math.max(0,sub-d)}; }
 function renderBill(){ const el=$('#billList'); if(!billItems.length){ el.innerHTML='<div style="text-align:center;color:var(--muted);padding:16px;font-size:13px">Koi item nahi — upar se product add karein.</div>'; } else { el.innerHTML=billItems.map((it,i)=>{ const p=findP(it.id); if(!p) return ''; return `<div class="citem" style="padding:9px;margin-bottom:8px"><div class="ci-img" style="width:44px;height:44px;font-size:22px;background:${CAT_BG[p.cat]||'#eef2f0'}">${p.emoji||'📦'}</div><div class="ci-info"><h4>${p.name}</h4><div class="u">${money(p.price)} × ${it.qty} = <b>${money(p.price*it.qty)}</b></div></div><div class="ci-right"><button class="ci-del" onclick="billRemove(${i})">🗑</button><div class="qty-sm"><button onclick="billQ(${i},-1)">−</button><span>${it.qty}</span><button onclick="billQ(${i},1)">+</button></div></div></div>`; }).join(''); } $('#billTotal').textContent=money(billTotalVal().tot); }
-function printInvoice(){ if(!billItems.length){ toast('🧾','Pehle products add karein'); return; } const t=billTotalVal(); const cust=$('#billCust').value.trim()||'Walk-in Customer'; const rows=billItems.map(it=>{const p=findP(it.id);if(!p)return '';return `<tr><td>${p.name}</td><td style="text-align:center">${it.qty}</td><td style="text-align:right">${money(p.price)}</td><td style="text-align:right">${money(p.price*it.qty)}</td></tr>`;}).join(''); const inv='INV'+Date.now().toString().slice(-6); const date=new Date().toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); document.getElementById('invoicePrint').innerHTML=`<div class="inv-doc"><div class="inv-top"><div><div class="inv-logo">TEE<span style="color:#e14d16">TOO</span></div><div class="inv-sub">Fresh Grocery • Fast Delivery</div></div><div style="text-align:right"><h2 style="margin:0;letter-spacing:2px">INVOICE</h2><div style="font-size:12px;color:#555">${inv}<br>${date}</div></div></div><div class="inv-cust">Bill To: <b>${cust}</b></div><table class="inv-tbl"><thead><tr><th>Item</th><th style="text-align:center">Qty</th><th style="text-align:right">Price</th><th style="text-align:right">Amount</th></tr></thead><tbody>${rows}</tbody></table><div class="inv-tot"><div><span>Subtotal</span><b>${money(t.sub)}</b></div>${t.disc>0?`<div><span>Discount</span><b>- ${money(t.disc)}</b></div>`:''}<div class="inv-grand"><span>Total</span><b>${money(t.tot)}</b></div></div><div class="inv-thanks">Thank you for shopping with T.T!</div></div>`; const _it=billItems.map(function(it){var p=findP(it.id); if(!p) return null; var sid=String(p.sellerId||''); return {name:p.name,qty:it.qty,price:p.price,cost:(typeof p.cost==='number'?p.cost:0),pid:p.id,sellerId:sid,sellerName:sid?sellerName(sid):'',commRate:sid?sellerCommRate(sid):0};}).filter(Boolean); _it.forEach(function(it){ var pp=findP(it.pid); if(pp&&hasStock(pp)){ pp.stock=Math.max(0,pp.stock-it.qty); fbSaveProduct(pp); } });
+function printInvoice(){ if(!billItems.length){ toast('🧾','Pehle products add karein'); return; } const t=billTotalVal(); const cust=$('#billCust').value.trim()||'Walk-in Customer'; const rows=billItems.map(it=>{const p=findP(it.id);if(!p)return '';return `<tr><td>${p.name}</td><td style="text-align:center">${it.qty}</td><td style="text-align:right">${money(p.price)}</td><td style="text-align:right">${money(p.price*it.qty)}</td></tr>`;}).join(''); var inv=editingInvId||('INV'+Date.now().toString().slice(-6)); const date=new Date().toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); document.getElementById('invoicePrint').innerHTML=`<div class="inv-doc"><div class="inv-top"><div><div class="inv-logo">TEE<span style="color:#e14d16">TOO</span></div><div class="inv-sub">Fresh Grocery • Fast Delivery</div></div><div style="text-align:right"><h2 style="margin:0;letter-spacing:2px">INVOICE</h2><div style="font-size:12px;color:#555">${inv}<br>${date}</div></div></div><div class="inv-cust">Bill To: <b>${cust}</b></div><table class="inv-tbl"><thead><tr><th>Item</th><th style="text-align:center">Qty</th><th style="text-align:right">Price</th><th style="text-align:right">Amount</th></tr></thead><tbody>${rows}</tbody></table><div class="inv-tot"><div><span>Subtotal</span><b>${money(t.sub)}</b></div>${t.disc>0?`<div><span>Discount</span><b>- ${money(t.disc)}</b></div>`:''}<div class="inv-grand"><span>Total</span><b>${money(t.tot)}</b></div></div><div class="inv-thanks">Thank you for shopping with T.T!</div></div>`; const _it=billItems.map(function(it){var p=findP(it.id); if(!p) return null; var sid=String(p.sellerId||''); return {name:p.name,qty:it.qty,price:p.price,cost:(typeof p.cost==='number'?p.cost:0),pid:p.id,sellerId:sid,sellerName:sid?sellerName(sid):'',commRate:sid?sellerCommRate(sid):0};}).filter(Boolean);
+  var oldQty={}, editIdx=-1;
+  if(editingInvId){
+    editIdx=invoices.findIndex(function(v){ return String(v.id)===String(editingInvId); });
+    if(editIdx>=0) (invoices[editIdx].items||[]).forEach(function(x){ oldQty[x.pid]=(oldQty[x.pid]||0)+(x.qty||0); });
+  }
+  _it.forEach(function(it){
+    var pp=findP(it.pid); if(!pp||!hasStock(pp)){ delete oldQty[it.pid]; return; }
+    var delta=(it.qty||0)-(oldQty[it.pid]||0);
+    pp.stock=Math.max(0,pp.stock-delta); fbSaveProduct(pp);
+    delete oldQty[it.pid];
+  });
+  Object.keys(oldQty).forEach(function(pid){
+    var pp=findP(pid); if(pp&&hasStock(pp)){ pp.stock=pp.stock+oldQty[pid]; fbSaveProduct(pp); }
+  });
+  if(editIdx<0) makeSellerLines(_it,inv,'Counter',date,'');
+  _it.forEach(function(it){ warnIfLow(findP(it.pid)); });
   LS.set('tt_products',catalog); if(typeof renderGrid==='function')renderGrid();
-  invoices.push({id:inv,date:date,cust:cust,items:_it,sub:t.sub,disc:t.disc,tot:t.tot}); LS.set('tt_invoices',invoices); fbSaveInvoice(invoices[invoices.length-1]); var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show'))renderAcct(); closeModal('billModal'); openModal('invoiceModal'); }
+  var _rec={id:inv,date:date,cust:cust,items:_it,sub:t.sub,disc:t.disc,tot:t.tot};
+  if(editIdx>=0){ _rec.id=invoices[editIdx].id; _rec.date=invoices[editIdx].date; _rec.edited=date; invoices[editIdx]=_rec; }
+  else invoices.push(_rec);
+  editingInvId=null; if(typeof renderBillEditBar==='function')renderBillEditBar();
+  LS.set('tt_invoices',invoices); fbSaveInvoice(_rec); var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show'))renderAcct(); closeModal('billModal'); openModal('invoiceModal'); }
 function renderInvoiceDoc(inv){ var rows=inv.items.map(function(it){ return `<tr><td>${it.name}</td><td style="text-align:center">${it.qty}</td><td style="text-align:right">${money(it.price)}</td><td style="text-align:right">${money(it.price*it.qty)}</td></tr>`; }).join(''); document.getElementById('invoicePrint').innerHTML=`<div class="inv-doc"><div class="inv-top"><div><div class="inv-logo">TEE<span style="color:#e14d16">TOO</span></div><div class="inv-sub">Fresh Grocery • Fast Delivery</div></div><div style="text-align:right"><h2 style="margin:0;letter-spacing:2px">INVOICE</h2><div style="font-size:12px;color:#555">${inv.id}<br>${inv.date}</div></div></div><div class="inv-cust">Bill To: <b>${inv.cust}</b></div><table class="inv-tbl"><thead><tr><th>Item</th><th style="text-align:center">Qty</th><th style="text-align:right">Price</th><th style="text-align:right">Amount</th></tr></thead><tbody>${rows}</tbody></table><div class="inv-tot"><div><span>Subtotal</span><b>${money(inv.sub)}</b></div>${inv.disc>0?`<div><span>Discount</span><b>- ${money(inv.disc)}</b></div>`:''}<div class="inv-grand"><span>Total</span><b>${money(inv.tot)}</b></div></div><div class="inv-thanks">Thank you for shopping with T.T!</div></div>`; }
 function viewInvoice(i){ if(invoices[i]){ renderInvoiceDoc(invoices[i]); openModal('invoiceModal'); } }
 function fbSaveInvoice(inv){ if(window.db&&inv){ try{ window.db.collection('invoices').doc(String(inv.id)).set(JSON.parse(JSON.stringify(inv))); }catch(e){ console.warn('fb inv',e); } } }
-function renderBillInvoices(){ var el=document.getElementById('billInvList'); if(!el)return; if(!invoices.length){ el.innerHTML='<div style="text-align:center;color:var(--muted);padding:12px;font-size:13px">Abhi koi invoice nahi bani.</div>'; return; } el.innerHTML=invoices.map(function(v,idx){return {v:v,idx:idx};}).reverse().map(function(o){ var v=o.v; return '<div class="order"><div class="order-top"><b>'+v.id+'</b><span style="display:flex;gap:6px"><button class="add" style="width:auto;padding:5px 12px;font-size:12px;margin:0" onclick="viewInvoice('+o.idx+')">View / Print</button><button class="ci-del" title="Delete" onclick="deleteInvoice('+o.idx+')" style="color:#ef4444">\ud83d\uddd1</button></span></div><div class="items">'+v.items.map(function(i){return i.name+' \u00d7'+i.qty;}).join('  \u00b7  ')+'</div><div class="ordfoot"><span>'+v.date+' \u00b7 '+esc(v.cust||'')+'</span><b>'+money(v.tot)+'</b></div></div>'; }).join(''); }
-function invoicesSection(){ if(!invoices.length) return `<div class="acct-sec"><h4>Invoice History</h4><div class="empty" style="padding:20px"><div class="big">🧾</div><h3>No invoices yet</h3><p>Billing se invoice banayen — yahan save hongi.</p></div></div>`; var tot=invoices.reduce(function(s,v){return s+(v.tot||0);},0); var body=invoices.map(function(v,idx){return {v:v,idx:idx};}).reverse().map(function(o){ var v=o.v; return `<div class="order"><div class="order-top"><b>${v.id}</b><span style="display:flex;gap:6px"><button class="add" style="width:auto;padding:5px 12px;font-size:12px;margin:0" onclick="viewInvoice(${o.idx})">View / Print</button><button class="ci-del" title="Delete" onclick="deleteInvoice(${o.idx})" style="color:#ef4444">🗑</button></span></div><div class="items">${v.items.map(function(i){return i.name+' ×'+i.qty;}).join('  ·  ')}</div><div class="ordfoot"><span>${v.date} · ${v.cust}</span><b>${money(v.tot)}</b></div></div>`; }).join(''); return `<div class="acct-sec"><h4>Invoice History <span style="text-transform:none;letter-spacing:0;color:var(--muted)">${invoices.length} bills · ${money(tot)}</span></h4>${body}</div>`; }
+function renderBillInvoices(){ var el=document.getElementById('billInvList'); if(!el)return; if(!invoices.length){ el.innerHTML='<div style="text-align:center;color:var(--muted);padding:12px;font-size:13px">Abhi koi invoice nahi bani.</div>'; return; } el.innerHTML=invoices.map(function(v,idx){return {v:v,idx:idx};}).reverse().map(function(o){ var v=o.v; return '<div class="order"><div class="order-top"><b>'+v.id+'</b><span style="display:flex;gap:6px"><button class="add" style="width:auto;padding:5px 12px;font-size:12px;margin:0" onclick="viewInvoice('+o.idx+')">View / Print</button><button class="add" style="width:auto;padding:5px 12px;font-size:12px;margin:0;background:#eff6ff;color:#1e40af;border-color:#bfdbfe" onclick="editInvoice('+o.idx+')">\u270f\ufe0f Edit</button><button class="ci-del" title="Delete" onclick="deleteInvoice('+o.idx+')" style="color:#ef4444">\ud83d\uddd1</button></span></div><div class="items">'+v.items.map(function(i){return i.name+' \u00d7'+i.qty;}).join('  \u00b7  ')+'</div><div class="ordfoot"><span>'+v.date+' \u00b7 '+esc(v.cust||'')+'</span><span><b>'+money(v.tot)+'</b><span style="font-size:11px;color:#15803d;margin-left:8px">nafa '+money(itemsProfit(v.items,v.disc||0))+'</span></span></div></div>'; }).join(''); }
+function invoicesSection(){ if(!invoices.length) return `<div class="acct-sec"><h4>Invoice History</h4><div class="empty" style="padding:20px"><div class="big">🧾</div><h3>No invoices yet</h3><p>Billing se invoice banayen — yahan save hongi.</p></div></div>`; var tot=invoices.reduce(function(s,v){return s+(v.tot||0);},0); var body=invoices.map(function(v,idx){return {v:v,idx:idx};}).reverse().map(function(o){ var v=o.v; return `<div class="order"><div class="order-top"><b>${v.id}</b><span style="display:flex;gap:6px"><button class="add" style="width:auto;padding:5px 12px;font-size:12px;margin:0" onclick="viewInvoice(${o.idx})">View / Print</button><button class="add" style="width:auto;padding:5px 12px;font-size:12px;margin:0;background:#eff6ff;color:#1e40af;border-color:#bfdbfe" onclick="editInvoice(${o.idx})">✏️ Edit</button><button class="ci-del" title="Delete" onclick="deleteInvoice(${o.idx})" style="color:#ef4444">🗑</button></span></div><div class="items">${v.items.map(function(i){return i.name+' ×'+i.qty;}).join('  ·  ')}</div><div class="ordfoot"><span>${v.date} · ${v.cust}</span><b>${money(v.tot)}</b></div></div>`; }).join(''); return `<div class="acct-sec"><h4>Invoice History <span style="text-transform:none;letter-spacing:0;color:var(--muted)">${invoices.length} bills · ${money(tot)}</span></h4>${body}</div>`; }
 function deleteInvoice(i){
   var v=invoices[i]; if(!v) return;
   if(!confirm('Invoice '+v.id+' ('+money(v.tot)+') delete karein?\nAccounts ka hisaab isi waqt ghat jayega. Ye wapas nahi hoga.')) return;
@@ -1442,49 +1509,85 @@ function fbSaveOrder(order,email){ if(window.db&&order){ try{ window.db.collecti
 function updateOrdersBadge(){ var b=document.getElementById('ordCount'); if(!b)return; var n=isAdmin()?allOrders.filter(function(o){ return !o.read; }).length:0; b.style.display=n?'grid':'none'; b.textContent=n; }
 function openOrders(){ renderOrders(); openModal('ordersModal'); markOrdersRead(); }
 function markOrdersRead(){ var ch=false; allOrders.forEach(function(o){ if(!o.read){ o.read=true; ch=true; if(window.db){ try{ window.db.collection('orders').doc(String(o.id)).set({read:true},{merge:true}); }catch(e){} } } }); Object.keys(ordersAll).forEach(function(em){ (ordersAll[em]||[]).forEach(function(x){ x.read=true; }); }); if(ch)LS.set('tt_orders',ordersAll); updateOrdersBadge(); }
-function ordStatusStyle(s){ if(s==='Accepted')return {c:'#16a34a',bg:'#dcfce7'}; if(s==='Cancelled')return {c:'#dc2626',bg:'#fee2e2'}; return {c:'#d97706',bg:'#fef3c7'}; }
+function ordStatusStyle(s){ if(s==='Delivered')return {c:'#1d4ed8',bg:'#dbeafe'}; if(s==='Accepted')return {c:'#16a34a',bg:'#dcfce7'}; if(s==='Cancelled')return {c:'#dc2626',bg:'#fee2e2'}; return {c:'#d97706',bg:'#fef3c7'}; }
 var ordTab='pending';
 function setOrdTab(t){ ordTab=t; renderOrders(); }
-function ordBuckets(){ var b={pending:[],accepted:[],cancelled:[]};
+function ordBuckets(){ var b={pending:[],accepted:[],delivered:[],cancelled:[]};
   allOrders.forEach(function(o){ var st=o.status||'Confirmed';
-    if(st==='Accepted') b.accepted.push(o); else if(st==='Cancelled') b.cancelled.push(o); else b.pending.push(o); });
+    if(st==='Delivered') b.delivered.push(o);
+    else if(st==='Accepted') b.accepted.push(o);
+    else if(st==='Cancelled') b.cancelled.push(o);
+    else b.pending.push(o); });
   return b; }
 function renderOrders(){
   var el=document.getElementById('ordersList'); if(!el) return;
   var b=ordBuckets();
   var tabs=document.getElementById('ordTabs');
-  if(tabs){ tabs.innerHTML=[['pending','⏳ Pending',b.pending.length],['accepted','✅ Accepted',b.accepted.length],['cancelled','✕ Cancelled',b.cancelled.length]]
+  if(tabs){ tabs.innerHTML=[['pending','⏳ Pending',b.pending.length],['accepted','✅ Accepted',b.accepted.length],['delivered','🚚 Delivered',b.delivered.length],['cancelled','✕ Cancelled',b.cancelled.length]]
     .map(function(t){ return '<button class="otab '+(ordTab===t[0]?'on':'')+'" onclick="setOrdTab(\''+t[0]+'\')">'+t[1]+'<span class="n">'+t[2]+'</span></button>'; }).join(''); }
   var list=b[ordTab]||[];
   var tot=allOrders.reduce(function(a,o){ return a+(((o.status||'')==='Cancelled')?0:(o.total||0)); },0);
   var head='<div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">'
     +'<div style="flex:1;min-width:130px;background:#fef3c7;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:19px;color:#d97706">'+b.pending.length+'</b><small style="color:#92600a">Pending</small></div>'
     +'<div style="flex:1;min-width:130px;background:#f0fdf4;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:19px;color:#16a34a">'+b.accepted.length+'</b><small style="color:#15803d">Accepted</small></div>'
+    +'<div style="flex:1;min-width:130px;background:#dbeafe;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:19px;color:#1d4ed8">'+b.delivered.length+'</b><small style="color:#1e40af">Delivered</small></div>'
     +'<div style="flex:1;min-width:130px;background:#fee2e2;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:19px;color:#dc2626">'+b.cancelled.length+'</b><small style="color:#991b1b">Cancelled</small></div>'
     +'<div style="flex:1;min-width:150px;background:#eff6ff;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:16px;color:#1e40af">'+money(tot)+'</b><small style="color:#1e40af">Net Sale</small></div></div>';
-  if(!list.length){ var msg={pending:['⏳','Koi pending order nahi','Naye orders yahan aayenge.'],accepted:['✅','Abhi koi accept nahi hua','Pending tab se orders accept karein.'],cancelled:['✕','Koi cancelled order nahi','Achi baat hai.']}[ordTab];
+  if(!list.length){ var msg={pending:['⏳','Koi pending order nahi','Naye orders yahan aayenge.'],accepted:['✅','Abhi koi accept nahi hua','Pending tab se orders accept karein.'],delivered:['🚚','Abhi kuch deliver nahi hua','Accepted tab se "Delivered" dabayen jab maal pohnch jaye.'],cancelled:['✕','Koi cancelled order nahi','Achi baat hai.']}[ordTab];
     el.innerHTML=head+'<div class="empty" style="padding:40px 20px"><div class="big">'+msg[0]+'</div><h3>'+msg[1]+'</h3><p>'+msg[2]+'</p></div>'; return; }
   el.innerHTML=head+'<div class="ogrid">'+list.map(function(o){
     var st=o.status||'Confirmed'; var stl=ordStatusStyle(st);
     var items=(o.items||[]).map(function(x){ return (x.emoji||'')+' '+esc(x.name||'')+' ×'+x.qty; }).join('<br>');
     var acts='';
     if(ordTab==='pending') acts='<div class="oacts"><button style="background:#16a34a" onclick="setOrderStatus(\''+o.id+'\',\'Accepted\')">✓ Accept</button><button style="background:#dc2626" onclick="setOrderStatus(\''+o.id+'\',\'Cancelled\')">✕ Cancel</button></div>';
-    else if(ordTab==='accepted') acts='<div class="oacts"><button style="background:#dc2626" onclick="setOrderStatus(\''+o.id+'\',\'Cancelled\')">✕ Cancel karein</button></div>';
+    else if(ordTab==='accepted') acts='<div class="oacts"><button style="background:#1d4ed8" onclick="setOrderStatus(\''+o.id+'\',\'Delivered\')">🚚 Delivered</button><button style="background:#dc2626" onclick="setOrderStatus(\''+o.id+'\',\'Cancelled\')">✕ Cancel</button></div>';
+    else if(ordTab==='delivered') acts='<div class="oacts"><button style="background:#9ca3af" onclick="setOrderStatus(\''+o.id+'\',\'Accepted\')">↩ Wapas Accepted</button><button style="background:#dc2626" onclick="setOrderStatus(\''+o.id+'\',\'Cancelled\')">✕ Cancel</button></div>';
     else acts='<div class="oacts"><button style="background:#16a34a" onclick="setOrderStatus(\''+o.id+'\',\'Accepted\')">✓ Wapas Accept karein</button></div>';
     return '<div class="ocard'+(o.read?'':' new')+'">'
       +'<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="oid">'+o.id+(o.read?'':' <span style="font-size:10px;background:#dc2626;color:#fff;padding:2px 7px;border-radius:6px;vertical-align:middle">NEW</span>')+'</span>'
       +'<span style="font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;color:'+stl.c+';background:'+stl.bg+'">'+st+'</span></div>'
-      +'<div style="font-size:11.5px;color:var(--muted);margin-top:3px">'+esc(o.date||'')+'</div>'
+      +'<div style="margin-top:6px;font-size:11.5px;line-height:1.75">'
+        +'<div style="color:var(--muted)">\ud83d\udd52 Order: <b style="color:var(--ink)">'+esc(o.date||'-')+(o.time?(' \u00b7 '+esc(o.time)):'')+'</b></div>'
+        +(o.acceptedAt?('<div style="color:#15803d">\u2713 Accept: <b>'+esc(o.acceptedAt)+'</b></div>'):'')
+        +(o.deliveredAt?('<div style="color:#1d4ed8">\ud83d\ude9a Delivered: <b>'+esc(o.deliveredAt)+'</b></div>'):'')
+        +(o.cancelledAt?('<div style="color:#dc2626">\u2715 Cancel: <b>'+esc(o.cancelledAt)+'</b></div>'):'')
+      +'</div>'
       +'<div class="oitems">'+(items||'—')+'</div>'
       +(o.address?'<div class="oaddr">📍 '+esc(o.address)+(o.phone?'<br>📞 '+esc(o.phone):'')+'</div>':'')
       +'<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:12px;color:var(--muted)">'+esc(o.pay||'')+'</span><span class="oamt">'+money(o.total||0)+'</span></div>'
       +acts+'</div>';
   }).join('')+'</div>';
 }
-function setOrderStatus(id,status){ var o=allOrders.find(function(x){return String(x.id)===String(id);}); if(o)o.status=status; Object.keys(ordersAll).forEach(function(em){ (ordersAll[em]||[]).forEach(function(x){ if(String(x.id)===String(id))x.status=status; }); }); LS.set('tt_orders',ordersAll); if(window.db){ try{ window.db.collection('orders').doc(String(id)).set({status:status},{merge:true}); }catch(e){ console.warn('order status',e); } } renderOrders(); updateOrdersBadge(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); toast(status==='Accepted'?'✅':'❌','Order '+id+' '+status); }
-function acceptOrder(i){ var o=allOrders[i]; if(o)setOrderStatus(o.id,'Accepted'); }
-function cancelOrder(i){ var o=allOrders[i]; if(o)setOrderStatus(o.id,'Cancelled'); }
-function allOrdersSection(){ if(!allOrders.length) return `<div class="acct-sec"><h4>All Customer Orders</h4><div class="empty" style="padding:20px"><div class="big">📦</div><h3>No orders yet</h3><p>Customers ke orders yahan aayenge.</p></div></div>`; var tot=allOrders.reduce(function(s,o){return s+(o.total||0);},0); var body=allOrders.map(function(o){ return `<div class="order"><div class="order-top"><b>${o.id}</b><span class="st">${o.status||'Confirmed'}</span></div><div class="items">${(o.items||[]).map(function(i){return (i.emoji||'')+' '+i.name+' ×'+i.qty;}).join('  ·  ')}</div><div class="ordfoot"><span>${o.date||''} · ${o.userEmail||o.phone||''}</span><b>${money(o.total||0)}</b></div></div>`; }).join(''); return `<div class="acct-sec"><h4>All Customer Orders <span style="text-transform:none;letter-spacing:0;color:var(--muted)">${allOrders.length} orders · ${money(tot)}</span></h4>${body}</div>`; }
+function restockOrder(o,back){
+  if(!o||!o.items) return;
+  if(!o.stockTaken) return;              // purane orders — inka stock kabhi kata hi nahi tha
+  if(back && o.stockReturned) return;    // do baar wapas na ho
+  if(!back && !o.stockReturned) return;
+  o.items.forEach(function(it){
+    var p=findP(it.pid); if(!p||!hasStock(p)) return;
+    p.stock=Math.max(0, p.stock + (back? (it.qty||0) : -(it.qty||0)));
+    fbSaveProduct(p);
+  });
+  o.stockReturned = back? true : false;
+  LS.set('tt_products',catalog);
+  if(window.db){ try{ window.db.collection('orders').doc(String(o.id)).set({stockReturned:o.stockReturned},{merge:true}); }catch(e){} }
+  if(typeof renderGrid==='function')renderGrid();
+}
+function nowStamp(){ var n=new Date();
+  return n.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})+' \u00b7 '+n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}); }
+function setOrderStatus(id,status){ var o=allOrders.find(function(x){return String(x.id)===String(id);});
+  var stamp=nowStamp();
+  if(o){
+    if(status==='Cancelled') restockOrder(o,true); else if(o.status==='Cancelled') restockOrder(o,false);
+    o.status=status;
+    if(status==='Accepted'){ o.acceptedAt=stamp; o.deliveredAt=null; o.cancelledAt=null; }
+    else if(status==='Delivered') o.deliveredAt=stamp;
+    else if(status==='Cancelled') o.cancelledAt=stamp;
+  } Object.keys(ordersAll).forEach(function(em){ (ordersAll[em]||[]).forEach(function(x){ if(String(x.id)===String(id))x.status=status; }); }); LS.set('tt_orders',ordersAll); if(window.db){ try{ var _u={status:status};
+    if(status==='Accepted'){ _u.acceptedAt=stamp; _u.deliveredAt=null; _u.cancelledAt=null; }
+    else if(status==='Delivered') _u.deliveredAt=stamp;
+    else if(status==='Cancelled') _u.cancelledAt=stamp;
+    window.db.collection('orders').doc(String(id)).set(_u,{merge:true}); }catch(e){ console.warn('order status',e); } } renderOrders(); updateOrdersBadge(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); toast(status==='Accepted'?'✅':'❌','Order '+id+' '+status); }
 function openProductView(id){ var p=findP(id); if(!p) return; var off=p.old?Math.round((1-p.price/p.old)*100):0; $('#pvBody').innerHTML=`<div style="text-align:center"><div style="position:relative;height:180px;border-radius:14px;background:${CAT_BG[p.cat]||'#eef2f0'};display:grid;place-items:center;overflow:hidden;margin-bottom:14px;font-size:70px">${p.emoji||'📦'}<img src="${imgUrl(p)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'"></div><div style="font-size:12.5px;color:#b8860b;font-weight:600">⭐ ${(p.rating||4.5).toFixed(1)}</div><h2 style="margin:6px 0 2px">${p.name}</h2><div style="color:var(--muted);font-size:13px">${p.unit||''}</div>
   ${p.sellerId?`<div style="display:inline-flex;align-items:center;gap:8px;background:#faf5ff;border:1px solid #e9d5ff;border-radius:11px;padding:8px 14px;margin-top:10px">
     <span style="font-size:18px">🏪</span>
@@ -1494,7 +1597,7 @@ function openProductView(id){ var p=findP(id); if(!p) return; var off=p.old?Math
     <span style="font-size:18px">🌿</span>
     <span style="text-align:left"><span style="display:block;font-size:10.5px;color:var(--green-dark);text-transform:uppercase;letter-spacing:.5px;font-weight:700">Bika ja raha hai</span>
     <b style="font-size:13.5px;color:var(--green-dark)">${esc(settings.store||'TEETOO')}</b></span></div>`}
-  ${hasStock(p)?`<div style="font-size:12.5px;margin-top:8px;font-weight:700;color:${p.stock>5?'#0f766e':(p.stock>0?'#d97706':'#dc2626')}">${p.stock>0?('📦 '+p.stock+' stock mein maujood'):'📦 Abhi stock mein nahi'}</div>`:''}<div style="margin:12px 0"><span style="font-size:24px;font-weight:800;color:var(--ink)">${money(p.price)}</span>${p.old?` <span style="color:#b0b6b3;text-decoration:line-through;margin-left:6px">${money(p.old)}</span>`:''}${off>0?` <span style="background:var(--amber);color:#fff;padding:2px 8px;border-radius:7px;font-size:12px;font-weight:700;margin-left:6px">-${off}%</span>`:''}</div></div>${inStock(p)?`<div style="display:flex;gap:10px;margin-top:6px"><button class="add" style="flex:1" onclick="changeQty(${p.id},1)">Add to Cart</button><button class="btn-primary" style="flex:1;margin:0" onclick="buyNow(${p.id})">Buy Now</button></div>`:`<div style="margin-top:6px"><button class="add" disabled style="width:100%;background:#f1f4f2;color:#9aa4a0;border-color:#e3e8e5;cursor:not-allowed">Out of stock</button></div>`}`; openModal('productModal'); }
+  ${hasStock(p)?`<div style="font-size:12.5px;margin-top:8px;font-weight:700;color:${p.stock>lowStockLimit()?'#0f766e':(p.stock>0?'#d97706':'#dc2626')}">${p.stock>0?('📦 '+p.stock+' stock mein maujood'):'📦 Abhi stock mein nahi'}</div>`:''}<div style="margin:12px 0"><span style="font-size:24px;font-weight:800;color:var(--ink)">${money(p.price)}</span>${p.old?` <span style="color:#b0b6b3;text-decoration:line-through;margin-left:6px">${money(p.old)}</span>`:''}${off>0?` <span style="background:var(--amber);color:#fff;padding:2px 8px;border-radius:7px;font-size:12px;font-weight:700;margin-left:6px">-${off}%</span>`:''}</div></div>${inStock(p)?`<div style="display:flex;gap:10px;margin-top:6px"><button class="add" style="flex:1" onclick="changeQty(${p.id},1)">Add to Cart</button><button class="btn-primary" style="flex:1;margin:0" onclick="buyNow(${p.id})">Buy Now</button></div>`:`<div style="margin-top:6px"><button class="add" disabled style="width:100%;background:#f1f4f2;color:#9aa4a0;border-color:#e3e8e5;cursor:not-allowed">Out of stock</button></div>`}`; openModal('productModal'); }
 function buyNow(id){ if(!cart[id]) changeQty(id,1); closeModal('productModal'); startCheckout(); }
 function startCheckout(){
   if(!cartCount()){ toast('🛒','Your cart is empty'); return; }
@@ -1503,23 +1606,22 @@ function startCheckout(){
   $('#coName').value=u.name==='Store Admin'?'':u.name; voucher=null; if($('#coVoucher')){$('#coVoucher').value='';} if($('#voucherMsg')){$('#voucherMsg').textContent='';} updateCoTotal();
   ['cfName','cfPhone','cfAddr'].forEach(f=>$('#'+f).classList.remove('invalid')); openModal('checkoutModal');
 }
-function selectPay(el){ document.querySelectorAll('.pay-opt').forEach(o=>o.classList.remove('sel')); el.classList.add('sel'); selectedPay=el.dataset.pay; const cf=document.getElementById('cardFields'),wf=document.getElementById('walletFields'); if(cf)cf.style.display=selectedPay==='Card'?'block':'none'; if(wf)wf.style.display=selectedPay==='Wallet'?'block':'none'; }
+function selectPay(el){ document.querySelectorAll('.pay-opt').forEach(o=>o.classList.remove('sel')); el.classList.add('sel'); selectedPay=el.dataset.pay; }
 function placeOrder(){
   const name=$('#coName').value.trim(),phone=$('#coPhone').value.trim(),addr=$('#coAddr').value.trim(); let bad=false;
   if(!name){$('#cfName').classList.add('invalid');bad=true;} else $('#cfName').classList.remove('invalid');
   if(phone.replace(/\D/g,'').length<10){$('#cfPhone').classList.add('invalid');bad=true;} else $('#cfPhone').classList.remove('invalid');
   if(!addr){$('#cfAddr').classList.add('invalid');bad=true;} else $('#cfAddr').classList.remove('invalid');
   if(bad) return;
-  if(selectedPay==='Card' && $('#ccNum').value.replace(/\D/g,'').length<12){ toast('💳','Enter card number'); return; }
-  if(selectedPay==='Wallet' && $('#wlNum').value.replace(/\D/g,'').length<10){ toast('📱','Enter wallet number'); return; }
   const u=currentUser();
   var short=[];
   Object.entries(cart).forEach(function(e){ var p=findP(e[0]); if(p&&hasStock(p)&&e[1]>stockLeft(p)) short.push(p.name+' (sirf '+stockLeft(p)+')'); });
   if(short.length){ toast('📦','Stock kam hai: '+short.join(', ')); return; }
   const items=Object.entries(cart).map(([id,q])=>{ const p=findP(id); if(!p) return null; var sid=String(p.sellerId||''); return {name:p.name,emoji:p.emoji||'📦',qty:q,price:p.price,cost:(typeof p.cost==='number'?p.cost:0),pid:p.id,sellerId:sid,sellerName:sid?sellerName(sid):'',commRate:sid?sellerCommRate(sid):0}; }).filter(Boolean);
-  const order={id:'TT'+Date.now().toString().slice(-7),date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),items,total:Math.max(0,cartTotal()-voucherDiscount()),pay:selectedPay,voucher:voucher||undefined,status:'Confirmed',read:false,address:addr,phone};
+  const order={id:'TT'+Date.now().toString().slice(-7),date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),ts:Date.now(),items,total:Math.max(0,cartTotal()-voucherDiscount()),delivery:deliveryFee(),discount:voucherDiscount(),stockTaken:true,stockReturned:false,pay:selectedPay,voucher:voucher||undefined,status:'Confirmed',read:false,address:addr,phone};
   if(!ordersAll[u.email]) ordersAll[u.email]=[];
   ordersAll[u.email].push(order); LS.set('tt_orders',ordersAll); fbSaveOrder(order,u.email);
+  makeSellerLines(items,order.id,'Online',order.date,order.time);
   items.forEach(function(it){ var p=findP(it.pid); if(p&&hasStock(p)){ p.stock=Math.max(0,p.stock-it.qty); fbSaveProduct(p); } });
   LS.set('tt_products',catalog); renderGrid();
   cart={}; LS.set('tt_cart',cart); updateCartUI(); closeModal('checkoutModal'); $('#confId').textContent='#'+order.id; openModal('confirmModal');
@@ -1559,7 +1661,7 @@ const DEFAULT_BANNERS=[
  {st:'🥦 Farm Fresh Daily',h2:'END OF MONTH SALE',p:'Fresh fruits, veggies &amp; daily needs',badge:'Explore',em:'🥦',bg:'linear-gradient(120deg,#15803d,#22c55e 60%,#4ade80)'}
 ];
 let banners=LS.get('tt_banners',null); if(!Array.isArray(banners)){banners=[];LS.set('tt_banners',banners);}
-let wishlist=LS.get('tt_wishlist',[]); let voucher=null; let invoices=LS.get('tt_invoices',[]); let messages=LS.get('tt_messages',[]); let allOrders=[]; let settings=LS.get('tt_settings',{help:'0300-1234567',store:'TEETOO',commission:5,sellerCommission:10,email:'teetoo@teetoo9.com'}); let purchases=LS.get('tt_purchases',[]); let jobs=LS.get('tt_jobs',[]); let sellers=LS.get('tt_sellers',[]);
+let wishlist=LS.get('tt_wishlist',[]); let voucher=null; let invoices=LS.get('tt_invoices',[]); let messages=LS.get('tt_messages',[]); let allOrders=[]; let settings=LS.get('tt_settings',{help:'0300-1234567',store:'TEETOO',commission:5,sellerCommission:10,lowStock:5,email:'teetoo@teetoo9.com',deliverTo:'Home',deliveryFee:99,freeOver:2000,stripText:'⚡ END OF MONTH',stripOff:'UPTO 80% OFF'}); let purchases=LS.get('tt_purchases',[]); let jobs=LS.get('tt_jobs',[]); let sellers=LS.get('tt_sellers',[]); let mySales=LS.get('tt_mysales',[]);
 const VOUCHERS={'TT50':{off:50,type:'flat',min:500},'SAVE10':{off:10,type:'pct'},'FRESH100':{off:100,type:'flat',min:1000},'GROCERY15':{off:15,type:'pct',min:800}};
 const BANNER_BG=[['Purple + Orange','linear-gradient(120deg,#7e22ce,#c026d3 55%,#f57224)'],['Orange','linear-gradient(120deg,#c2410c,#f57224 60%,#fb923c)'],['Green','linear-gradient(120deg,#15803d,#22c55e 60%,#4ade80)'],['Blue','linear-gradient(120deg,#1e40af,#3b82f6 60%,#60a5fa)'],['Pink','linear-gradient(120deg,#be185d,#ec4899 60%,#f9a8d4)'],['Dark','linear-gradient(120deg,#111827,#374151 60%,#6b7280)']];
 function renderCarousel(){const box=document.getElementById('slides');if(!box)return;var _car=document.getElementById('carousel');if(!banners.length){ if(typeof isAdmin==='function'&&isAdmin()){ if(_car)_car.style.display=''; box.innerHTML='<div class="slide" style="background:#334155;align-items:center;justify-content:center;text-align:center"><div><h2 style="max-width:100%">No banner yet</h2><p style="max-width:100%">Upar right me &quot;✎ Edit ads&quot; se apni photo/banner add karein</p></div></div>'; cCount=1;cSlide=0;box.style.transform='translateX(0%)';renderDots(); } else { if(_car)_car.style.display='none'; } return; } if(_car)_car.style.display='';box.innerHTML=banners.map(function(b){ if(b.img){ return '<div class="slide" style="background:#fff;padding:0"><img src="'+b.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain"></div>'; } return '<div class="slide" style="background:'+b.bg+'"><div class="st">'+(b.st||'')+'</div><h2>'+(b.h2||'')+'</h2><p>'+(b.p||'')+'</p>'+(b.badge?'<span class="badge">'+b.badge+'</span>':'')+'<span class="em">'+(b.em||'🛍️')+'</span></div>'; }).join('');cCount=banners.length;if(cSlide>=cCount)cSlide=0;box.style.transform='translateX(-'+(cSlide*100)+'%)';renderDots();}
@@ -1570,25 +1672,158 @@ function compressImg(file,cb){ var r=new FileReader(); r.onload=function(e){ var
 function uploadBannerImg(input){ var f=input.files&&input.files[0]; if(!f)return; toast('⏳','Photo lag rahi hai...'); compressImg(f,function(data){ var b={id:'B'+Date.now(),img:data}; banners.unshift(b); LS.set('tt_banners',banners); fbSaveBanner(b); cSlide=0; renderCarousel(); renderBannerMgr(); if(typeof renderAcct==='function')renderAcct(); toast('✅','Banner photo add ho gayi'); }); input.value=''; }
 function fbSaveBanner(b){ if(window.db&&b){ try{ window.db.collection('banners').doc(String(b.id||('B'+Date.now()))).set(JSON.parse(JSON.stringify(b))); }catch(e){ console.warn('fb banner',e); } } }
 function fbDeleteBanner(id){ if(window.db&&id){ try{ window.db.collection('banners').doc(String(id)).delete(); }catch(e){} } }
-function saleBillsHtml(){ if(!invoices.length) return ''; return '<div style="font-size:12px;color:var(--muted);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px">Sale bills / invoices</div>'+invoices.map(function(v,idx){return {v:v,idx:idx};}).reverse().map(function(o){ var v=o.v; return '<div class="order"><div class="order-top"><b>'+v.id+'</b><span style="display:flex;gap:6px"><button class="add" style="width:auto;padding:5px 12px;font-size:12px;margin:0" onclick="viewInvoice('+o.idx+')">View</button><button class="ci-del" title="Delete" onclick="deleteInvoice('+o.idx+')" style="color:#ef4444">\ud83d\uddd1</button></span></div><div class="ordfoot"><span>'+v.date+' · '+esc(v.cust||'')+'</span><b>'+money(v.tot)+'</b></div></div>'; }).join(''); }
 var purItems=[];
-function openPurchase(){ purItems=[]; if($('#purSup'))$('#purSup').value=''; if($('#purItem'))$('#purItem').value=''; if($('#purQty'))$('#purQty').value=1; if($('#purCost'))$('#purCost').value=0; renderPurItems(); renderPurchases(); openModal('purchaseModal'); }
-function addPurItem(){ var nm=$('#purItem').value.trim(); var q=Math.max(1,parseInt($('#purQty').value,10)||1); var c=Math.max(0,parseInt($('#purCost').value,10)||0); if(!nm){ toast('📦','Item ka naam likhein'); return; } purItems.push({name:nm,qty:q,cost:c}); $('#purItem').value=''; $('#purQty').value=1; $('#purCost').value=0; renderPurItems(); }
+function fillPurProds(){
+  var sel=document.getElementById('purProd'); if(!sel) return;
+  var list=isAdmin()?catalog:catalog.filter(function(p){ var m=mySeller(); return m&&String(p.sellerId||'')===String(m.id); });
+  sel.innerHTML='<option value="">— Doosra (haath se likhein) —</option>'
+    +list.map(function(p){ return '<option value="'+p.id+'">'+esc(p.name)+' — '+esc(p.unit||'')+' (abhi '+(p.stock||0)+')</option>'; }).join('');
+}
+function onPurProd(){
+  var id=document.getElementById('purProd').value;
+  var wrap=document.getElementById('purNameWrap');
+  if(id){
+    var p=findP(id);
+    if(wrap) wrap.style.display='none';
+    if(p && typeof p.cost==='number') $('#purCost').value=p.cost;
+  } else {
+    if(wrap) wrap.style.display='';
+    $('#purCost').value=0;
+  }
+}
+function openPurchase(){ purItems=[]; fillPurProds(); onPurProd(); if($('#purSup'))$('#purSup').value=''; if($('#purItem'))$('#purItem').value=''; if($('#purQty'))$('#purQty').value=1; if($('#purCost'))$('#purCost').value=0; renderPurItems(); renderPurchases(); openModal('purchaseModal'); }
+function addPurItem(){
+  var pid=document.getElementById('purProd')?document.getElementById('purProd').value:'';
+  var q=Math.max(1,parseInt($('#purQty').value,10)||1);
+  var c=Math.max(0,parseInt($('#purCost').value,10)||0);
+  var nm, rec;
+  if(pid){
+    var p=findP(pid); if(!p){ toast('📦','Product nahi mila'); return; }
+    nm=p.name; rec={name:nm,qty:q,cost:c,pid:p.id};
+  } else {
+    nm=$('#purItem').value.trim();
+    if(!nm){ toast('📦','Item ka naam likhein'); return; }
+    rec={name:nm,qty:q,cost:c};
+  }
+  purItems.push(rec);
+  $('#purItem').value=''; $('#purQty').value=1; $('#purCost').value=0;
+  if(document.getElementById('purProd')) document.getElementById('purProd').value='';
+  onPurProd(); renderPurItems();
+}
 function purRemove(i){ purItems.splice(i,1); renderPurItems(); }
 function purTotalVal(){ return purItems.reduce(function(s,it){return s+it.cost*it.qty;},0); }
-function renderPurItems(){ var el=$('#purList'); if(!el)return; if(!purItems.length){ el.innerHTML='<div style="text-align:center;color:var(--muted);padding:14px;font-size:13px">Koi item nahi — upar se add karein.</div>'; } else { el.innerHTML=purItems.map(function(it,i){ return '<div class="citem" style="padding:9px;margin-bottom:8px"><div class="ci-info"><h4>'+esc(it.name)+'</h4><div class="u">'+money(it.cost)+' × '+it.qty+' = <b>'+money(it.cost*it.qty)+'</b></div></div><div class="ci-right"><button class="ci-del" onclick="purRemove('+i+')">🗑</button></div></div>'; }).join(''); } $('#purTotal').textContent=money(purTotalVal()); }
+function renderPurItems(){ var el=$('#purList'); if(!el)return; if(!purItems.length){ el.innerHTML='<div style="text-align:center;color:var(--muted);padding:14px;font-size:13px">Koi item nahi — upar se add karein.</div>'; } else { el.innerHTML=purItems.map(function(it,i){ return '<div class="citem" style="padding:9px;margin-bottom:8px"><div class="ci-info"><h4>'+esc(it.name)+(it.pid?' <span style="font-size:10px;background:#dcfce7;color:#15803d;padding:2px 7px;border-radius:6px;font-weight:700">stock +'+it.qty+'</span>':' <span style="font-size:10px;background:#f1f5f9;color:#475569;padding:2px 7px;border-radius:6px;font-weight:700">sirf kharcha</span>')+'</h4><div class="u">'+money(it.cost)+' × '+it.qty+' = <b>'+money(it.cost*it.qty)+'</b></div></div><div class="ci-right"><button class="ci-del" onclick="purRemove('+i+')">🗑</button></div></div>'; }).join(''); } $('#purTotal').textContent=money(purTotalVal()); }
 function nextPurSerial(){ var mx=0; purchases.forEach(function(p){ var n=parseInt(p.serial,10)||0; if(n>mx)mx=n; }); return mx+1; }
-function savePurchase(){ if(!purItems.length){ toast('📦','Pehle item add karein'); return; } var serial=nextPurSerial(); var id='PUR'+Date.now().toString().slice(-6); var date=new Date().toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); var p={id:id,serial:serial,serialNo:'PB-'+String(serial).padStart(5,'0'),sup:($('#purSup').value.trim()||'-'),items:purItems.slice(),tot:purTotalVal(),date:date}; purchases.push(p); LS.set('tt_purchases',purchases); fbSavePurchase(p); purItems=[]; renderPurItems(); renderPurchases(); toast('✅','Purchase bill save: '+p.serialNo); }
-function renderPurchases(){ var el=$('#purHist'); if(!el)return; if(!purchases.length){ el.innerHTML='<div style="text-align:center;color:var(--muted);padding:12px;font-size:13px">Abhi koi purchase bill nahi.</div>'; return; } var tot=purchases.reduce(function(s,p){return s+(p.tot||0);},0); el.innerHTML='<div style="font-size:12px;color:var(--muted);margin-bottom:8px">'+purchases.length+' bills · Total '+money(tot)+'</div>'+purchases.map(function(p,i){return {p:p,i:i};}).reverse().map(function(w){ var p=w.p; return '<div class="order"><div class="order-top"><b>'+(p.serialNo||p.id)+'</b><span style="display:flex;gap:6px;align-items:center"><span class="st">'+esc(p.sup||'-')+'</span><button class="ci-del" title="Delete" onclick="deletePurchase('+w.i+')" style="color:#ef4444">\ud83d\uddd1</button></span></div><div class="items">'+(p.items||[]).map(function(i){return esc(i.name)+' ×'+i.qty;}).join('  ·  ')+'</div><div class="ordfoot"><span>'+p.date+'</span><b>'+money(p.tot||0)+'</b></div></div>'; }).join(''); }
+function savePurchase(){ if(!purItems.length){ toast('📦','Pehle item add karein'); return; } var serial=nextPurSerial(); var id='PUR'+Date.now().toString().slice(-6); var date=new Date().toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); var p={id:id,serial:serial,serialNo:'PB-'+String(serial).padStart(5,'0'),sup:($('#purSup').value.trim()||'-'),items:purItems.slice(),tot:purTotalVal(),date:date};
+  var added=0;
+  p.items.forEach(function(it){
+    if(!it.pid) return;
+    var pr=findP(it.pid); if(!pr) return;
+    pr.stock=Math.max(0,(typeof pr.stock==='number'?pr.stock:0)+(it.qty||0));
+    if(it.cost>0) pr.cost=it.cost;
+    fbSaveProduct(pr); added+=(it.qty||0);
+  });
+  if(added){ LS.set('tt_products',catalog); if(typeof renderGrid==='function')renderGrid(); if(typeof renderProductsAdmin==='function')renderProductsAdmin(); }
+  purchases.push(p); LS.set('tt_purchases',purchases); fbSavePurchase(p); purItems=[]; renderPurItems(); renderPurchases(); toast('✅','Purchase bill save: '+p.serialNo+(added?(' — '+added+' items stock mein add'):'')); }
+function renderPurchases(){ var el=$('#purHist'); if(!el)return; if(!purchases.length){ el.innerHTML='<div style="text-align:center;color:var(--muted);padding:12px;font-size:13px">Abhi koi purchase bill nahi.</div>'; return; } var tot=purchases.reduce(function(s,p){return s+(p.tot||0);},0); el.innerHTML='<div style="font-size:12px;color:var(--muted);margin-bottom:8px">'+purchases.length+' bills · Total '+money(tot)+'</div>'+purchases.map(function(p,i){return {p:p,i:i};}).reverse().map(function(w){ var p=w.p; return '<div class="order"><div class="order-top"><b>'+(p.serialNo||p.id)+'</b><span style="display:flex;gap:6px;align-items:center"><span class="st">'+esc(p.sup||'-')+'</span><button class="ci-del" title="Delete" onclick="deletePurchase('+w.i+')" style="color:#ef4444">\ud83d\uddd1</button></span></div><div class="items">'+(p.items||[]).map(function(i){return esc(i.name)+' ×'+i.qty+(i.pid?' 📦':'');}).join('  ·  ')+'</div><div class="ordfoot"><span>'+p.date+'</span><b>'+money(p.tot||0)+'</b></div></div>'; }).join(''); }
 function fbSavePurchase(p){ if(window.db&&p){ try{ window.db.collection('purchases').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }catch(e){ console.warn('fb pur',e); } } }
-function openSales(){ renderSales(); openModal('salesModal'); }
+var accTab='summary'; var accPeriod='all'; var accBreak='month';
+function setAccBreak(v){ accBreak=v; renderSales(); }
+function periodStart(){
+  var n=new Date();
+  if(accPeriod==='week'){ var d=new Date(n); var dow=(d.getDay()+6)%7; d.setDate(d.getDate()-dow); d.setHours(0,0,0,0); return d.getTime(); }
+  if(accPeriod==='month'){ return new Date(n.getFullYear(),n.getMonth(),1).getTime(); }
+  if(accPeriod==='lastmonth'){ return new Date(n.getFullYear(),n.getMonth()-1,1).getTime(); }
+  return 0;
+}
+function periodEnd(){
+  var n=new Date();
+  if(accPeriod==='lastmonth') return new Date(n.getFullYear(),n.getMonth(),1).getTime();
+  return Infinity;
+}
+function inPeriod(t){ if(accPeriod==='all') return true; if(!t) return false; return t>=periodStart() && t<periodEnd(); }
+function setAccPeriod(v){ accPeriod=v; renderSales(); }
+function setAccTab(t){ accTab=t; renderSales(); }
+function openSales(){ accTab='summary'; renderSales(); openModal('salesModal'); }
+function parseWhen(d){ if(!d) return 0; var t=Date.parse(String(d).replace(',','')); return isNaN(t)?0:t; }
+function profitInfo(items,discount){
+  var pf=0, missing=0;
+  (items||[]).forEach(function(it){
+    var qty=it.qty||0, line=(it.price||0)*qty;
+    if(String(it.sellerId||'')){
+      var r=(typeof it.commRate==='number')?it.commRate:sellerCommRate(it.sellerId);
+      pf+=Math.round(line*r/100);              // seller ka maal -> sirf commission hamari
+    } else {
+      var c=(typeof it.cost==='number')?it.cost:null;
+      if(c===null){ missing+=qty; c=0; }       // lagat nahi daali -> hisaab adhoora
+      pf+=line-(c*qty);                        // apna maal -> sale - lagat
+    }
+  });
+  pf-=(discount||0);                            // di hui chhoot nafa se ghatti hai
+  return {pf:pf,missing:missing};
+}
+function itemsProfit(items,discount){ return profitInfo(items,discount).pf; }
+function ledgerRows(){
+  var rows=[];
+  allOrders.forEach(function(o){
+    if((o.status||'')==='Cancelled') return;
+    rows.push({t:o.ts||parseWhen(o.date),when:(o.date||'')+(o.time?(' · '+o.time):''),ref:o.id,
+      desc:'Online order',party:o.userEmail||o.phone||'-',cr:o.total||0,dr:0,kind:'sale',
+      pf:profitInfo(o.items,o.discount||0).pf,miss:profitInfo(o.items,o.discount||0).missing});
+  });
+  invoices.forEach(function(v){
+    rows.push({t:parseWhen(v.date),when:v.date||'',ref:v.id,desc:'Counter bill',
+      party:v.cust||'Walk-in',cr:v.tot||0,dr:0,kind:'sale',
+      pf:profitInfo(v.items,v.disc||0).pf,miss:profitInfo(v.items,v.disc||0).missing});
+  });
+  purchases.forEach(function(x){
+    rows.push({t:parseWhen(x.date),when:x.date||'',ref:x.serialNo||x.id,desc:'Purchase',
+      party:x.sup||'-',cr:0,dr:x.tot||0,kind:'purchase',pf:null});
+  });
+  rows=rows.filter(function(r){ return inPeriod(r.t); });
+  rows.sort(function(a,b){ return a.t-b.t; });
+  var bal=0;
+  rows.forEach(function(r){ bal+=r.cr-r.dr; r.bal=bal; });
+  return rows;
+}
+function supplierRows(){
+  var m={};
+  purchases.forEach(function(x){
+    if(!inPeriod(parseWhen(x.date))) return;
+    var k=x.sup||'-';
+    if(!m[k]) m[k]={party:k,bills:0,items:0,amt:0};
+    m[k].bills++; m[k].amt+=(x.tot||0);
+    (x.items||[]).forEach(function(i){ m[k].items+=(i.qty||0); });
+  });
+  return Object.keys(m).map(function(k){return m[k];}).sort(function(a,b){return b.amt-a.amt;});
+}
+function customerRows(){
+  var m={};
+  allOrders.forEach(function(o){
+    if((o.status||'')==='Cancelled') return;
+    if(!inPeriod(o.ts||parseWhen(o.date))) return;
+    var k=o.userEmail||o.phone||'-';
+    if(!m[k]) m[k]={party:k,src:'Online',orders:0,items:0,amt:0};
+    m[k].orders++; m[k].amt+=(o.total||0);
+    (o.items||[]).forEach(function(i){ m[k].items+=(i.qty||0); });
+  });
+  invoices.forEach(function(v){
+    if(!inPeriod(parseWhen(v.date))) return;
+    var k=v.cust||'Walk-in';
+    if(!m[k]) m[k]={party:k,src:'Counter',orders:0,items:0,amt:0};
+    else if(m[k].src==='Online') m[k].src='Online + Counter';
+    m[k].orders++; m[k].amt+=(v.tot||0);
+    (v.items||[]).forEach(function(i){ m[k].items+=(i.qty||0); });
+  });
+  return Object.keys(m).map(function(k){return m[k];}).sort(function(a,b){return b.amt-a.amt;});
+}
 function profitReport(){
-  var r={ownSale:0,ownCost:0,ownItems:0,sellSale:0,sellComm:0,sellItems:0,orderTotal:0,orders:0,noCost:0,map:{},units:0,onlineSale:0,counterSale:0,counterDisc:0,bills:0};
+  var r={ownSale:0,ownCost:0,ownItems:0,sellSale:0,sellComm:0,sellItems:0,orderTotal:0,orders:0,noCost:0,map:{},units:0,onlineSale:0,counterSale:0,counterDisc:0,bills:0,disc:0};
   var feed=[];
-  allOrders.forEach(function(o){ if((o.status||'')!=='Cancelled') feed.push({items:o.items||[],src:'online',total:o.total||0}); });
-  invoices.forEach(function(v){ feed.push({items:v.items||[],src:'counter',total:v.tot||0,disc:v.disc||0}); });
+  allOrders.forEach(function(o){ if((o.status||'')!=='Cancelled' && inPeriod(o.ts||parseWhen(o.date))) feed.push({items:o.items||[],src:'online',total:o.total||0,discount:o.discount||0}); });
+  invoices.forEach(function(v){ if(inPeriod(parseWhen(v.date))) feed.push({items:v.items||[],src:'counter',total:v.tot||0,disc:v.disc||0}); });
   feed.forEach(function(o){
-    if(o.src==='online'){ r.orders++; r.orderTotal+=o.total; } else { r.bills++; r.counterDisc+=(o.disc||0); }
+    if(o.src==='online'){ r.orders++; r.orderTotal+=o.total; r.disc+=(o.discount||0); } else { r.bills++; r.counterDisc+=(o.disc||0); r.disc+=(o.disc||0); }
     (o.items||[]).forEach(function(it){
       var qty=it.qty||0, line=(it.price||0)*qty;
       var k=it.name||'Item';
@@ -1608,49 +1843,233 @@ function profitReport(){
   });
   r.sellPayable=Math.max(0,r.sellSale-r.sellComm);
   r.itemSale=r.ownSale+r.sellSale;
-  r.profit=(r.ownSale-r.ownCost)+r.sellComm;
+  r.profit=(r.ownSale-r.ownCost)+r.sellComm-r.disc;
   return r;
+}
+function periodChips(){
+  return '<div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;align-items:center">'
+    +'<span style="font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px">Period</span>'
+    +[['all','Sab waqt'],['week','Is hafte'],['month','Is mahine'],['lastmonth','Pichla mahina']]
+      .map(function(t){ return '<button class="otab '+(accPeriod===t[0]?'on':'')+'" style="padding:7px 14px;font-size:12.5px" onclick="setAccPeriod(\''+t[0]+'\')">'+t[1]+'</button>'; }).join('')
+    +'</div>';
+}
+function periodTable(mode){
+  var rows=ledgerRows();
+  var g={};
+  rows.forEach(function(r){
+    if(!r.t) return;
+    var d=new Date(r.t), key, lbl;
+    if(mode==='week'){
+      var x=new Date(d); var dow=(x.getDay()+6)%7; x.setDate(x.getDate()-dow); x.setHours(0,0,0,0);
+      key=x.getTime(); lbl='Hafta — '+x.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+    } else {
+      key=new Date(d.getFullYear(),d.getMonth(),1).getTime();
+      lbl=d.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+    }
+    if(!g[key]) g[key]={k:key,lbl:lbl,sale:0,kharcha:0,nafa:0,n:0,miss:0};
+    g[key].sale+=r.cr; g[key].kharcha+=r.dr; g[key].n++;
+    if(typeof r.pf==='number') g[key].nafa+=r.pf;
+    if(r.miss) g[key].miss++;
+  });
+  var list=Object.keys(g).map(function(k){return g[k];}).sort(function(a,b){return b.k-a.k;});
+  if(!list.length) return '';
+  var tS=0,tK=0,tN=0;
+  var body=list.map(function(x){
+    tS+=x.sale; tK+=x.kharcha; tN+=x.nafa;
+    return '<tr><td><b style="font-size:13px">'+esc(x.lbl)+'</b><div style="font-size:11px;color:var(--muted)">'+x.n+' entries'+(x.miss?' · ⚠ lagat adhoori':'')+'</div></td>'
+      +'<td style="text-align:right"><b style="color:#15803d">'+money(x.sale)+'</b></td>'
+      +'<td style="text-align:right"><b style="color:#dc2626">'+money(x.kharcha)+'</b></td>'
+      +'<td style="text-align:right"><b style="color:'+(x.nafa>=0?'#15803d':'#dc2626')+';font-size:14px">'+money(x.nafa)+'</b></td></tr>';
+  }).join('');
+  return '<div style="margin-top:18px"><div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap">'
+    +'<span style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700;flex:1">'+(mode==='week'?'Haftawar':'Mahana')+' hisaab</span>'
+    +'<button class="otab '+(accBreak==='week'?'on':'')+'" style="padding:6px 13px;font-size:12px" onclick="setAccBreak(\'week\')">Weekly</button>'
+    +'<button class="otab '+(accBreak==='month'?'on':'')+'" style="padding:6px 13px;font-size:12px" onclick="setAccBreak(\'month\')">Monthly</button></div>'
+    +'<div style="overflow-x:auto"><table class="ptbl"><thead><tr>'
+      +'<th>'+(mode==='week'?'Hafta':'Mahina')+'</th><th style="text-align:right">Sale</th><th style="text-align:right">Kharcha</th><th style="text-align:right">Nafa</th>'
+    +'</tr></thead><tbody>'+body+'</tbody>'
+    +'<tfoot><tr style="background:var(--green-soft);border-top:2px solid var(--green-light)">'
+      +'<td style="padding:12px 8px"><b style="color:var(--green-dark)">TOTAL</b></td>'
+      +'<td style="padding:12px 8px;text-align:right"><b style="color:#15803d">'+money(tS)+'</b></td>'
+      +'<td style="padding:12px 8px;text-align:right"><b style="color:#dc2626">'+money(tK)+'</b></td>'
+      +'<td style="padding:12px 8px;text-align:right"><b style="font-size:15px;color:#15803d">'+money(tN)+'</b></td>'
+    +'</tr></tfoot></table></div></div>';
+}
+function accTabsBar(){
+  var tb=document.getElementById('accTabs'); if(!tb) return;
+  var L=ledgerRows();
+  tb.innerHTML=[['summary','📈 Summary',''],
+                ['ledger','📒 Ledger',L.length],
+                ['suppliers','🚚 Suppliers',supplierRows().length],
+                ['customers','👥 Customers',customerRows().length]]
+    .map(function(t){ return '<button class="otab '+(accTab===t[0]?'on':'')+'" onclick="setAccTab(\''+t[0]+'\')">'+t[1]+(t[2]!==''?('<span class="n">'+t[2]+'</span>'):'')+'</button>'; }).join('');
+}
+function accBox(bg,col,val,lbl){ return '<div style="flex:1;min-width:150px;background:'+bg+';border-radius:12px;padding:13px;text-align:center"><b style="display:block;font-size:18px;color:'+col+'">'+val+'</b><small style="color:'+col+'">'+lbl+'</small></div>'; }
+function renderLedger(){
+  var rows=ledgerRows();
+  var tIn=0,tOut=0,tPf=0;
+  rows.forEach(function(r){ tIn+=r.cr; tOut+=r.dr; if(typeof r.pf==='number') tPf+=r.pf; });
+  var head='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">'
+    + accBox('#f0fdf4','#15803d',money(tIn),'Kul Aamdani (IN)')
+    + accBox('#fee2e2','#991b1b',money(tOut),'Kul Kharcha (OUT)')
+    + accBox(tIn-tOut>=0?'#eff6ff':'#fef3c7', tIn-tOut>=0?'#1e40af':'#92600a', money(tIn-tOut),'Balance')
+    + accBox('#dcfce7','#15803d',money(tPf),'Kul Nafa (sales par)')
+    + accBox('#f1f5f9','#475569',rows.length,'Entries')
+    + '</div>'
+    + (rows.filter(function(r){return r.miss;}).length
+       ? '<div style="background:#fffbeb;border:1px dashed #fde68a;color:#b45309;font-size:12.5px;padding:11px 13px;border-radius:11px;margin-bottom:14px">'
+         +'<b>⚠ Nafa poora sahi nahi hai.</b> '+rows.filter(function(r){return r.miss;}).length+' entries mein aise items hain jinki <b>lagat (cost)</b> product mein daali hi nahi gayi — un ka poora paisa nafa gina ja raha hai. '
+         +'<button class="add" style="width:auto;padding:5px 12px;margin:6px 0 0;font-size:12px" onclick="closeModal(\'salesModal\');openProductsAdmin();setProdFilter(\'nocost\')">Jin ki lagat nahi — dekhein</button></div>'
+       : '');
+  if(!rows.length) return head+'<div class="empty" style="padding:40px 20px"><div class="big">📒</div><h3>Ledger khali hai</h3><p>Order, counter bill ya purchase — koi bhi entry yahan aayegi.</p></div>';
+  var body=rows.map(function(r){
+    var isSale=r.kind==='sale';
+    return '<tr>'
+      +'<td style="white-space:nowrap;font-size:12px;color:var(--muted)">'+esc(r.when||'-')+'</td>'
+      +'<td style="white-space:nowrap"><b style="font-size:12.5px">'+esc(r.ref||'')+'</b></td>'
+      +'<td><span style="font-size:11px;font-weight:800;padding:3px 9px;border-radius:20px;color:'+(isSale?'#15803d':'#991b1b')+';background:'+(isSale?'#dcfce7':'#fee2e2')+'">'+esc(r.desc)+'</span></td>'
+      +'<td style="font-size:12.5px">'+esc(r.party||'-')+'</td>'
+      +'<td style="text-align:right;white-space:nowrap">'+(r.cr?('<b style="color:#15803d">'+money(r.cr)+'</b>'):'<span style="color:#cbd5cf">—</span>')+'</td>'
+      +'<td style="text-align:right;white-space:nowrap">'+(r.dr?('<b style="color:#dc2626">'+money(r.dr)+'</b>'):'<span style="color:#cbd5cf">—</span>')+'</td>'
+      +'<td style="text-align:right;white-space:nowrap">'+((typeof r.pf==='number')
+          ?('<b style="color:'+(r.miss?'#d97706':(r.pf>=0?'#15803d':'#dc2626'))+'">'+(r.miss?'⚠ ':'')+money(r.pf)+'</b>'
+            +(r.miss?'<div style="font-size:10px;color:#d97706">lagat nahi</div>':''))
+          :'<span style="color:#cbd5cf">—</span>')+'</td>'
+      +'<td style="text-align:right;white-space:nowrap"><b style="color:'+(r.bal>=0?'#1e40af':'#b45309')+'">'+money(r.bal)+'</b></td>'
+      +'</tr>';
+  }).join('');
+  return head+'<div style="overflow-x:auto"><table class="ptbl"><thead><tr>'
+    +'<th>Date</th><th>Ref</th><th>Type</th><th>Party</th>'
+    +'<th style="text-align:right">Aamdani</th><th style="text-align:right">Kharcha</th><th style="text-align:right">Nafa</th><th style="text-align:right">Balance</th>'
+    +'</tr></thead><tbody>'+body+'</tbody>'
+    +'<tfoot><tr style="background:var(--green-soft);border-top:2px solid var(--green-light)">'
+      +'<td colspan="4" style="padding:13px 8px"><b style="color:var(--green-dark)">TOTAL</b><div style="font-size:11px;color:var(--muted)">'+rows.length+' entries</div></td>'
+      +'<td style="padding:13px 8px;text-align:right"><b style="font-size:14px;color:#15803d">'+money(tIn)+'</b></td>'
+      +'<td style="padding:13px 8px;text-align:right"><b style="font-size:14px;color:#dc2626">'+money(tOut)+'</b></td>'
+      +'<td style="padding:13px 8px;text-align:right"><b style="font-size:15px;color:#15803d">'+money(tPf)+'</b></td>'
+      +'<td style="padding:13px 8px;text-align:right"><b style="font-size:15px;color:#1e40af">'+money(tIn-tOut)+'</b></td>'
+    +'</tr></tfoot></table></div>';
+}
+function renderSuppliers(){
+  var rows=supplierRows();
+  var tot=rows.reduce(function(a,x){return a+x.amt;},0);
+  var bills=rows.reduce(function(a,x){return a+x.bills;},0);
+  var head='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">'
+    + accBox('#faf5ff','#6b21a8',rows.length,'Suppliers')
+    + accBox('#f1f5f9','#475569',bills,'Purchase bills')
+    + accBox('#fee2e2','#991b1b',money(tot),'Kul kharidari')
+    + '</div>';
+  if(!rows.length) return head+'<div class="empty" style="padding:40px 20px"><div class="big">🚚</div><h3>Koi supplier nahi</h3><p>Purchase bill banate waqt supplier ka naam likhein.</p></div>';
+  var body=rows.map(function(x){
+    return '<tr><td><b style="font-size:13.5px">'+esc(x.party)+'</b></td>'
+      +'<td>'+x.bills+'</td><td>'+x.items+'</td>'
+      +'<td style="text-align:right"><b style="color:#dc2626">'+money(x.amt)+'</b></td></tr>';
+  }).join('');
+  return head+'<div style="overflow-x:auto"><table class="ptbl"><thead><tr>'
+    +'<th>Supplier / Party</th><th>Bills</th><th>Items</th><th style="text-align:right">Kul kharcha</th>'
+    +'</tr></thead><tbody>'+body+'</tbody>'
+    +'<tfoot><tr style="background:var(--green-soft);border-top:2px solid var(--green-light)">'
+      +'<td style="padding:13px 8px"><b style="color:var(--green-dark)">TOTAL</b></td><td>'+bills+'</td><td></td>'
+      +'<td style="padding:13px 8px;text-align:right"><b style="font-size:15px;color:#dc2626">'+money(tot)+'</b></td>'
+    +'</tr></tfoot></table></div>';
+}
+function renderCustomers(){
+  var rows=customerRows();
+  var tot=rows.reduce(function(a,x){return a+x.amt;},0);
+  var ord=rows.reduce(function(a,x){return a+x.orders;},0);
+  var head='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">'
+    + accBox('#eff6ff','#1e40af',rows.length,'Customers')
+    + accBox('#f1f5f9','#475569',ord,'Orders / bills')
+    + accBox('#f0fdf4','#15803d',money(tot),'Kul sale')
+    + '</div>';
+  if(!rows.length) return head+'<div class="empty" style="padding:40px 20px"><div class="big">👥</div><h3>Abhi koi sale nahi</h3><p>Order ya counter bill aate hi customer yahan aayega.</p></div>';
+  var body=rows.map(function(x){
+    return '<tr><td><b style="font-size:13.5px">'+esc(x.party)+'</b><div style="font-size:11px;color:var(--muted)">'+esc(x.src)+'</div></td>'
+      +'<td>'+x.orders+'</td><td>'+x.items+'</td>'
+      +'<td style="text-align:right"><b style="color:#15803d">'+money(x.amt)+'</b></td></tr>';
+  }).join('');
+  return head+'<div style="overflow-x:auto"><table class="ptbl"><thead><tr>'
+    +'<th>Customer</th><th>Orders</th><th>Items</th><th style="text-align:right">Kul sale</th>'
+    +'</tr></thead><tbody>'+body+'</tbody>'
+    +'<tfoot><tr style="background:var(--green-soft);border-top:2px solid var(--green-light)">'
+      +'<td style="padding:13px 8px"><b style="color:var(--green-dark)">TOTAL</b></td><td>'+ord+'</td><td></td>'
+      +'<td style="padding:13px 8px;text-align:right"><b style="font-size:15px;color:#15803d">'+money(tot)+'</b></td>'
+    +'</tr></tfoot></table></div>';
 }
 function renderSales(){
   var el=document.getElementById('salesList'); if(!el)return;
+  accTabsBar();
+  if(accTab==='ledger'){ el.innerHTML=periodChips()+renderLedger(); return; }
+  if(accTab==='suppliers'){ el.innerHTML=periodChips()+renderSuppliers(); return; }
+  if(accTab==='customers'){ el.innerHTML=periodChips()+renderCustomers(); return; }
   var r=profitReport();
   var purTotal=purchases.reduce(function(a,x){ return a+(x.tot||0); },0);
   var stockVal=catalog.reduce(function(a,p){ var q=hasStock(p)?p.stock:0; var c=(typeof p.cost==='number')?p.cost:p.price; return a+q*c; },0);
-  var box=function(bg,col,val,lbl){ return '<div style="flex:1;min-width:150px;background:'+bg+';border-radius:12px;padding:13px;text-align:center"><b style="display:block;font-size:18px;color:'+col+'">'+val+'</b><small style="color:'+col+'">'+lbl+'</small></div>'; };
-  var head='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">'
-    + box('#f0fdf4','#15803d',money(r.itemSale),'Items ki Sale')
-    + box('#fee2e2','#991b1b','− '+money(r.ownCost),'Lagat (bike hue maal ki)')
-    + box('#faf5ff','#6b21a8','− '+money(r.sellPayable),'Sellers ko dena')
-    + box('#fef3c7','#92600a','+ '+money(r.sellComm),'Seller commission')
+  var head=periodChips()+'<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">'
+    + accBox('#f0fdf4','#15803d',money(r.itemSale),'Items ki Sale')
+    + accBox('#fee2e2','#991b1b','− '+money(r.ownCost),'Lagat (bike hue maal ki)')
+    + accBox('#faf5ff','#6b21a8','− '+money(r.sellPayable),'Sellers ko dena')
+    + accBox('#fef3c7','#92600a','+ '+money(r.sellComm),'Seller commission')
+    + (r.disc? accBox('#fee2e2','#991b1b','− '+money(r.disc),'Di hui chhoot') : '')
     + '</div>'
     + '<div style="background:linear-gradient(135deg,#15803d,#22c55e);color:#fff;border-radius:14px;padding:18px;text-align:center;margin-bottom:14px">'
       + '<div style="font-size:13px;opacity:.9">Kul Nafa (Profit)</div>'
       + '<div style="font-size:30px;font-weight:800;line-height:1.2">'+money(r.profit)+'</div>'
       + '<div style="font-size:11.5px;opacity:.85;margin-top:4px">Apni sale − lagat + seller commission</div></div>'
     + '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">'
-      + box('#eff6ff','#1e40af',money(r.onlineSale)+' / '+r.orders,'Online sale / orders')
-      + box('#ecfeff','#0e7490',money(r.counterSale)+' / '+r.bills,'Counter sale / bills')
-      + box('#eff6ff','#1e40af',r.units,'Items bike')
-      + box('#f1f5f9','#475569',money(purTotal),'Stock kharidari (purchase bills)')
-      + box('#faf5ff','#7c3aed',money(stockVal),'Maujooda stock ki qeemat')
+      + accBox('#eff6ff','#1e40af',money(r.onlineSale)+' / '+r.orders,'Online sale / orders')
+      + accBox('#ecfeff','#0e7490',money(r.counterSale)+' / '+r.bills,'Counter sale / bills')
+      + accBox('#eff6ff','#1e40af',r.units,'Items bike')
+      + accBox('#f1f5f9','#475569',money(purTotal),'Stock kharidari')
+      + accBox('#faf5ff','#7c3aed',money(stockVal),'Maujooda stock')
       + '</div>';
-  if(r.noCost>0) head+='<div style="background:#fffbeb;border:1px dashed #fde68a;color:#b45309;font-size:12.5px;padding:10px 12px;border-radius:11px;margin-bottom:14px"><b>Dhyan dein:</b> '+r.noCost+' items aise bike jinki lagat product mein daali hi nahi gayi. Un ka poora paisa nafa gina gaya hai. Sahi nafa ke liye har product mein "Lagat / Buying cost" bharein.</div>';
+  if(r.noCost>0) head+='<div style="background:#fffbeb;border:1px dashed #fde68a;color:#b45309;font-size:12.5px;padding:10px 12px;border-radius:11px;margin-bottom:14px"><b>Dhyan dein:</b> '+r.noCost+' items aise bike jinki lagat product mein daali hi nahi gayi. Un ka poora paisa nafa gina gaya hai.</div>';
   var rows=Object.keys(r.map).map(function(k){return r.map[k];}).sort(function(a,b){return b.val-a.val;});
-  if(!rows.length){ el.innerHTML=head+'<div class="empty" style="padding:30px"><div class="big">📊</div><h3>Abhi koi sale nahi</h3><p>Order aate hi har item ka hisab yahan dikhega.</p></div>'+saleBillsHtml(); return; }
+  if(!rows.length){ el.innerHTML=head+'<div class="empty" style="padding:30px"><div class="big">📊</div><h3>Abhi koi sale nahi</h3><p>Order aate hi har item ka hisab yahan dikhega.</p></div>'; return; }
   var body='<div style="font-size:12px;color:var(--muted);margin:2px 0 8px;text-transform:uppercase;letter-spacing:.5px">Har item ki value</div>'
     +'<div class="egrid">'+rows.map(function(x){
       return '<div class="padmin"><div class="pe" style="background:var(--green-soft);font-size:18px">'+x.emoji+'</div>'
         +'<div class="pinfo"><b>'+esc(x.name)+'</b><small>'+x.qty+' sold'+(x.seller?(' · 🏪 '+esc(x.seller)):'')+'</small></div>'
         +'<b style="color:var(--green-dark);white-space:nowrap">'+money(x.val)+'</b></div>';
     }).join('')+'</div>';
-  el.innerHTML=head+body+saleBillsHtml();
+  el.innerHTML=head+body+periodTable(accBreak);
 }
 function openHelpInfo(){ openHelp(); }
 function openHelpFromAcct(){ closeModal('acctModal'); openHelp(); }
-function applySettings(){ try{ document.title=(settings.store||'TEETOO')+' — Fresh Grocery'; }catch(e){} var hm=document.getElementById('hdrMail'); if(hm){ hm.href='mailto:'+supportEmail(); hm.innerHTML='\ud83d\udce7 '+esc(supportEmail()); } if(typeof renderHpContact==='function')renderHpContact(); }
+function openStoreSettings(){
+  if(!isAdmin()) return;
+  $('#tkDeliver').value=settings.deliverTo||'Home';
+  $('#tkFee').value=deliveryFeeAmt();
+  $('#tkFree').value=freeOverAmt();
+  $('#tkStrip').value=settings.stripText||'';
+  $('#tkOff').value=settings.stripOff||'';
+  openModal('tickerModal');
+}
+function saveTicker(){
+  settings.deliverTo=($('#tkDeliver').value||'').trim()||'Home';
+  var f=parseInt($('#tkFee').value,10); settings.deliveryFee=(isNaN(f)||f<0)?0:f;
+  var o=parseInt($('#tkFree').value,10); settings.freeOver=(isNaN(o)||o<0)?0:o;
+  settings.stripText=($('#tkStrip').value||'').trim();
+  settings.stripOff=($('#tkOff').value||'').trim();
+  LS.set('tt_settings',settings); fbSaveSettings(); applySettings();
+  closeModal('tickerModal'); toast('✅','Top bar updated');
+}
+function applySettings(){ try{ document.title=(settings.store||'TEETOO')+' — Fresh Grocery'; }catch(e){}
+  var d=document.getElementById('hsDeliver'); if(d) d.textContent=settings.deliverTo||'Home';
+  var f=document.getElementById('hsFree'); if(f) f.textContent='Free delivery over '+money(freeOverAmt());
+  var sb=document.getElementById('stripBig'); if(sb) sb.textContent=settings.stripText||'';
+  var so=document.getElementById('stripOff'); if(so) so.textContent=settings.stripOff||'';
+  var ps=document.getElementById('promoStrip'); if(ps) ps.style.display=((settings.stripText||settings.stripOff)?'flex':'none');
+  var he=document.getElementById('hsEdit'); if(he) he.style.display=(typeof isAdmin==='function'&&isAdmin())?'inline-block':'none';
+  var se=document.getElementById('stripEdit'); if(se) se.style.display=(typeof isAdmin==='function'&&isAdmin())?'inline-block':'none'; var hm=document.getElementById('hdrMail'); if(hm){ hm.href='mailto:'+supportEmail(); hm.innerHTML='\ud83d\udce7 '+esc(supportEmail()); } if(typeof renderHpContact==='function')renderHpContact(); }
 function fbSaveSettings(){ if(window.db){ try{ window.db.collection('settings').doc('main').set(JSON.parse(JSON.stringify(settings))); }catch(e){ console.warn('fb settings',e); } } }
-function saveSettings(){ var h=document.getElementById('setHelp'); var st=document.getElementById('setStore'); var cm=document.getElementById('setComm'); var sc=document.getElementById('setSellComm'); if(sc){ var sv=parseFloat(sc.value); settings.sellerCommission=(isNaN(sv)||sv<0)?0:sv; } var em=document.getElementById('setEmail'); if(em){ settings.email=(em.value||'').trim(); } settings.help=((h&&h.value)||'').trim(); settings.store=((st&&st.value)||'').trim(); if(cm){ var cv=parseFloat(cm.value); settings.commission=(isNaN(cv)||cv<0)?0:cv; } LS.set('tt_settings',settings); fbSaveSettings(); applySettings(); if(typeof renderAcct==='function'){var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show'))renderAcct();} toast('✅','Settings save ho gayi'); }
-function settingsSection(){ return '<div class="acct-sec"><h4>Store Settings</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="field"><label>Help &amp; Support Number</label><input id="setHelp" value="'+esc(settings.help||'')+'" placeholder="0300-1234567"></div><div class="field"><label>Store Name</label><input id="setStore" value="'+esc(settings.store||'')+'" placeholder="TEETOO"></div><div class="field"><label>Support Email</label><input id="setEmail" type="email" value="'+esc(supportEmail())+'" placeholder="teetoo@teetoo9.com"></div><div class="field"><label>Employee Commission (%)</label><input id="setComm" type="number" min="0" step="0.1" value="'+esc(String(commissionPct()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Har employee ki sale par itne percent commission bane gi.</div></div><div class="field"><label>Seller Commission (%) — default</label><input id="setSellComm" type="number" min="0" step="0.1" value="'+esc(String(sellerCommDefault()))+'" placeholder="10"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Seller ki har sale par T.T itne percent rakhega. Kisi ek seller ka rate alag karna ho to Sellers page se badlein.</div></div><button class="btn-primary" style="margin-top:6px" onclick="saveSettings()">Save Settings</button></div></div>'; }
+function saveSettings(){ var h=document.getElementById('setHelp'); var st=document.getElementById('setStore'); var cm=document.getElementById('setComm'); var df=document.getElementById('setDelFee'); if(df){ var dv=parseInt(df.value,10); settings.deliveryFee=(isNaN(dv)||dv<0)?0:dv; }
+  var fo=document.getElementById('setFreeOver'); if(fo){ var fv=parseInt(fo.value,10); settings.freeOver=(isNaN(fv)||fv<0)?0:fv; }
+  var dt=document.getElementById('setDeliverTo'); if(dt) settings.deliverTo=(dt.value||'').trim()||'Home';
+  var st1=document.getElementById('setStripText'); if(st1) settings.stripText=(st1.value||'').trim();
+  var st2=document.getElementById('setStripOff'); if(st2) settings.stripOff=(st2.value||'').trim();
+  var ls=document.getElementById('setLowStock'); if(ls){ var lv=parseInt(ls.value,10); settings.lowStock=(isNaN(lv)||lv<0)?5:lv; } var sc=document.getElementById('setSellComm'); if(sc){ var sv=parseFloat(sc.value); settings.sellerCommission=(isNaN(sv)||sv<0)?0:sv; } var em=document.getElementById('setEmail'); if(em){ settings.email=(em.value||'').trim(); } settings.help=((h&&h.value)||'').trim(); settings.store=((st&&st.value)||'').trim(); if(cm){ var cv=parseFloat(cm.value); settings.commission=(isNaN(cv)||cv<0)?0:cv; } LS.set('tt_settings',settings); fbSaveSettings(); applySettings(); if(typeof renderAcct==='function'){var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show'))renderAcct();} toast('✅','Settings save ho gayi'); }
+function settingsSection(){ return '<div class="acct-sec"><h4>Store Settings</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="field"><label>Help &amp; Support Number</label><input id="setHelp" value="'+esc(settings.help||'')+'" placeholder="0300-1234567"></div><div class="field"><label>Store Name</label><input id="setStore" value="'+esc(settings.store||'')+'" placeholder="TEETOO"></div><div class="field"><label>Support Email</label><input id="setEmail" type="email" value="'+esc(supportEmail())+'" placeholder="teetoo@teetoo9.com"></div><div class="field"><label>Employee Commission (%)</label><input id="setComm" type="number" min="0" step="any" value="'+esc(String(commissionPct()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Har employee ki sale par itne percent commission bane gi. Aadha percent bhi chalta hai — jaise 2.5 ya 7.25</div></div><div class="field"><label>Delivery Fee (Rs)</label><input id="setDelFee" type="number" min="0" value="'+esc(String(deliveryFeeAmt()))+'" placeholder="99"></div><div class="field"><label>Free delivery is raqam se upar (Rs)</label><input id="setFreeOver" type="number" min="0" value="'+esc(String(freeOverAmt()))+'" placeholder="2000"></div><div class="field"><label>Deliver to \u2014 kya likha ho</label><input id="setDeliverTo" value="'+esc(settings.deliverTo||'Home')+'" placeholder="Home"></div><div class="field"><label>Ticker \u2014 bara text</label><input id="setStripText" value="'+esc(settings.stripText||'')+'" placeholder="END OF MONTH"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Dono khane khali chhor dein to ticker bilkul chhup jayega.</div></div><div class="field"><label>Ticker \u2014 right side ka text</label><input id="setStripOff" value="'+esc(settings.stripOff||'')+'" placeholder="UPTO 80% OFF"></div><div class="field"><label>Low stock warning (kitne se kam par)</label><input id="setLowStock" type="number" min="0" value="'+esc(String(lowStockLimit()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Is se kam quantity bache to Inventory mein "kam bache" ka warning aayega.</div></div><div class="field"><label>Seller Commission (%) — default</label><input id="setSellComm" type="number" min="0" step="any" value="'+esc(String(sellerCommDefault()))+'" placeholder="10"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Seller ki har sale par T.T itne percent rakhega. Kisi ek seller ka rate alag karna ho to Sellers page se badlein.</div></div><button class="btn-primary" style="margin-top:6px" onclick="saveSettings()">Save Settings</button></div></div>'; }
 function copyRefMy(){ var u=currentUser(); if(!u)return; var code=u.refCode||('TT'+String(u.phone||'').slice(-6)); try{ navigator.clipboard.writeText(code); }catch(e){} toast('📋','Code copy: '+code); }
 function referralSection(){ var u=currentUser(); if(!u||isAdmin())return ''; var code=u.refCode||('TT'+String(u.phone||'').slice(-6)); var cnt=u.refCount||0; return '<div class="acct-sec"><h4>Refer &amp; Earn</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line);text-align:center"><div style="font-size:12px;color:var(--muted)">Aap ka referral code</div><div style="font-size:24px;font-weight:800;letter-spacing:2px;color:var(--green-dark);margin:6px 0">'+esc(code)+'</div><button class="add" style="width:auto;padding:6px 16px;margin:0 auto" onclick="copyRefMy()">Copy code</button><div style="margin-top:12px;font-size:13px">Total referrals: <b style="color:var(--green-dark);font-size:16px">'+cnt+'</b></div><div style="font-size:11.5px;color:var(--muted);margin-top:6px">Ye code doston ko dein \u2014 jab wo is se register karenge, aap ka count barhega.</div></div></div>'; }
 function sellerCtaSection(){
@@ -1661,6 +2080,41 @@ function sellerCtaSection(){
 }
 function customerChatSection(){ return '<div class="acct-sec"><h4>Help</h4><button class="add" style="width:100%;background:var(--green);display:flex;align-items:center;justify-content:center;gap:8px" onclick="openHelpFromAcct()">💬 Chat to TT Services — Live</button><div style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px">Aapka message seedha admin ko jayega<br>\ud83d\udcde '+esc(settings.help||'')+' &nbsp;·&nbsp; <a href="mailto:'+esc(supportEmail())+'" style="color:var(--green-dark);font-weight:600">\ud83d\udce7 '+esc(supportEmail())+'</a></div></div>'; }
 function myJobApp(){ var u=currentUser(); if(u){ var byMail=jobs.find(function(j){return j.email&&j.email===u.email;}); if(byMail)return byMail; if(u.phone){ var byPh=jobs.find(function(j){return j.phone&&j.phone===u.phone;}); if(byPh)return byPh; } } return null; }
+function unseenSales(){ return mySales.filter(function(l){ return !l.seen; }); }
+function updateSellerBadge(){
+  var b=document.getElementById('sellNewCount'); if(!b) return;
+  var n=(!isAdmin() && isApprovedSeller())?unseenSales().length:0;
+  b.style.display=n?'grid':'none'; b.textContent=n;
+}
+function markSalesSeen(){
+  var ch=false;
+  mySales.forEach(function(l){ if(!l.seen){ l.seen=true; ch=true; if(window.db){ try{ window.db.collection('sellerSales').doc(String(l.id)).set({seen:true},{merge:true}); }catch(e){} } } });
+  if(ch) LS.set('tt_mysales',mySales);
+  updateSellerBadge();
+}
+function mySalesRows(){
+  return mySales.slice().sort(function(a,b){ return String(b.orderId||'').localeCompare(String(a.orderId||'')); });
+}
+function openMyShop(){
+  if(!currentUser()){ toast('🔒','Pehle login karein'); openAuth(); return; }
+  if(!mySeller()){ closeModal('acctModal'); openSellPage(); return; }
+  renderMyShop(); openModal('shopModal');
+  if(isApprovedSeller()) setTimeout(function(){ markSalesSeen(); },1500);
+}
+function renderMyShop(){
+  var el=document.getElementById('shopBody'); if(!el) return;
+  var me=mySeller();
+  var sub=document.getElementById('shopSub');
+  if(sub) sub.textContent=me?((me.shop||'')+' · '+(me.status==='approved'?'Approved':(me.status==='pending'?'Zer-e-ghaur':'Band'))):'';
+  el.innerHTML=sellerShopSection()+mySalesSection();
+}
+function updateShopBtn(){
+  var b=document.getElementById('myShopBtn'); if(!b) return;
+  b.style.display=(!isAdmin() && mySeller())?'flex':'none';
+  var c=document.getElementById('shopNewCount'); if(!c) return;
+  var n=(!isAdmin() && isApprovedSeller())?unseenSales().length:0;
+  c.style.display=n?'grid':'none'; c.textContent=n;
+}
 function sellerShopSection(){
   var me=mySeller(); if(!me) return '';
   if(me.status!=='approved'){
@@ -1675,7 +2129,7 @@ function sellerShopSection(){
   var rows=mine.length? mine.map(function(p){
     return '<div class="padmin">'
       +(p.img?('<img src="'+p.img+'" style="width:34px;height:34px;border-radius:8px;object-fit:cover;flex-shrink:0">'):('<div class="pe" style="background:'+(CAT_BG[p.cat]||'#eef2f0')+'">'+(p.emoji||'\ud83d\udce6')+'</div>'))
-      +'<div class="pinfo"><b>'+esc(p.name)+'</b><small>'+money(p.price)+' \u00b7 '+esc(p.unit||'')+' \u00b7 <span style="color:'+(hasStock(p)?(p.stock>5?'#0f766e':(p.stock>0?'#d97706':'#dc2626')):'#9ca3af')+';font-weight:700">'+(hasStock(p)?(p.stock>0?(p.stock+' stock'):'OUT OF STOCK'):'unlimited')+'</span></small></div>'
+      +'<div class="pinfo"><b>'+esc(p.name)+'</b><small>'+money(p.price)+' \u00b7 '+esc(p.unit||'')+' \u00b7 <span style="color:'+(hasStock(p)?(p.stock>lowStockLimit()?'#0f766e':(p.stock>0?'#d97706':'#dc2626')):'#9ca3af')+';font-weight:700">'+(p.stock>0?(p.stock+' stock'):'OUT OF STOCK')+'</span></small></div>'
       +'<button class="pdel" title="Edit" onclick="openEditProduct('+p.id+')" style="color:#64748b">\u270f\ufe0f</button>'
       +'<button class="pdel" title="Delete" onclick="deleteProduct('+p.id+')" style="color:#ef4444">\ud83d\uddd1</button></div>';
   }).join('') : '<div class="empty" style="padding:26px"><div class="big">\ud83d\udce6</div><h3>Abhi koi product nahi</h3><p>Upar wale button se apna pehla product daalein.</p></div>';
@@ -1687,7 +2141,38 @@ function sellerShopSection(){
       +'<div class="stat" style="min-width:110px"><b>'+st.items+'</b><small>Items bike</small></div></div>'
     +'<div class="admin-panel"><button class="admin-add" onclick="openAddProduct()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Naya Product daalein</button>'
     +'<div class="plist">'+rows+'</div></div>'
-    +'<div style="font-size:11.5px;color:var(--muted);margin-top:8px;text-align:center">Payout aap ke account par: '+esc(me.bank||'-')+'</div></div>';
+    +'<div style="font-size:11.5px;color:var(--muted);margin-top:8px;text-align:center">Payout aap ke account par: '+esc(me.bank||'-')+'</div></div>'
+    +mySalesSection();
+}
+function mySalesSection(){
+  var rows=mySalesRows();
+  var nUnseen=unseenSales().length;
+  if(!rows.length){
+    return '<div class="acct-sec"><h4>Meri Sales</h4><div class="empty" style="padding:26px"><div class="big">🧾</div><h3>Abhi koi sale nahi</h3><p>Jab koi aap ka product khareedega, uski poori tafseel yahan aayegi.</p></div></div>';
+  }
+  var tS=0,tC=0,tN=0,tQ=0;
+  var body=rows.map(function(l){
+    tS+=(l.total||0); tC+=(l.comm||0); tN+=(l.net||0); tQ+=(l.qty||0);
+    return '<tr'+(l.seen?'':' style="background:var(--green-soft)')+'">'
+      +'<td><b style="font-size:13px">'+esc(l.product||'')+(l.seen?'':' <span style="font-size:9.5px;background:#dc2626;color:#fff;padding:2px 6px;border-radius:6px;vertical-align:middle">NEW</span>')+'</b>'
+        +'<div style="font-size:11px;color:var(--muted)">'+esc(l.orderId||'')+' · '+esc(l.src||'')+'</div></td>'
+      +'<td style="font-size:11.5px;color:var(--muted);white-space:nowrap">'+esc(l.date||'')+(l.time?('<br>'+esc(l.time)):'')+'</td>'
+      +'<td style="white-space:nowrap"><b>'+l.qty+'</b> × '+money(l.price)+'<div style="font-size:11px;color:var(--muted)">= '+money(l.total)+'</div></td>'
+      +'<td style="white-space:nowrap"><b style="color:#b45309">− '+money(l.comm)+'</b><div style="font-size:10.5px;color:var(--muted)">'+l.commRate+'%</div></td>'
+      +'<td style="text-align:right;white-space:nowrap"><b style="color:#7c3aed">'+money(l.net)+'</b></td>'
+      +'</tr>';
+  }).join('');
+  return '<div class="acct-sec"><h4>Meri Sales <span style="text-transform:none;letter-spacing:0;color:var(--muted)">'+rows.length+' entries'+(nUnseen?(' · '+nUnseen+' nayi'):'')+'</span></h4>'
+    +'<div style="overflow-x:auto"><table class="ptbl"><thead><tr>'
+      +'<th>Product</th><th>Kab</th><th>Qty × Rate</th><th>Commission</th><th style="text-align:right">Mujhe milega</th>'
+    +'</tr></thead><tbody>'+body+'</tbody>'
+    +'<tfoot><tr style="background:var(--green-soft);border-top:2px solid var(--green-light)">'
+      +'<td style="padding:12px 8px"><b style="color:var(--green-dark)">TOTAL</b><div style="font-size:11px;color:var(--muted)">'+tQ+' items</div></td>'
+      +'<td></td>'
+      +'<td style="padding:12px 8px"><b style="font-size:14px;color:var(--green-dark)">'+money(tS)+'</b><div style="font-size:10.5px;color:var(--muted)">kul sale</div></td>'
+      +'<td style="padding:12px 8px"><b style="font-size:14px;color:#b45309">− '+money(tC)+'</b></td>'
+      +'<td style="padding:12px 8px;text-align:right"><b style="font-size:15px;color:#7c3aed">'+money(tN)+'</b></td>'
+    +'</tr></tfoot></table></div></div>';
 }
 function jobApplySection(){ if(isAdmin())return ''; var app=myJobApp(); return '<div class="acct-sec"><h4>Apply for Job</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line);text-align:center">'+(app?'<div style="font-size:12px;color:var(--green-dark);font-weight:700;margin-bottom:8px">✅ Application submitted — '+esc(app.date||'')+'</div>':'<div style="font-size:12.5px;color:var(--muted);margin-bottom:10px">Hamare saath kaam karne ke liye apply karein — naam, phone, address, father name, city aur professional ID card number chahiye.</div>')+'<button class="add" style="width:auto;padding:8px 20px;margin:0 auto;background:var(--green);color:#fff" onclick="openJobApply()">'+(app?'✏️ Update Application':'💼 Apply Now')+'</button></div></div>'; }
 function openJobApply(){ if(isAdmin()){ closeModal('acctModal'); openJobsAdmin(); return; } if(!currentUser()){ closeModal('acctModal'); toast('\ud83d\udd12','Pehle login karein \u2014 job apply karne ke liye account zaroori hai'); openAuth(); return; } var u=currentUser(); var app=myJobApp(); $('#jName').value=app?(app.name||''):(u?u.name||'':''); $('#jPhone').value=app?(app.phone||''):(u?u.phone||'':''); $('#jAddr').value=app?(app.address||''):(u?u.address||'':''); $('#jFather').value=app?(app.father||''):''; $('#jCity').value=app?(app.city||''):''; $('#jIdCard').value=app?(app.idCard||''):''; $('#jGender').value=app?(app.gender||''):''; $('#jEdu').value=app?(app.education||''):''; $('#jExp').value=app?(app.experience||''):''; ['jfName','jfPhone','jfAddr','jfFather','jfCity','jfId','jfGender','jfEdu','jfExp'].forEach(function(id){ var el=document.getElementById(id); if(el)el.classList.remove('invalid'); }); closeModal('acctModal'); closeModal('authModal'); openModal('jobModal'); }
@@ -1740,12 +2225,29 @@ function jobsBodyHtml(grid){
   var head='<div style="display:flex;gap:8px;margin-bottom:14px"><div style="flex:1;background:#f0fdf4;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:19px;color:#15803d">'+jobs.length+'</b><small style="color:#15803d">Applicants</small></div><div style="flex:1;background:#eff6ff;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:19px;color:#1e40af">'+totClients+'</b><small style="color:#1e40af">Clients</small></div><div style="flex:1;background:#fef3c7;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:16px;color:#d97706">'+money(totSale)+'</b><small style="color:#92600a">Sale</small></div></div>';
   return head+(grid?('<div class="egrid">'+rows+'</div>'):rows);
 }
+function deliveryFeeAmt(){ var v=parseInt(settings.deliveryFee,10); return (isNaN(v)||v<0)?99:v; }
+function freeOverAmt(){ var v=parseInt(settings.freeOver,10); return (isNaN(v)||v<0)?2000:v; }
+function lowStockLimit(){ var v=parseInt(settings.lowStock,10); return (isNaN(v)||v<0)?5:v; }
 function sellerCommDefault(){ var v=parseFloat(settings.sellerCommission); return (isNaN(v)||v<0)?0:v; }
 function findSeller(id){ return sellers.find(function(x){ return String(x.id)===String(id); })||null; }
 function mySeller(){ var u=currentUser(); return u? findSeller(u.email) : null; }
 function isApprovedSeller(){ var s=mySeller(); return !!(s && s.status==='approved'); }
 function sellerCommRate(id){ var s=findSeller(id); if(s && typeof s.commission==='number') return s.commission; return sellerCommDefault(); }
 function sellerName(id){ var s=findSeller(id); return s? (s.shop||s.name||'') : ''; }
+function fbSaveSellerLine(l){ if(window.db&&l){ try{ window.db.collection('sellerSales').doc(String(l.id)).set(JSON.parse(JSON.stringify(l))); }catch(e){ console.warn('fb sline',e); } } }
+function makeSellerLines(items,ref,src,dateStr,timeStr){
+  (items||[]).forEach(function(it){
+    var sid=String(it.sellerId||''); if(!sid) return;
+    var qty=it.qty||0, price=it.price||0, line=price*qty;
+    var rate=(typeof it.commRate==='number')?it.commRate:sellerCommRate(sid);
+    var comm=Math.round(line*rate/100);
+    var l={id:ref+'_'+(it.pid||it.name),sellerId:sid,orderId:ref,src:src,
+           date:dateStr||'',time:timeStr||'',product:it.name||'',qty:qty,price:price,
+           total:line,commRate:rate,comm:comm,net:Math.max(0,line-comm),seen:false};
+    fbSaveSellerLine(l);
+    if(typeof mySeller==='function'){ var m=mySeller(); if(m&&String(m.id)===sid){ mySales.push(l); LS.set('tt_mysales',mySales); } }
+  });
+}
 function fbSaveSeller(x){ if(window.db&&x){ try{ window.db.collection('sellers').doc(String(x.id)).set(JSON.parse(JSON.stringify(x))); }catch(e){ console.warn('fb seller',e); } } }
 function supportEmail(){ return (settings.email||'teetoo@teetoo9.com').trim(); }
 function commissionPct(){ var p=parseFloat(settings.commission); return (isNaN(p)||p<0)?0:p; }
@@ -1808,6 +2310,14 @@ function updateSellersBadge(){ var n=isAdmin()?sellers.filter(function(x){ retur
   var b=document.getElementById('sellCount'); if(b){ b.style.display=n?'grid':'none'; b.textContent=n; } }
 function markSellersRead(){ var ch=false; sellers.forEach(function(x){ if(!x.read){ x.read=true; ch=true; fbSaveSeller(x); } }); if(ch)LS.set('tt_sellers',sellers); updateSellersBadge(); }
 function sellerOrderStats(sid){
+  if(!isAdmin()){
+    var m=mySeller();
+    if(m && String(m.id)===String(sid)){
+      var S=0,I=0,C=0;
+      mySales.forEach(function(l){ S+=(l.total||0); I+=(l.qty||0); C+=(l.comm||0); });
+      return {sale:S,items:I,comm:C,cost:0,payable:Math.max(0,S-C)};
+    }
+  }
   var sale=0,items=0,comm=0,cost=0;
   allOrders.forEach(function(o){ if((o.status||'')==='Cancelled') return;
     (o.items||[]).forEach(function(it){ if(String(it.sellerId||'')!==String(sid)) return;
@@ -1833,12 +2343,59 @@ function setSellerComm(id,val){
 var sellTab='pending';
 function setSellTab(t){ sellTab=t; renderSellers(); }
 function openSellersAdmin(){ renderSellers(); openModal('sellersModal'); markSellersRead(); }
+function saveGlobalComm(){
+  var el=document.getElementById('gComm'); if(!el) return;
+  var v=parseFloat(String(el.value).trim());
+  if(isNaN(v)||v<0){ toast('⚠️','Sahi percentage likhein'); return; }
+  settings.sellerCommission=v; LS.set('tt_settings',settings); fbSaveSettings();
+  renderSellers(); toast('✅','Default commission '+v+'% set');
+}
+function commissionPanel(approved){
+  var pct=sellerCommDefault();
+  var h='<div class="admcard" style="margin-bottom:16px;background:#fff5ef;border-color:var(--green-light)">'
+    +'<h4>Default commission — sab sellers par</h4>'
+    +'<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
+      +'<input id="gComm" type="number" min="0" step="any" value="'+pct+'" style="width:110px;padding:11px;border:1.5px solid var(--green-light);border-radius:11px;font-size:17px;font-weight:800;text-align:center;color:var(--green-dark)">'
+      +'<span style="font-size:15px;font-weight:800;color:var(--green-dark)">%</span>'
+      +'<button class="add" style="width:auto;padding:10px 20px;margin:0" onclick="saveGlobalComm()">Save</button>'
+      +'<span style="font-size:12.5px;color:var(--muted);flex:1;min-width:180px">Har seller ki sale par TeeToo itna kaategi. Jo marzi number likhein \u2014 5, 7.5, 12.75, 0.5 sab chalte hain. Kisi ek ka rate alag karna ho to neeche table se badlein.</span>'
+    +'</div></div>';
+  if(!approved.length) return h+'<div class="empty" style="padding:34px 20px"><div class="big">🏪</div><h3>Koi approved seller nahi</h3><p>Approve hone ke baad yahan uska hisaab aayega.</p></div>';
+  var tS=0,tC=0,tP=0;
+  var rows=approved.map(function(x){
+    var st=sellerOrderStats(x.id);
+    var r=sellerCommRate(x.id);
+    var own=(typeof x.commission==='number');
+    tS+=st.sale; tC+=st.comm; tP+=st.payable;
+    return '<tr>'
+      +'<td><b style="font-size:13.5px">'+esc(x.shop||x.name||'')+'</b><div style="font-size:11px;color:var(--muted)">'+esc(x.name||'')+' · '+esc(x.phone||'')+'</div></td>'
+      +'<td><div class="qtybox"><input id="cm_'+x.id+'" type="number" min="0" step="any" value="'+(own?x.commission:'')+'" placeholder="'+pct+'" style="width:66px;font-weight:800;color:var(--green-dark)">'
+        +'<span style="font-size:12px;color:var(--muted)">%</span>'
+        +'<button class="sv" onclick="setSellerComm(\''+x.id+'\',document.getElementById(\'cm_'+x.id+'\').value)">Set</button></div>'
+        +'<div style="font-size:10.5px;color:var(--muted);margin-top:3px">abhi <b>'+r+'%</b> '+(own?'(alag)':'(default)')+'</div></td>'
+      +'<td style="white-space:nowrap"><b style="font-size:13.5px">'+money(st.sale)+'</b><div style="font-size:10.5px;color:var(--muted)">'+st.items+' items</div></td>'
+      +'<td style="white-space:nowrap"><b style="font-size:13.5px;color:#b45309">− '+money(st.comm)+'</b><div style="font-size:10.5px;color:var(--muted)">TeeToo ka hissa</div></td>'
+      +'<td style="white-space:nowrap;text-align:right"><b style="font-size:14px;color:#7c3aed">'+money(st.payable)+'</b><div style="font-size:10.5px;color:var(--muted)">seller ko dena</div></td>'
+      +'</tr>';
+  }).join('');
+  h+='<div style="overflow-x:auto"><table class="ptbl"><thead><tr>'
+    +'<th>Seller</th><th>Rate</th><th>Sale</th><th>Katauti</th><th style="text-align:right">Payout</th>'
+    +'</tr></thead><tbody>'+rows+'</tbody>'
+    +'<tfoot><tr style="background:var(--green-soft);border-top:2px solid var(--green-light)">'
+      +'<td style="padding:13px 8px"><b style="color:var(--green-dark)">TOTAL</b><div style="font-size:11px;color:var(--muted)">'+approved.length+' sellers</div></td>'
+      +'<td></td>'
+      +'<td style="padding:13px 8px"><b style="font-size:15px;color:var(--green-dark)">'+money(tS)+'</b><div style="font-size:10.5px;color:var(--muted)">kul sale</div></td>'
+      +'<td style="padding:13px 8px"><b style="font-size:15px;color:#b45309">− '+money(tC)+'</b><div style="font-size:10.5px;color:var(--muted)">hamari kamai</div></td>'
+      +'<td style="padding:13px 8px;text-align:right"><b style="font-size:15px;color:#7c3aed">'+money(tP)+'</b><div style="font-size:10.5px;color:var(--muted)">sab ko dena</div></td>'
+    +'</tr></tfoot></table></div>';
+  return h;
+}
 function renderSellers(){
   var el=document.getElementById('sellersList'); if(!el) return;
   var b={pending:[],approved:[],rejected:[]};
   sellers.forEach(function(x){ (b[x.status||'pending']||b.pending).push(x); });
   var tb=document.getElementById('sellTabs');
-  if(tb) tb.innerHTML=[['pending','\u23f3 Pending',b.pending.length],['approved','\u2705 Approved',b.approved.length],['rejected','\u2715 Rejected',b.rejected.length]]
+  if(tb) tb.innerHTML=[['pending','\u23f3 Pending',b.pending.length],['approved','\u2705 Approved',b.approved.length],['rejected','\u2715 Rejected',b.rejected.length],['comm','\u2699\ufe0f Commission',sellerCommDefault()+'%']]
     .map(function(t){ return '<button class="otab '+(sellTab===t[0]?'on':'')+'" onclick="setSellTab(\''+t[0]+'\')">'+t[1]+'<span class="n">'+t[2]+'</span></button>'; }).join('');
   var tSale=0,tComm=0,tPay=0;
   b.approved.forEach(function(x){ var st=sellerOrderStats(x.id); tSale+=st.sale; tComm+=st.comm; tPay+=st.payable; });
@@ -1847,6 +2404,7 @@ function renderSellers(){
     +'<div style="flex:1;min-width:140px;background:#eff6ff;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:16px;color:#1e40af">'+money(tSale)+'</b><small style="color:#1e40af">Seller sale</small></div>'
     +'<div style="flex:1;min-width:140px;background:#fef3c7;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:16px;color:#d97706">'+money(tComm)+'</b><small style="color:#92600a">T.T commission</small></div>'
     +'<div style="flex:1;min-width:140px;background:#faf5ff;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:16px;color:#7c3aed">'+money(tPay)+'</b><small style="color:#6b21a8">Sellers ko dena</small></div></div>';
+  if(sellTab==='comm'){ el.innerHTML=head+commissionPanel(b.approved); return; }
   var list=b[sellTab]||[];
   if(!list.length){ el.innerHTML=head+'<div class="empty" style="padding:40px 20px"><div class="big">\ud83c\udfea</div><h3>Yahan koi seller nahi</h3><p>Nayi applications "Sell on TeeToo" se aati hain.</p></div>'; return; }
   el.innerHTML=head+'<div class="egrid">'+list.map(function(x){
@@ -1868,11 +2426,313 @@ function renderSellers(){
       +'<div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">'+mine+' products \u00b7 '+st.items+' items bike \u00b7 '+esc(x.date||'')+'</div>'
       +'<div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 9px;margin-bottom:4px">'
         +'<span style="font-size:12px;color:var(--muted);flex:1">Commission %</span>'
-        +'<input id="sc_'+x.id+'" type="number" min="0" step="0.1" value="'+(typeof x.commission==="number"?x.commission:"")+'" placeholder="'+sellerCommDefault()+'" style="width:70px;padding:6px;border:1px solid var(--line);border-radius:8px;font-size:13px;text-align:center">'
+        +'<input id="sc_'+x.id+'" type="number" min="0" step="any" value="'+(typeof x.commission==="number"?x.commission:"")+'" placeholder="'+sellerCommDefault()+'" style="width:70px;padding:6px;border:1px solid var(--line);border-radius:8px;font-size:13px;text-align:center">'
         +'<button class="add" style="width:auto;padding:6px 12px;margin:0;font-size:12px" onclick="setSellerComm(\''+x.id+'\',document.getElementById(\'sc_'+x.id+'\').value)">Set</button></div>'
       +'<div style="font-size:11px;color:var(--muted);margin-bottom:6px">Abhi lagoo: <b>'+rate+'%</b>'+((typeof x.commission==='number')?' (is seller ke liye alag)':' (default)')+'</div>'
       +acts+'</div>';
   }).join('')+'</div>';
+}
+var railOpen=true;
+function toggleRail(){ railOpen=!railOpen; var r=document.getElementById('admRail'); if(r)r.classList.toggle('on',railOpen&&isAdmin()); }
+function renderRail(){
+  var r=document.getElementById('admRail'); var t=document.getElementById('railToggle');
+  if(!r||!t) return;
+  if(!isAdmin()){ r.classList.remove('on'); t.classList.remove('on'); return; }
+  t.classList.add('on'); r.classList.toggle('on',railOpen);
+  var unreadOrd=allOrders.filter(function(o){return !o.read;}).length;
+  var unreadSel=sellers.filter(function(x){return !x.read;}).length;
+  var unreadJob=jobs.filter(function(j){return !j.read;}).length;
+  var unreadMsg=messages.filter(function(m){return !m.read;}).length;
+  var items=[
+    ['📊','Accounts','openSales()',0],
+    ['📥','Purchase','openPurchase()',0],
+    ['🧾','Orders','openOrders()',unreadOrd],
+    ['📦','Inventory','openProductsAdmin()',alertCount()],
+    ['🏪','Sellers','openSellersAdmin()',unreadSel],
+    ['💼','Employee','openJobsAdmin()',unreadJob],
+    ['💬','Messages','openMessages()',unreadMsg],
+    ['🧮','Bill / Invoice','openBilling()',0],
+    ['🖼️','Banners','openBannerMgr()',0],
+    ['⚙️','Settings','openAccount()',0]
+  ];
+  r.innerHTML=items.map(function(it){
+    return '<button class="rbtn" onclick="'+it[2]+'" title="'+it[1]+'"><span class="em">'+it[0]+'</span><span class="lbl">'+it[1]+'</span>'
+      +(it[3]?'<span class="rc" style="display:grid">'+it[3]+'</span>':'')+'</button>';
+  }).join('');
+}
+function setProductStock(id,val){
+  var p=findP(id); if(!p) return;
+  if(!canManage(p)){ toast('🔒','This product is not yours'); return; }
+  var v=String(val).trim();
+  if(v===''||isNaN(parseInt(v,10))){ toast('⚠️','Enter a quantity'); renderProductsAdmin(); return; }
+  var n=parseInt(v,10); p.stock=(n<0)?0:n;
+  LS.set('tt_products',catalog); fbSaveProduct(p);
+  renderGrid(); renderProductsAdmin();
+  toast('✅',p.name+' → '+p.stock+' stock');
+}
+function bumpStock(id,d){
+  var p=findP(id); if(!p) return;
+  if(!canManage(p)){ toast('🔒','This product is not yours'); return; }
+  p.stock=Math.max(0,(typeof p.stock==='number'?p.stock:0)+d);
+  LS.set('tt_products',catalog); fbSaveProduct(p); renderGrid(); renderProductsAdmin();
+}
+function setProductCost(id,val){
+  var p=findP(id); if(!p) return;
+  if(!canManage(p)){ toast('🔒','This product is not yours'); return; }
+  var v=String(val).trim();
+  if(v===''){ delete p.cost; } else { var n=parseInt(v,10); if(isNaN(n)||n<0){ toast('⚠️','Enter a valid cost'); renderProductsAdmin(); return; } p.cost=n; }
+  LS.set('tt_products',catalog); fbSaveProduct(p); renderProductsAdmin();
+  toast('✅',p.name+' cost → '+(typeof p.cost==='number'?money(p.cost):'—'));
+}
+function setProductPrice(id,val){
+  var p=findP(id); if(!p) return;
+  if(!canManage(p)){ toast('🔒','This product is not yours'); return; }
+  var n=parseInt(String(val).trim(),10);
+  if(isNaN(n)||n<1){ toast('⚠️','Enter a valid price'); renderProductsAdmin(); return; }
+  p.price=n;
+  if(p.old && p.old<=n) delete p.old;
+  LS.set('tt_products',catalog); fbSaveProduct(p);
+  renderGrid(); renderProductsAdmin();
+  toast('✅',p.name+' → '+money(n));
+}
+function defaultCostFor(p){
+  var R={fruits:0.80,dairy:0.85,bakery:0.75,meat:0.88,beverages:0.82,
+         snacks:0.78,staples:0.90,household:0.80,care:0.75};
+  var r=R[p&&p.cat]; if(typeof r!=='number') r=0.82;
+  return Math.max(1,Math.round(((p&&p.price)||0)*r));
+}
+function migrateStock(){
+  var n=0;
+  catalog.forEach(function(p){
+    var ch=false;
+    if(typeof p.stock!=='number'){ p.stock=50; ch=true; }
+    if(typeof p.cost!=='number'){ p.cost=defaultCostFor(p); ch=true; }
+    if(ch){ p._ns=true; n++; }
+  });
+  if(n){
+    LS.set('tt_products',catalog);
+    if(typeof isAdmin==='function' && isAdmin()){
+      catalog.forEach(function(p){ if(p._ns){ delete p._ns; fbSaveProduct(p); } });
+    }
+  }
+  return n;
+}
+var prodQuery=''; var prodFilter='all'; var prodSort=''; var prodGroup=true;
+function prodSearch(v){
+  prodQuery=String(v||'').trim().toLowerCase();
+  renderProductsAdmin();
+  var el=document.getElementById('prodSearch');
+  if(el){ el.focus(); var t=el.value; el.value=''; el.value=t; }
+}
+function setProdFilter(f){ prodFilter=f; renderProductsAdmin(); }
+function setProdSort(v){ prodSort=v; renderProductsAdmin(); }
+function toggleProdGroup(){ prodGroup=!prodGroup; renderProductsAdmin(); }
+function setProductCat(id,cid){
+  var p=findP(id); if(!p) return;
+  if(!canManage(p)){ toast('🔒','This product is not yours'); return; }
+  p.cat=cid; LS.set('tt_products',catalog); fbSaveProduct(p);
+  renderGrid(); renderProductsAdmin();
+  var c=CATEGORIES.find(function(x){return x.id===cid;});
+  toast('✅',p.name+' → '+((c&&c.name)||cid));
+}
+function myProducts(){ return isAdmin()?catalog:catalog.filter(function(p){ var m=mySeller(); return m&&String(p.sellerId||'')===String(m.id); }); }
+function outList(){ return myProducts().filter(function(p){ return (typeof p.stock==='number') && p.stock===0; }); }
+function lowList(){ return myProducts().filter(function(p){ return (typeof p.stock==='number') && p.stock>0 && p.stock<=lowStockLimit(); }); }
+function alertCount(){ return outList().length + lowList().length; }
+function renderStockAlert(){
+  var out=outList(), low=lowList();
+  var sub=document.getElementById('saSub');
+  if(sub) sub.textContent=out.length+' khatam · '+low.length+' kam bache';
+  var row=function(p,red){
+    return '<div class="padmin" style="'+(red?'border-color:#fca5a5;background:#fef2f2':'border-color:#fde68a;background:#fffbeb')+'">'
+      +(p.img?('<img src="'+p.img+'" style="width:34px;height:34px;border-radius:8px;object-fit:cover;flex-shrink:0">'):('<div class="pe" style="background:'+(CAT_BG[p.cat]||'#eef2f0')+'">'+(p.emoji||'📦')+'</div>'))
+      +'<div class="pinfo"><b>'+esc(p.name)+'</b><small>'+esc(p.unit||'')+' · '
+        +'<span style="color:'+(red?'#dc2626':'#d97706')+';font-weight:800">'+(red?'0 left — OUT OF STOCK':(p.stock+' left'))+'</span></small></div>'
+      +'<button class="add" style="width:auto;padding:6px 12px;margin:0;font-size:12px" onclick="bumpStock('+p.id+',10);renderStockAlert()">+10</button></div>';
+  };
+  var h='';
+  if(out.length) h+='<div style="font-size:12px;color:#991b1b;text-transform:uppercase;letter-spacing:.5px;font-weight:800;margin:0 0 8px">Khatam ho gaye ('+out.length+')</div>'+out.map(function(p){return row(p,true);}).join('');
+  if(low.length) h+='<div style="font-size:12px;color:#92600a;text-transform:uppercase;letter-spacing:.5px;font-weight:800;margin:'+(out.length?'16px':'0')+' 0 8px">Kam bache ('+low.length+')</div>'+low.map(function(p){return row(p,false);}).join('');
+  if(!h) h='<div class="empty" style="padding:26px"><div class="big">✅</div><h3>Sab theek hai</h3><p>Koi product kam nahi.</p></div>';
+  var el=document.getElementById('saBody'); if(el) el.innerHTML=h;
+}
+function openStockAlert(){ renderStockAlert(); openModal('stockAlertModal'); }
+var _saShown=false;
+function maybeStockAlert(){
+  if(!isAdmin()&&!isApprovedSeller()) return;
+  if(_saShown) return;
+  if(!alertCount()) return;
+  _saShown=true; openStockAlert();
+}
+function warnIfLow(p){
+  if(!p||typeof p.stock!=='number') return;
+  if(p.stock===0) toast('🚨',p.name+' KHATAM ho gaya — stock daalein');
+  else if(p.stock<=lowStockLimit()) toast('⚠️',p.name+' — sirf '+p.stock+' bache');
+}
+function exportInventory(){
+  var list=isAdmin()?catalog:catalog.filter(function(p){ var m=mySeller(); return m&&String(p.sellerId||'')===String(m.id); });
+  var q=function(v){ return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'; };
+  var rows=[['Product','Unit','Category','Seller','Quantity','Price','Cost','Total Price','Total Cost'].map(q).join(',')];
+  var tq=0,tp=0,tc=0;
+  list.forEach(function(p){
+    var st=(typeof p.stock==='number')?p.stock:0;
+    var pr=p.price||0, co=(typeof p.cost==='number')?p.cost:0;
+    tq+=st; tp+=st*pr; tc+=st*co;
+    var cn=(CATEGORIES.find(function(c){return c.id===p.cat;})||{}).name||'';
+    rows.push([p.name,p.unit||'',cn,p.sellerName||'',st,pr,co,st*pr,st*co].map(q).join(','));
+  });
+  rows.push(['TOTAL','','','',tq,'','',tp,tc].map(q).join(','));
+  var blob=new Blob(['\ufeff'+rows.join('\r\n')],{type:'text/csv;charset=utf-8;'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='TEETOO-inventory-'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  toast('📥','Inventory CSV downloaded ('+list.length+' products)');
+}
+function openProductsAdmin(){ prodQuery=''; prodFilter='all'; prodSort=''; renderProductsAdmin(); openModal('productsModal'); }
+function renderProductsAdmin(){
+  var el=document.getElementById('productsBody'); if(!el) return;
+  var all=isAdmin()?catalog.slice():catalog.filter(function(p){ var m=mySeller(); return m&&String(p.sellerId||'')===String(m.id); });
+  var mine0=!prodQuery?all:all.filter(function(p){
+    var cn=(CATEGORIES.find(function(c){return c.id===p.cat;})||{}).name||'';
+    return String(p.name||'').toLowerCase().indexOf(prodQuery)>=0
+        || cn.toLowerCase().indexOf(prodQuery)>=0
+        || String(p.sellerName||'').toLowerCase().indexOf(prodQuery)>=0;
+  });
+  var mine=mine0.filter(function(p){
+    if(prodFilter==='low') return p.stock>0 && p.stock<=lowStockLimit();
+    if(prodFilter==='out') return p.stock===0;
+    if(prodFilter==='nocost') return typeof p.cost!=='number';
+    if(prodFilter.indexOf('cat:')===0) return p.cat===prodFilter.slice(4);
+    return true;
+  });
+  if(prodSort==='qa') mine.sort(function(a,b){return (a.stock||0)-(b.stock||0);});
+  else if(prodSort==='qd') mine.sort(function(a,b){return (b.stock||0)-(a.stock||0);});
+  else if(prodSort==='pa') mine.sort(function(a,b){return (a.price||0)-(b.price||0);});
+  else if(prodSort==='pd') mine.sort(function(a,b){return (b.price||0)-(a.price||0);});
+  else if(prodSort==='az') mine.sort(function(a,b){return String(a.name||'').localeCompare(String(b.name||''));});
+  var low=mine.filter(function(p){ return hasStock(p)&&p.stock>0&&p.stock<=lowStockLimit(); }).length;
+  var out=mine.filter(function(p){ return hasStock(p)&&p.stock===0; }).length;
+  var val=mine.reduce(function(a,p){ var q=hasStock(p)?p.stock:0; var c=(typeof p.cost==='number')?p.cost:p.price; return a+q*c; },0);
+  var head='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">'
+    +'<div style="flex:1;min-width:120px;background:#f0fdf4;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:19px;color:#15803d">'+mine.length+'</b><small style="color:#15803d">Products</small></div>'
+    +'<div style="flex:1;min-width:120px;background:#fef3c7;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:19px;color:#d97706">'+low+'</b><small style="color:#92600a">Low stock</small></div>'
+    +'<div style="flex:1;min-width:120px;background:#fee2e2;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:19px;color:#dc2626">'+out+'</b><small style="color:#991b1b">Out of stock</small></div>'
+    +'<div style="flex:1;min-width:140px;background:#faf5ff;border-radius:12px;padding:11px;text-align:center"><b style="display:block;font-size:16px;color:#7c3aed">'+money(val)+'</b><small style="color:#6b21a8">Stock value</small></div></div>'
+    
+    +(alertCount()
+      ? '<div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:12px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">'
+        +'<b style="color:#991b1b;font-size:13px;flex:1">⚠️ '+outList().length+' products khatam · '+lowList().length+' kam bache</b>'
+        +'<button class="add" style="width:auto;padding:7px 14px;margin:0" onclick="openStockAlert()">Dekhein</button></div>'
+      : '')
+    +'<div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap">'
+      +'<div style="flex:1;min-width:200px;display:flex;align-items:center;gap:9px;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:0 13px;height:44px">'
+        +'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9aa4a0" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'
+        +'<input id="prodSearch" type="text" value="'+esc(prodQuery)+'" oninput="prodSearch(this.value)" placeholder="Search product name..." style="flex:1;border:none;outline:none;font-size:14px;background:transparent">'
+        +(prodQuery?'<button onclick="prodSearch(\'\')" style="color:var(--muted);font-size:18px;line-height:1">&times;</button>':'')
+      +'</div>'
+      +'<select onchange="setProdSort(this.value)" style="height:44px;border:1.5px solid var(--line);border-radius:12px;padding:0 10px;font-size:13px;background:#fff;color:var(--ink)">'
+        +'<option value=""'+(prodSort===''?' selected':'')+'>Sort: default</option>'
+        +'<option value="qa"'+(prodSort==='qa'?' selected':'')+'>Quantity: low to high</option>'
+        +'<option value="qd"'+(prodSort==='qd'?' selected':'')+'>Quantity: high to low</option>'
+        +'<option value="pa"'+(prodSort==='pa'?' selected':'')+'>Price: low to high</option>'
+        +'<option value="pd"'+(prodSort==='pd'?' selected':'')+'>Price: high to low</option>'
+        +'<option value="az"'+(prodSort==='az'?' selected':'')+'>Name A-Z</option>'
+      +'</select>'
+      +'<button class="add" style="width:auto;padding:0 14px;height:44px;margin:0;white-space:nowrap'+(prodGroup?';background:var(--green);color:#fff;border-color:var(--green)':'')+'" onclick="toggleProdGroup()">📁 '+(prodGroup?'Grouped':'Flat')+'</button>'
+      +'<button class="add" style="width:auto;padding:0 16px;height:44px;margin:0;white-space:nowrap" onclick="exportInventory()">📥 CSV</button>'
+      +'<span style="font-size:12.5px;color:var(--muted);white-space:nowrap">'+mine.length+' / '+all.length+'</span>'
+    +'</div>'
+    +'<div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px">'
+      +[['all','All',all.length],
+        ['low','Low stock',all.filter(function(p){return p.stock>0&&p.stock<=lowStockLimit();}).length],
+        ['out','Out of stock',all.filter(function(p){return p.stock===0;}).length],
+        ['nocost','No cost',all.filter(function(p){return typeof p.cost!=='number';}).length]]
+        .map(function(f){ return '<button class="otab '+(prodFilter===f[0]?'on':'')+'" style="padding:7px 13px;font-size:12.5px" onclick="setProdFilter(\''+f[0]+'\')">'+f[1]+'<span class="n">'+f[2]+'</span></button>'; }).join('')
+      +'<select onchange="setProdFilter(this.value)" style="border:1.5px solid var(--line);border-radius:11px;padding:7px 10px;font-size:12.5px;background:#fff;color:var(--ink)">'
+        +'<option value="all">All categories</option>'
+        +CATEGORIES.filter(function(c){return c.id!=='all';}).map(function(c){ return '<option value="cat:'+c.id+'"'+(prodFilter==='cat:'+c.id?' selected':'')+'>'+c.ic+' '+esc(c.name)+'</option>'; }).join('')
+      +'</select>'
+    +'</div>'
+    +'<button class="admin-add" style="margin-bottom:14px" onclick="openAddProduct()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add New Product</button>';
+  if(!mine.length){
+    el.innerHTML=head+(prodQuery
+      ? '<div class="empty" style="padding:40px 20px"><div class="big">🔍</div><h3>“'+esc(prodQuery)+'” — no match found</h3><p>Try a different name.</p></div>'
+      : '<div class="empty" style="padding:40px 20px"><div class="big">📦</div><h3>No products yet</h3><p>Use the button above to add your first product.</p></div>');
+    var _el=document.getElementById('prodSearch'); if(_el&&prodQuery){ _el.focus(); }
+    return; }
+  var rowHtml=function(p){
+    var thumb=p.img?('<img class="pthumb" src="'+p.img+'">'):('<div class="pthumb" style="background:'+(CAT_BG[p.cat]||'#eef2f0')+'">'+(p.emoji||'📦')+'</div>');
+    var stockCol=hasStock(p)?p.stock:'';
+    var needSet=!hasStock(p);
+    var stColor=hasStock(p)?(p.stock>lowStockLimit()?'#0f766e':(p.stock>0?'#d97706':'#dc2626')):'#9ca3af';
+    var catName=(CATEGORIES.find(function(c){return c.id===p.cat;})||{}).name||'';
+    return '<tr>'
+      +'<td><div style="display:flex;align-items:center;gap:11px">'+thumb+'<div style="min-width:0"><b style="font-size:13.5px;display:block">'+esc(p.name)+'</b>'
+        +'<small style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">'+esc(p.unit||'')+(p.sellerId?(' · 🏪 '+esc(p.sellerName||'')):'')+'</small>'
+        +'<select class="pcat" onchange="setProductCat('+p.id+',this.value)">'
+          +CATEGORIES.filter(function(c){return c.id!=='all';}).map(function(c){ return '<option value="'+c.id+'"'+(c.id===p.cat?' selected':'')+'>'+c.ic+' '+esc(c.name)+'</option>'; }).join('')
+        +'</select></div></div></td>'
+      +'<td style="white-space:nowrap"><div class="qtybox"><span style="font-size:11.5px;color:var(--muted)">Rs</span>'
+        +'<input id="prc_'+p.id+'" type="number" min="1" value="'+(p.price||0)+'" style="width:78px;font-weight:700">'
+        +'<button class="sv" onclick="setProductPrice('+p.id+',document.getElementById(\'prc_'+p.id+'\').value)">Save</button></div>'
+        +'<div class="qtybox" style="margin-top:5px"><span style="font-size:10.5px;color:var(--muted);width:24px">cost</span>'
+        +'<input id="cst_'+p.id+'" type="number" min="0" value="'+((typeof p.cost==='number')?p.cost:'')+'" placeholder="—" style="width:62px;font-size:12px;color:'+((typeof p.cost==='number')?'#6b7280':'#d97706')+'">'
+        +'<button class="sv" style="padding:4px 8px;font-size:10.5px" onclick="setProductCost('+p.id+',document.getElementById(\'cst_'+p.id+'\').value)">✓</button></div></td>'
+      +'<td><div class="qtybox"><input id="qty_'+p.id+'" type="number" min="0" value="'+stockCol+'" placeholder="—" style="color:'+stColor+';font-weight:700">'
+        +'<button class="sv" onclick="setProductStock('+p.id+',document.getElementById(\'qty_'+p.id+'\').value)">Save</button></div>'
+        +'<div style="display:flex;gap:4px;margin-top:4px">'
+          +'<button onclick="bumpStock('+p.id+',-1)" style="flex:1;background:#fee2e2;color:#991b1b;border-radius:7px;padding:3px;font-size:12px;font-weight:800">−1</button>'
+          +'<button onclick="bumpStock('+p.id+',1)" style="flex:1;background:#dcfce7;color:#15803d;border-radius:7px;padding:3px;font-size:12px;font-weight:800">+1</button>'
+          +'<button onclick="bumpStock('+p.id+',10)" style="flex:1;background:#dbeafe;color:#1e40af;border-radius:7px;padding:3px;font-size:11px;font-weight:800">+10</button></div>'
+        +'<div style="font-size:10.5px;margin-top:3px;color:'+(needSet?'#d97706':'var(--muted)')+'">'+(needSet?'⚠️ set it':(p.stock===0?'Out of stock':'In stock'))+'</div></td>'
+      +'<td style="white-space:nowrap;text-align:right">'
+        +'<button class="picon" title="Upar" onclick="moveProduct('+p.id+',\'up\')" style="color:#0f766e">↑</button>'
+        +'<button class="picon" title="Neeche" onclick="moveProduct('+p.id+',\'down\')" style="color:#0f766e">↓</button>'
+        +'<button class="picon" title="Edit" onclick="openEditProduct('+p.id+')" style="color:#64748b">✏️</button>'
+        +'<button class="picon" title="Delete" onclick="deleteProduct('+p.id+')" style="color:#ef4444">🗑</button></td>'
+      +'</tr>';
+  };
+  var sums=function(list){ var q=0,pr=0,co=0; list.forEach(function(p){ var st=(typeof p.stock==='number')?p.stock:0; q+=st; pr+=st*(p.price||0); co+=st*((typeof p.cost==='number')?p.cost:0); }); return {q:q,p:pr,c:co}; };
+  var rows='';
+  if(prodGroup){
+    var order=CATEGORIES.filter(function(c){return c.id!=='all';}).map(function(c){return c.id;});
+    var seen={}; mine.forEach(function(p){ seen[p.cat]=true; });
+    order.filter(function(cid){return seen[cid];}).concat(Object.keys(seen).filter(function(cid){return order.indexOf(cid)<0;}))
+      .forEach(function(cid){
+        var grp=mine.filter(function(p){ return p.cat===cid; });
+        if(!grp.length) return;
+        var c=CATEGORIES.find(function(x){return x.id===cid;})||{name:cid,ic:'📦'};
+        var g=sums(grp);
+        rows+='<tr class="ghead"><td colspan="4">'+(c.ic||'📦')+' '+esc(c.name||cid)+' <span style="font-weight:600;color:var(--muted);font-size:12px">— '+grp.length+' products</span></td></tr>';
+        rows+=grp.map(rowHtml).join('');
+        rows+='<tr class="gsub"><td>Total — '+esc(c.name||cid)+'</td>'
+          +'<td><b>'+money(g.p)+'</b><div style="font-size:10.5px">cost '+money(g.c)+'</div></td>'
+          +'<td><b style="font-size:15px">'+g.q+'</b><div style="font-size:10.5px">quantity</div></td>'
+          +'<td style="text-align:right"><b style="color:#0f766e">'+money(Math.max(0,g.p-g.c))+'</b><div style="font-size:10.5px">profit</div></td></tr>';
+      });
+  } else {
+    rows=mine.map(rowHtml).join('');
+  }
+  var tQty=0,tUnl=0,tRetail=0,tCost=0;
+  mine.forEach(function(p){
+    if(hasStock(p)){ tQty+=p.stock; tRetail+=p.stock*(p.price||0); tCost+=p.stock*((typeof p.cost==='number')?p.cost:0); }
+    else tUnl++;
+  });
+  var foot='<tfoot><tr style="background:var(--green-soft);border-top:2px solid var(--green-light)">'
+    +'<td style="padding:13px 8px"><b style="font-size:13.5px;color:var(--green-dark)">GRAND TOTAL</b>'
+      +'<div style="font-size:11px;color:var(--muted)">'+mine.length+' products'+(tUnl?(' \u00b7 <span style="color:#d97706">'+tUnl+' set nahi</span>'):'')+'</div></td>'
+    +'<td style="padding:13px 8px;white-space:nowrap"><b style="font-size:15px;color:var(--green-dark)">'+money(tRetail)+'</b>'
+      +'<div style="font-size:11px;color:var(--muted)">Total price</div>'
+      +'<div style="font-size:10.5px;color:var(--muted)">cost '+money(tCost)+'</div></td>'
+    +'<td style="padding:13px 8px"><b style="font-size:18px;color:var(--green-dark)">'+tQty+'</b>'
+      +'<div style="font-size:11px;color:var(--muted)">Total quantity</div></td>'
+    +'<td style="padding:13px 8px;text-align:right"><div style="font-size:11px;color:var(--muted)">Expected profit</div>'
+      +'<b style="font-size:14px;color:#0f766e">'+money(Math.max(0,tRetail-tCost))+'</b></td>'
+    +'</tr></tfoot>';
+  el.innerHTML=head+'<div style="overflow-x:auto"><table class="ptbl"><thead><tr>'
+    +'<th>Product</th><th>Price</th><th>Quantity</th><th style="text-align:right">Actions</th>'
+    +'</tr></thead><tbody>'+rows+'</tbody>'+foot+'</table></div>';
 }
 function openJobsAdmin(){ renderJobsAdmin(); openModal('jobsAdminModal'); markJobsRead(); }
 function renderJobsAdmin(){ var el=document.getElementById('jobsAdminList'); if(el) el.innerHTML=jobsBodyHtml(true); }
@@ -1951,6 +2811,8 @@ if(window.fbAuth){
       session=null; LS.set('tt_session',null); updateAcctLabel(); return;
     }
     if(fbAdminAuthed && typeof fbAdminSync==='function') fbAdminSync();
+    if(typeof fbSellerSync==='function') setTimeout(fbSellerSync,600);
+    if(typeof maybeStockAlert==='function') setTimeout(maybeStockAlert,1200);
     if(!fbAdminAuthed){
       var em=String(user.email||'');
       if(/@teetoo9\.com$/i.test(em)){

@@ -244,30 +244,7 @@
   .egrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;align-content:start}
   .egrid .padmin{margin-bottom:0}
   @media(max-width:900px){ .adm2{grid-template-columns:1fr;gap:16px} }
-  /* Accounts: true full-screen website page, with the site's own Back button */
-#acctModal.acct-full-modal{padding:0;place-items:stretch}
-#acctModal.acct-full-modal.show{background:var(--card)}
-#acctModal .acct-full-card{width:100%!important;max-width:none!important;height:100%!important;max-height:none!important;border-radius:0;overflow:hidden}
-#acctModal .acct-topbar{
-  height:72px;min-height:72px;display:flex;align-items:center;gap:16px;
-  padding:0 24px;background:var(--card);border-bottom:1px solid var(--line);
-  box-shadow:0 2px 8px rgba(0,0,0,.05);z-index:20
-}
-#acctModal .acct-top-title{flex:1;text-align:center;font-size:20px;font-weight:800;color:var(--ink);margin-left:76px}
-#acctModal .acct-top-x{background:#eef2f0;border:1px solid #dde3e0;color:var(--ink);width:38px;height:38px}
-#acctModal .acct-content-full{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;background:var(--card)}
-#acctModal .acct-content-full .acct-hero,
-#acctModal .acct-content-full .acct-stats,
-#acctModal .acct-content-full .acct-sec,
-#acctModal .acct-content-full .admin-panel,
-#acctModal .acct-content-full .customer-grid,
-#acctModal .acct-content-full .jobs-grid{max-width:1180px;margin-left:auto;margin-right:auto}
-@media(max-width:768px){
-  #acctModal .acct-topbar{height:60px;min-height:60px;padding:0 12px;gap:8px}
-  #acctModal .acct-top-title{font-size:17px;margin-left:0}
-  #acctModal .acct-top-x{width:34px;height:34px}
-}
-.backbtn{display:inline-flex;align-items:center;gap:7px;background:#eef2f0;border:1px solid #dde3e0;border-radius:11px;padding:9px 15px;font-size:13.5px;font-weight:700;color:var(--ink);flex-shrink:0;transition:.15s}
+  .backbtn{display:inline-flex;align-items:center;gap:7px;background:#eef2f0;border:1px solid #dde3e0;border-radius:11px;padding:9px 15px;font-size:13.5px;font-weight:700;color:var(--ink);flex-shrink:0;transition:.15s}
   .backbtn:hover{background:#e2e8e5;transform:translateX(-2px)}
   @media(max-width:768px){ .modal-card.full .modal-head{padding:12px 14px;gap:10px} .modal-card.full .modal-head h2{font-size:16px} .modal-card.full .modal-head p{display:none} .modal-card.full .modal-body{padding:14px} .backbtn{padding:8px 12px;font-size:12.5px} }
   .modal-card.wide{width:1060px;max-width:96vw;height:92vh;max-height:92vh;max-height:calc(var(--vh,1vh)*92)}
@@ -398,118 +375,6 @@
   #helpFab:hover{transform:translateY(-2px)}
   .mcount{position:absolute;top:-7px;right:-7px;background:#dc2626;color:#fff;font-size:11px;font-weight:700;min-width:18px;height:18px;border-radius:99px;display:grid;place-items:center;padding:0 4px}
   @media(max-width:768px){#helpFab{bottom:78px;right:14px;padding:11px 15px}}
-
-/* GLOBAL FULL-SCREEN PAGES
-   Applies the same website-style full-page treatment to every existing modal/page.
-   Existing content, IDs and JavaScript are preserved. */
-.modal{
-  position:fixed!important;
-  inset:0!important;
-  width:100vw!important;
-  height:100vh!important;
-  min-height:100vh!important;
-  padding:0!important;
-  margin:0!important;
-  place-items:stretch!important;
-  align-items:stretch!important;
-  justify-items:stretch!important;
-}
-.modal.show{
-  display:grid!important;
-}
-.modal .modal-card{
-  width:100%!important;
-  max-width:none!important;
-  height:100%!important;
-  max-height:none!important;
-  min-height:100%!important;
-  margin:0!important;
-  border-radius:0!important;
-  overflow:hidden!important;
-}
-.modal .modal-card.full{
-  width:100%!important;
-  max-width:none!important;
-  height:100%!important;
-  max-height:none!important;
-  border-radius:0!important;
-}
-.modal .modal-card > .modal-head{
-  position:sticky;
-  top:0;
-  z-index:20;
-}
-.modal .modal-card > .modal-body,
-.modal .modal-card > .modal-content{
-  min-height:0;
-}
-@media(max-width:768px){
-  .modal .modal-card{
-    width:100%!important;
-    height:100%!important;
-    border-radius:0!important;
-  }
-}
-
-/* LOGIN PAGE — compact, polished site-style card */
-#authModal{
-  padding:24px!important;
-  place-items:center!important;
-  background:rgba(10,25,18,.48)!important;
-  backdrop-filter:blur(5px)!important;
-}
-#authModal .modal-card{
-  width:430px!important;
-  max-width:min(430px,100%)!important;
-  height:auto!important;
-  min-height:0!important;
-  max-height:calc(100vh - 48px)!important;
-  border-radius:24px!important;
-  overflow-y:auto!important;
-  box-shadow:0 24px 70px rgba(16,40,28,.22)!important;
-  transform:translateY(10px) scale(.98);
-}
-#authModal.show .modal-card{transform:none}
-#authModal .modal-head{
-  padding:26px 58px 8px 26px!important;
-}
-#authModal .modal-head h2{
-  font-size:24px!important;
-  letter-spacing:-.3px;
-}
-#authModal .modal-head p{
-  font-size:13px!important;
-}
-#authModal .modal-body{
-  padding:14px 26px 26px!important;
-}
-#authModal .tabs{
-  margin-bottom:20px!important;
-}
-#authModal .field{
-  margin-bottom:15px!important;
-}
-#authModal .field input{
-  min-height:46px;
-}
-#authModal #authSubmit{
-  margin-top:4px;
-}
-#authModal .muted-link{
-  margin-top:16px!important;
-  text-align:center;
-}
-@media(max-width:520px){
-  #authModal{padding:12px!important}
-  #authModal .modal-card{
-    width:100%!important;
-    max-width:430px!important;
-    max-height:calc(100vh - 24px)!important;
-    border-radius:20px!important;
-  }
-  #authModal .modal-head{padding:22px 54px 7px 22px!important}
-  #authModal .modal-body{padding:12px 22px 22px!important}
-}
 </style>
 </head>
 <body>
@@ -705,14 +570,13 @@
   </div>
 </div>
 
-<div class="modal acct-full-modal" id="acctModal">
-  <div class="modal-card full acct-full-card">
-    <div class="acct-topbar">
-      <button class="backbtn" onclick="closeModal('acctModal')">&larr; Back</button>
-      <div class="acct-top-title">Accounts</div>
-      <button class="x acct-top-x" onclick="closeModal('acctModal')">×</button>
+<div class="modal" id="acctModal">
+  <div class="modal-card full" style="padding:0">
+    <div style="position:absolute;top:14px;left:16px;right:16px;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:10px;pointer-events:none">
+      <button class="backbtn" onclick="closeModal('acctModal')" style="pointer-events:auto;background:rgba(255,255,255,.9);border-color:rgba(255,255,255,.6)">&larr; Back</button>
+      <button class="x" onclick="closeModal('acctModal')" style="pointer-events:auto;background:rgba(255,255,255,.25);color:#fff;border-color:rgba(255,255,255,.4)">×</button>
     </div>
-    <div id="acctContent" class="acct-content-full"></div>
+    <div id="acctContent" style="overflow-y:auto;flex:1"></div>
   </div>
 </div>
 
@@ -1493,49 +1357,33 @@ function saveProduct(){
   if(apImgData) np.img=apImgData; catalog.push(np); fbSaveProduct(np);
   LS.set('tt_products',catalog); closeModal('adminModal'); renderGrid(); renderAcct(); toast('✅',name+' added to store');
 }
-async function deleteProduct(id){
+function deleteProduct(id){
   const p=findP(id); if(!p) return;
   if(!canManage(p)){ toast('🔒','Ye product aap ka nahi'); return; }
   if(!confirm('"'+p.name+'" ko delete karein?\nYe wapas nahi ho sakega.')) return;
-  if(window.db){
-    try{
-      await window.db.collection('products').doc(String(p.id)).delete();
-    }catch(e){
-      console.error('fb del product',e);
-      toast('❌','Product delete nahi hua. Firebase permission/connection check karein.');
-      return;
-    }
-  }
-  catalog=catalog.filter(x=>String(x.id)!==String(id));
-  LS.set('tt_products',catalog);
+  catalog=catalog.filter(x=>x.id!==id); LS.set('tt_products',catalog); fbDeleteProduct(id);
   if(cart[id]){ delete cart[id]; LS.set('tt_cart',cart); updateCartUI(); }
   renderGrid(); renderAcct(); toast('🗑',p.name+' removed');
 }
 
-function fbSaveProduct(p){ if(window.db&&p){ try{ return window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }catch(e){ console.warn('fb save',e); } } }
-function fbDeleteProduct(id){ if(window.db){ return window.db.collection('products').doc(String(id)).delete(); } return Promise.resolve(); }
-
-let productsSyncInitialized=false;
-function fbInitSync(){ if(!window.db) return; window.db.collection('products').onSnapshot(function(snap){
-  if(snap.empty){
-    if(!productsSyncInitialized && catalog.length){
-      var batch=window.db.batch();
-      catalog.forEach(function(p){ batch.set(window.db.collection('products').doc(String(p.id)),JSON.parse(JSON.stringify(p))); });
-      batch.commit().catch(function(e){ console.warn('products initial seed',e); });
-      productsSyncInitialized=true;
-      return;
-    }
-    productsSyncInitialized=true;
-    catalog=[]; LS.set('tt_products',catalog);
-    if(typeof renderGrid==='function') renderGrid();
-    var am0=document.getElementById('acctModal'); if(am0&&am0.classList.contains('show')&&typeof renderAcct==='function') renderAcct();
-    return;
-  }
-  productsSyncInitialized=true;
-  catalog=snap.docs.map(function(d){ return d.data(); }).sort(function(a,b){ var ao=(typeof a.ord==='number'?a.ord:(a.id||0)); var bo=(typeof b.ord==='number'?b.ord:(b.id||0)); return ao-bo; });
-  LS.set('tt_products',catalog); if(typeof renderGrid==='function') renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct();
-}, function(err){ console.warn('products sync',err); });
-if(window.db) window.db.collection('messages').onSnapshot(function(snap){ messages=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id)>String(b.id)?1:-1;}); LS.set('tt_messages',messages); updateMsgBadge(); var mm=document.getElementById('msgsModal'); if(mm&&mm.classList.contains('show'))renderMessages(); var hm=document.getElementById('helpModal'); if(hm&&hm.classList.contains('show')&&typeof renderHpThread==='function')renderHpThread(); }, function(e){console.warn('msg sync',e);}); if(window.db) window.db.collection('orders').onSnapshot(function(snap){ allOrders=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(b.id)>String(a.id)?1:-1;}); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); if(typeof updateOrdersBadge==='function')updateOrdersBadge(); var om=document.getElementById('ordersModal'); if(om&&om.classList.contains('show')&&typeof renderOrders==='function')renderOrders(); var sm=document.getElementById('salesModal'); if(sm&&sm.classList.contains('show')&&typeof renderSales==='function')renderSales(); }, function(e){console.warn('order sync',e);}); if(window.db) window.db.collection('users').onSnapshot(function(snap){ users=snap.docs.map(function(d){return d.data();}); if(!users.some(function(u){return u.email===ADMIN_EMAIL;})) users.push({name:'Store Admin',email:ADMIN_EMAIL,provider:'admin'}); LS.set('tt_users',users); updateAcctLabel(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('users sync',e);}); if(window.db) window.db.collection('banners').onSnapshot(function(snap){ if(snap.empty){ banners.forEach(function(b){ if(!b.id)b.id='B'+Date.now()+Math.floor(Math.random()*999); fbSaveBanner(b); }); if(typeof renderCarousel==='function')renderCarousel(); return; } banners=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id||'')<String(b.id||'')?1:-1;}); var _defH=['UP TO 80% OFF','FREE DELIVERY','END OF MONTH SALE']; banners=banners.filter(function(b){ if(!b.img&&_defH.indexOf(b.h2)>=0){ if(b.id&&typeof fbDeleteBanner==='function')fbDeleteBanner(b.id); return false; } return true; }); LS.set('tt_banners',banners); if(typeof renderCarousel==='function')renderCarousel(); var _bm=document.getElementById('bannerMgrModal'); if(_bm&&_bm.classList.contains('show')&&typeof renderBannerMgr==='function')renderBannerMgr(); }, function(e){console.warn('banners sync',e);}); if(window.db) window.db.collection('settings').doc('main').onSnapshot(function(d){ if(d.exists){ settings=Object.assign(settings,d.data()); LS.set('tt_settings',settings); if(typeof applySettings==='function')applySettings(); } }, function(e){console.warn('settings sync',e);}); if(window.db) window.db.collection('invoices').onSnapshot(function(snap){ invoices=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id)>String(b.id)?1:-1;}); LS.set('tt_invoices',invoices); var _bm=document.getElementById('billModal'); if(_bm&&_bm.classList.contains('show')&&typeof renderBillInvoices==='function')renderBillInvoices(); var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('inv sync',e);}); if(window.db) window.db.collection('purchases').onSnapshot(function(snap){ purchases=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return (a.serial||0)-(b.serial||0);}); LS.set('tt_purchases',purchases); var _pm=document.getElementById('purchaseModal'); if(_pm&&_pm.classList.contains('show')&&typeof renderPurchases==='function')renderPurchases(); }, function(e){console.warn('pur sync',e);}); if(window.db) window.db.collection('sellers').onSnapshot(function(snap){ sellers=snap.docs.map(function(d){return d.data();}); LS.set('tt_sellers',sellers); if(typeof updateSellersBadge==='function')updateSellersBadge(); var sm=document.getElementById('sellersModal'); if(sm&&sm.classList.contains('show')&&typeof renderSellers==='function')renderSellers(); var pm=document.getElementById('sellModal'); if(pm&&pm.classList.contains('show')&&typeof renderSellPage==='function')renderSellPage(); if(typeof renderGrid==='function')renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('sellers sync',e);}); if(window.db) window.db.collection('jobApplications').onSnapshot(function(snap){ jobs=snap.docs.map(function(d){return d.data();}); LS.set('tt_jobs',jobs); if(typeof updateJobsBadge==='function')updateJobsBadge(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); var jm=document.getElementById('jobsAdminModal'); if(jm&&jm.classList.contains('show')&&typeof renderJobsAdmin==='function')renderJobsAdmin(); }, function(e){console.warn('jobs sync',e);}); if(window.db) window.db.collection('categories').onSnapshot(function(snap){ if(snap.empty){ CATEGORIES.forEach(function(c){ window.db.collection('categories').doc(String(c.id)).set(JSON.parse(JSON.stringify(c))); }); return; } var list=snap.docs.map(function(d){return d.data();}); if(!list.some(function(c){return c.id==='all';})) list.unshift({id:'all',name:'All',ic:'🛒'}); CATEGORIES=list; LS.set('tt_categories',CATEGORIES); if(typeof renderCats==='function')renderCats(); if(typeof renderGrid==='function')renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('categories sync',err); }); }
+function fbSaveProduct(p){ if(window.db&&p){ try{ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }catch(e){ console.warn('fb save',e); } } }
+function fbDeleteProduct(id){ if(window.db){ try{ window.db.collection('products').doc(String(id)).delete(); }catch(e){ console.warn('fb del',e); } } }
+function fbInitSync(){ if(!window.db) return;
+  window.db.collection('products').onSnapshot(function(snap){ if(snap.empty){ catalog.forEach(function(p){ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }); return; } catalog=snap.docs.map(function(d){ return d.data(); }).sort(function(a,b){ var ao=(typeof a.ord==='number'?a.ord:(a.id||0)); var bo=(typeof b.ord==='number'?b.ord:(b.id||0)); return ao-bo; }); LS.set('tt_products',catalog); if(typeof renderGrid==='function') renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('products sync',err); });
+  window.db.collection('banners').onSnapshot(function(snap){ if(snap.empty){ banners.forEach(function(b){ if(!b.id)b.id='B'+Date.now()+Math.floor(Math.random()*999); fbSaveBanner(b); }); if(typeof renderCarousel==='function')renderCarousel(); return; } banners=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id||'')<String(b.id||'')?1:-1;}); var _defH=['UP TO 80% OFF','FREE DELIVERY','END OF MONTH SALE']; banners=banners.filter(function(b){ if(!b.img&&_defH.indexOf(b.h2)>=0){ if(b.id&&typeof fbDeleteBanner==='function')fbDeleteBanner(b.id); return false; } return true; }); LS.set('tt_banners',banners); if(typeof renderCarousel==='function')renderCarousel(); var _bm=document.getElementById('bannerMgrModal'); if(_bm&&_bm.classList.contains('show')&&typeof renderBannerMgr==='function')renderBannerMgr(); }, function(e){console.warn('banners sync',e);});
+  window.db.collection('settings').doc('main').onSnapshot(function(d){ if(d.exists){ settings=Object.assign(settings,d.data()); LS.set('tt_settings',settings); if(typeof applySettings==='function')applySettings(); } }, function(e){console.warn('settings sync',e);});
+  window.db.collection('categories').onSnapshot(function(snap){ if(snap.empty){ CATEGORIES.forEach(function(c){ window.db.collection('categories').doc(String(c.id)).set(JSON.parse(JSON.stringify(c))); }); return; } var list=snap.docs.map(function(d){return d.data();}); if(!list.some(function(c){return c.id==='all';})) list.unshift({id:'all',name:'All',ic:'🛒'}); CATEGORIES=list; LS.set('tt_categories',CATEGORIES); if(typeof renderCats==='function')renderCats(); if(typeof renderGrid==='function')renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('categories sync',err); });
+}
+var _admSyncOn=false;
+function fbAdminSync(){ if(!window.db||_admSyncOn||!isAdmin()) return; _admSyncOn=true;
+  window.db.collection('orders').onSnapshot(function(snap){ allOrders=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(b.id)>String(a.id)?1:-1;}); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); if(typeof updateOrdersBadge==='function')updateOrdersBadge(); var om=document.getElementById('ordersModal'); if(om&&om.classList.contains('show')&&typeof renderOrders==='function')renderOrders(); var sm=document.getElementById('salesModal'); if(sm&&sm.classList.contains('show')&&typeof renderSales==='function')renderSales(); }, function(e){console.warn('order sync',e);});
+  window.db.collection('users').onSnapshot(function(snap){ users=snap.docs.map(function(d){return d.data();}); if(!users.some(function(u){return u.email===ADMIN_EMAIL;})) users.push({name:'Store Admin',email:ADMIN_EMAIL,provider:'admin'}); LS.set('tt_users',users); updateAcctLabel(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('users sync',e);});
+  window.db.collection('invoices').onSnapshot(function(snap){ invoices=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id)>String(b.id)?1:-1;}); LS.set('tt_invoices',invoices); var _bm=document.getElementById('billModal'); if(_bm&&_bm.classList.contains('show')&&typeof renderBillInvoices==='function')renderBillInvoices(); var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('inv sync',e);});
+  window.db.collection('purchases').onSnapshot(function(snap){ purchases=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return (a.serial||0)-(b.serial||0);}); LS.set('tt_purchases',purchases); var _pm=document.getElementById('purchaseModal'); if(_pm&&_pm.classList.contains('show')&&typeof renderPurchases==='function')renderPurchases(); }, function(e){console.warn('pur sync',e);});
+  window.db.collection('sellers').onSnapshot(function(snap){ sellers=snap.docs.map(function(d){return d.data();}); LS.set('tt_sellers',sellers); if(typeof updateSellersBadge==='function')updateSellersBadge(); var sm=document.getElementById('sellersModal'); if(sm&&sm.classList.contains('show')&&typeof renderSellers==='function')renderSellers(); var pm=document.getElementById('sellModal'); if(pm&&pm.classList.contains('show')&&typeof renderSellPage==='function')renderSellPage(); if(typeof renderGrid==='function')renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('sellers sync',e);});
+  window.db.collection('jobApplications').onSnapshot(function(snap){ jobs=snap.docs.map(function(d){return d.data();}); LS.set('tt_jobs',jobs); if(typeof updateJobsBadge==='function')updateJobsBadge(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); var jm=document.getElementById('jobsAdminModal'); if(jm&&jm.classList.contains('show')&&typeof renderJobsAdmin==='function')renderJobsAdmin(); }, function(e){console.warn('jobs sync',e);});
+  window.db.collection('messages').onSnapshot(function(snap){ messages=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id)>String(b.id)?1:-1;}); LS.set('tt_messages',messages); updateMsgBadge(); var mm=document.getElementById('msgsModal'); if(mm&&mm.classList.contains('show'))renderMessages(); var hm=document.getElementById('helpModal'); if(hm&&hm.classList.contains('show')&&typeof renderHpThread==='function')renderHpThread(); }, function(e){console.warn('msg sync',e);});
+}
 function toggleWish(id){ const i=wishlist.indexOf(id); if(i>=0)wishlist.splice(i,1); else wishlist.push(id); LS.set('tt_wishlist',wishlist); renderGrid(); renderCats(); toast(i>=0?'🤍':'❤️',(i>=0?'Removed from':'Added to')+' wishlist'); }
 function voucherDiscount(){ if(!voucher)return 0; const v=VOUCHERS[voucher]; if(!v)return 0; const sub=cartSubtotal(); if(v.min&&sub<v.min)return 0; return v.type==='pct'?Math.round(sub*v.off/100):v.off; }
 function updateCoTotal(){ const disc=voucherDiscount(); const tot=Math.max(0,cartTotal()-disc); const ct=document.getElementById('coTotal'); if(ct)ct.textContent=money(tot); const dr=document.getElementById('coDiscRow'); if(dr){ if(disc>0){dr.style.display='flex';document.getElementById('coDisc').textContent='- '+money(disc);}else{dr.style.display='none';} } }
@@ -1569,28 +1417,24 @@ function viewInvoice(i){ if(invoices[i]){ renderInvoiceDoc(invoices[i]); openMod
 function fbSaveInvoice(inv){ if(window.db&&inv){ try{ window.db.collection('invoices').doc(String(inv.id)).set(JSON.parse(JSON.stringify(inv))); }catch(e){ console.warn('fb inv',e); } } }
 function renderBillInvoices(){ var el=document.getElementById('billInvList'); if(!el)return; if(!invoices.length){ el.innerHTML='<div style="text-align:center;color:var(--muted);padding:12px;font-size:13px">Abhi koi invoice nahi bani.</div>'; return; } el.innerHTML=invoices.map(function(v,idx){return {v:v,idx:idx};}).reverse().map(function(o){ var v=o.v; return '<div class="order"><div class="order-top"><b>'+v.id+'</b><span style="display:flex;gap:6px"><button class="add" style="width:auto;padding:5px 12px;font-size:12px;margin:0" onclick="viewInvoice('+o.idx+')">View / Print</button><button class="ci-del" title="Delete" onclick="deleteInvoice('+o.idx+')" style="color:#ef4444">\ud83d\uddd1</button></span></div><div class="items">'+v.items.map(function(i){return i.name+' \u00d7'+i.qty;}).join('  \u00b7  ')+'</div><div class="ordfoot"><span>'+v.date+' \u00b7 '+esc(v.cust||'')+'</span><b>'+money(v.tot)+'</b></div></div>'; }).join(''); }
 function invoicesSection(){ if(!invoices.length) return `<div class="acct-sec"><h4>Invoice History</h4><div class="empty" style="padding:20px"><div class="big">🧾</div><h3>No invoices yet</h3><p>Billing se invoice banayen — yahan save hongi.</p></div></div>`; var tot=invoices.reduce(function(s,v){return s+(v.tot||0);},0); var body=invoices.map(function(v,idx){return {v:v,idx:idx};}).reverse().map(function(o){ var v=o.v; return `<div class="order"><div class="order-top"><b>${v.id}</b><span style="display:flex;gap:6px"><button class="add" style="width:auto;padding:5px 12px;font-size:12px;margin:0" onclick="viewInvoice(${o.idx})">View / Print</button><button class="ci-del" title="Delete" onclick="deleteInvoice(${o.idx})" style="color:#ef4444">🗑</button></span></div><div class="items">${v.items.map(function(i){return i.name+' ×'+i.qty;}).join('  ·  ')}</div><div class="ordfoot"><span>${v.date} · ${v.cust}</span><b>${money(v.tot)}</b></div></div>`; }).join(''); return `<div class="acct-sec"><h4>Invoice History <span style="text-transform:none;letter-spacing:0;color:var(--muted)">${invoices.length} bills · ${money(tot)}</span></h4>${body}</div>`; }
-async function deleteInvoice(i){
+function deleteInvoice(i){
   var v=invoices[i]; if(!v) return;
   if(!confirm('Invoice '+v.id+' ('+money(v.tot)+') delete karein?\nAccounts ka hisaab isi waqt ghat jayega. Ye wapas nahi hoga.')) return;
-  try{
-    if(window.db) await window.db.collection('invoices').doc(String(v.id)).delete();
-    invoices.splice(i,1); LS.set('tt_invoices',invoices);
-    if(typeof renderBillInvoices==='function')renderBillInvoices();
-    var sm=document.getElementById('salesModal'); if(sm&&sm.classList.contains('show'))renderSales();
-    var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show'))renderAcct();
-    toast('🗑','Invoice '+v.id+' delete ho gayi');
-  }catch(e){ console.error('delete invoice',e); toast('⚠️','Invoice delete nahi hui'); }
+  if(window.db){ try{ window.db.collection('invoices').doc(String(v.id)).delete(); }catch(e){} }
+  invoices.splice(i,1); LS.set('tt_invoices',invoices);
+  if(typeof renderBillInvoices==='function')renderBillInvoices();
+  var sm=document.getElementById('salesModal'); if(sm&&sm.classList.contains('show'))renderSales();
+  var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show'))renderAcct();
+  toast('\ud83d\uddd1','Invoice '+v.id+' delete ho gayi');
 }
-async function deletePurchase(i){
+function deletePurchase(i){
   var x=purchases[i]; if(!x) return;
   if(!confirm('Purchase bill '+(x.serialNo||x.id)+' ('+money(x.tot)+') delete karein?\nStock kharidari ka total ghat jayega. Ye wapas nahi hoga.')) return;
-  try{
-    if(window.db) await window.db.collection('purchases').doc(String(x.id)).delete();
-    purchases.splice(i,1); LS.set('tt_purchases',purchases);
-    if(typeof renderPurchases==='function')renderPurchases();
-    var sm=document.getElementById('salesModal'); if(sm&&sm.classList.contains('show'))renderSales();
-    toast('🗑','Purchase bill delete ho gaya');
-  }catch(e){ console.error('delete purchase',e); toast('⚠️','Purchase bill delete nahi hua'); }
+  if(window.db){ try{ window.db.collection('purchases').doc(String(x.id)).delete(); }catch(e){} }
+  purchases.splice(i,1); LS.set('tt_purchases',purchases);
+  if(typeof renderPurchases==='function')renderPurchases();
+  var sm=document.getElementById('salesModal'); if(sm&&sm.classList.contains('show'))renderSales();
+  toast('\ud83d\uddd1','Purchase bill delete ho gaya');
 }
 function doPrintInvoice(){ window.print(); }
 function fbSaveUser(u){ if(!u||u.email===ADMIN_EMAIL) return; if(window.db){ try{ var c=JSON.parse(JSON.stringify(u)); delete c.password; window.db.collection('users').doc(String(u.email)).set(c); }catch(e){ console.warn('fb user',e); } } }
@@ -2106,6 +1950,7 @@ if(window.fbAuth){
     if(!user){
       session=null; LS.set('tt_session',null); updateAcctLabel(); return;
     }
+    if(fbAdminAuthed && typeof fbAdminSync==='function') fbAdminSync();
     if(!fbAdminAuthed){
       var em=String(user.email||'');
       if(/@teetoo9\.com$/i.test(em)){

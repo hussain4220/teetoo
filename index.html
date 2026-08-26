@@ -618,15 +618,17 @@
           <input id="apStock" type="number" min="0" placeholder="e.g. 25" />
           <div class="err">Quantity likhna zaroori hai</div>
         </div>
-        <div class="field">
-          <label>Lagat / Buying cost <span style="color:#9aa4a0;font-weight:400">(Rs)</span></label>
-          <input id="apCost" type="number" min="0" placeholder="nafa ke hisab ke liye" />
+        <div class="field" id="apfCost">
+          <label>Lagat / Buying cost <span style="color:#ef4444">*</span></label>
+          <input id="apCost" type="number" min="0" placeholder="kis daam par khareeda" />
+          <div class="err">Lagat likhna zaroori hai — is ke baghair nafa nahi banta</div>
         </div>
       </div>
       <div class="row2">
-        <div class="field">
-          <label>Unit</label>
+        <div class="field" id="apfUnit">
+          <label>Unit <span style="color:#ef4444">*</span></label>
           <input id="apUnit" type="text" placeholder="1 kg / 1 pc / 500 g" />
+          <div class="err">Unit likhna zaroori hai — bill par chapta hai</div>
         </div>
         <div class="field">
           <label>Badge</label>
@@ -774,7 +776,7 @@
         <div class="row2">
           <div class="field" style="margin:0;flex:1" id="purNameWrap"><label>Item name</label><input id="purItem" placeholder="e.g. Bori / packing / mazdoori"></div>
           <div class="field" style="margin:0;max-width:70px"><label>Qty</label><input id="purQty" type="number" min="1" value="1"></div>
-          <div class="field" style="margin:0;max-width:110px"><label>Unit cost</label><input id="purCost" type="number" min="0" value="0"></div>
+          <div class="field" style="margin:0;max-width:120px"><label>Unit cost <span style="color:#ef4444">*</span></label><input id="purCost" type="number" min="1" placeholder="0"></div>
         </div>
         <button class="add" style="margin:12px 0 16px" onclick="addPurItem()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add item</button>
         <div class="sumrow total" style="border-top:1px dashed #d7ddd9;margin-top:6px;padding-top:12px"><span>Total</span><span id="purTotal">Rs 0</span></div>
@@ -1320,7 +1322,7 @@ function openAddProduct(){
   editingId=null; $('#adminModalTitle').textContent=isAdmin()?'Add Product':'Mera naya product'; $('#apSubmit').textContent='Add Product';
   $('#apEmoji').value=''; $('#apName').value=''; $('#apPrice').value=''; $('#apOld').value=''; $('#apUnit').value=''; $('#apTag').value=''; $('#apStock').value=''; $('#apCost').value='';
   apImgData=undefined; $('#apImgPreviewWrap').style.display='none';
-  fillCatOptions(); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); var _fs=document.getElementById('apfStock'); if(_fs)_fs.classList.remove('invalid'); openModal('adminModal');
+  fillCatOptions(); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); var _fs=document.getElementById('apfStock'); if(_fs)_fs.classList.remove('invalid'); var _fc=document.getElementById('apfCost'); if(_fc)_fc.classList.remove('invalid'); var _fu=document.getElementById('apfUnit'); if(_fu)_fu.classList.remove('invalid'); openModal('adminModal');
 }
 function canManage(p){ if(isAdmin()) return true; var m=mySeller(); return !!(m && m.status==='approved' && String(p.sellerId||'')===String(m.id)); }
 function openEditProduct(id){
@@ -1330,7 +1332,7 @@ function openEditProduct(id){
   $('#apEmoji').value=p.emoji||''; $('#apName').value=p.name; $('#apPrice').value=p.price; $('#apOld').value=p.old||''; $('#apUnit').value=p.unit||''; $('#apTag').value=p.tag||''; $('#apStock').value=(typeof p.stock==='number'?p.stock:''); $('#apCost').value=(typeof p.cost==='number'?p.cost:'');
   apImgData=undefined;
   if(p.img){ $('#apImgPreview').src=p.img; $('#apImgPreviewWrap').style.display='flex'; } else { $('#apImgPreviewWrap').style.display='none'; }
-  fillCatOptions(p.cat); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); var _fs=document.getElementById('apfStock'); if(_fs)_fs.classList.remove('invalid'); openModal('adminModal');
+  fillCatOptions(p.cat); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); var _fs=document.getElementById('apfStock'); if(_fs)_fs.classList.remove('invalid'); var _fc=document.getElementById('apfCost'); if(_fc)_fc.classList.remove('invalid'); var _fu=document.getElementById('apfUnit'); if(_fu)_fu.classList.remove('invalid'); openModal('adminModal');
 }
 function saveProduct(){
   if(!isAdmin() && !isApprovedSeller()){ toast('🔒','Sirf approved seller ya admin product daal sakta hai'); return; }
@@ -1340,17 +1342,22 @@ function saveProduct(){
   var _st=$('#apStock').value.trim();
   if(_st===''||isNaN(parseInt(_st,10))||parseInt(_st,10)<0){ $('#apfStock').classList.add('invalid'); bad=true; }
   else $('#apfStock').classList.remove('invalid');
+  var _co=$('#apCost').value.trim();
+  if(_co===''||isNaN(parseInt(_co,10))||parseInt(_co,10)<1){ $('#apfCost').classList.add('invalid'); bad=true; }
+  else $('#apfCost').classList.remove('invalid');
+  if(!$('#apUnit').value.trim()){ $('#apfUnit').classList.add('invalid'); bad=true; }
+  else $('#apfUnit').classList.remove('invalid');
   if(bad) return;
   const oldP=parseInt($('#apOld').value,10);
   var stRaw=$('#apStock').value.trim(); var coRaw=$('#apCost').value.trim();
   var stVal=Math.max(0,parseInt(stRaw,10)||0);
-  var coVal=(coRaw==='')?undefined:Math.max(0,parseInt(coRaw,10)||0);
+  var coVal=Math.max(1,parseInt(coRaw,10)||1);
   const data={name,cat:$('#apCat').value,emoji:$('#apEmoji').value.trim()||'📦',price,old:(oldP&&oldP>price)?oldP:undefined,unit:$('#apUnit').value.trim()||'1 pc',tag:$('#apTag').value||undefined,stock:stVal,cost:coVal};
-  if(editingId){ const p=findP(editingId); if(p){ if(!canManage(p)){ toast('🔒','This product is not yours'); return; } var _keepS=p.sellerId,_keepN=p.sellerName; Object.assign(p,data); if(_keepS){p.sellerId=_keepS;p.sellerName=_keepN;}  if(coVal===undefined) delete p.cost; if(apImgData===null){ delete p.img; } else if(apImgData){ p.img=apImgData; } fbSaveProduct(p); } LS.set('tt_products',catalog); closeModal('adminModal'); renderGrid(); renderAcct(); toast('✏️',name+' updated'); editingId=null; return; }
+  if(editingId){ const p=findP(editingId); if(p){ if(!canManage(p)){ toast('🔒','This product is not yours'); return; } var _keepS=p.sellerId,_keepN=p.sellerName; Object.assign(p,data); if(_keepS){p.sellerId=_keepS;p.sellerName=_keepN;}   if(apImgData===null){ delete p.img; } else if(apImgData){ p.img=apImgData; } fbSaveProduct(p); } LS.set('tt_products',catalog); closeModal('adminModal'); refreshProductViews(); toast('✏️',name+' updated'); editingId=null; return; }
   const np={id:(catalog.reduce((m,p)=>Math.max(m,p.id),0))+1,rating:4.5,...data};
   if(!isAdmin()){ var _ms=mySeller(); if(_ms){ np.sellerId=_ms.id; np.sellerName=_ms.shop||_ms.name||''; } }
   if(apImgData) np.img=apImgData; catalog.push(np); fbSaveProduct(np);
-  LS.set('tt_products',catalog); closeModal('adminModal'); renderGrid(); renderAcct(); toast('✅',name+' added to store');
+  LS.set('tt_products',catalog); closeModal('adminModal'); refreshProductViews(); toast('✅',name+' added to store');
 }
 function deleteProduct(id){
   const p=findP(id); if(!p) return;
@@ -1358,13 +1365,27 @@ function deleteProduct(id){
   if(!confirm('"'+p.name+'" ko delete karein?\nYe wapas nahi ho sakega.')) return;
   catalog=catalog.filter(x=>x.id!==id); LS.set('tt_products',catalog); fbDeleteProduct(id);
   if(cart[id]){ delete cart[id]; LS.set('tt_cart',cart); updateCartUI(); }
-  renderGrid(); renderAcct(); toast('🗑',p.name+' removed');
+  refreshProductViews(); toast('🗑',p.name+' removed');
 }
 
+function refreshProductViews(){
+  if(typeof renderGrid==='function') renderGrid();
+  var pm=document.getElementById('productsModal');
+  if(pm&&pm.classList.contains('show')&&typeof renderProductsAdmin==='function') renderProductsAdmin();
+  var sm=document.getElementById('shopModal');
+  if(sm&&sm.classList.contains('show')&&typeof renderMyShop==='function') renderMyShop();
+  var am=document.getElementById('acctModal');
+  if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct();
+  var sa=document.getElementById('stockAlertModal');
+  if(sa&&sa.classList.contains('show')&&typeof renderStockAlert==='function') renderStockAlert();
+  var ac=document.getElementById('salesModal');
+  if(ac&&ac.classList.contains('show')&&typeof renderSales==='function') renderSales();
+  if(typeof renderRail==='function') renderRail();
+}
 function fbSaveProduct(p){ if(window.db&&p){ try{ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }catch(e){ console.warn('fb save',e); } } }
 function fbDeleteProduct(id){ if(window.db){ try{ window.db.collection('products').doc(String(id)).delete(); }catch(e){ console.warn('fb del',e); } } }
 function fbInitSync(){ if(!window.db) return;
-  window.db.collection('products').onSnapshot(function(snap){ if(snap.empty){ catalog.forEach(function(p){ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }); return; } catalog=snap.docs.map(function(d){ return d.data(); }).sort(function(a,b){ var ao=(typeof a.ord==='number'?a.ord:(a.id||0)); var bo=(typeof b.ord==='number'?b.ord:(b.id||0)); return ao-bo; }); if(typeof migrateStock==='function')migrateStock(); LS.set('tt_products',catalog); if(typeof maybeStockAlert==='function') setTimeout(maybeStockAlert,900); if(typeof renderGrid==='function') renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('products sync',err); });
+  window.db.collection('products').onSnapshot(function(snap){ if(snap.empty){ catalog.forEach(function(p){ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }); return; } catalog=snap.docs.map(function(d){ return d.data(); }).sort(function(a,b){ var ao=(typeof a.ord==='number'?a.ord:(a.id||0)); var bo=(typeof b.ord==='number'?b.ord:(b.id||0)); return ao-bo; }); if(typeof migrateStock==='function')migrateStock(); LS.set('tt_products',catalog); if(typeof maybeStockAlert==='function') setTimeout(maybeStockAlert,900); if(typeof refreshProductViews==='function') refreshProductViews(); }, function(err){ console.warn('products sync',err); });
   window.db.collection('banners').onSnapshot(function(snap){ if(snap.empty){ banners.forEach(function(b){ if(!b.id)b.id='B'+Date.now()+Math.floor(Math.random()*999); fbSaveBanner(b); }); if(typeof renderCarousel==='function')renderCarousel(); return; } banners=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id||'')<String(b.id||'')?1:-1;}); var _defH=['UP TO 80% OFF','FREE DELIVERY','END OF MONTH SALE']; banners=banners.filter(function(b){ if(!b.img&&_defH.indexOf(b.h2)>=0){ if(b.id&&typeof fbDeleteBanner==='function')fbDeleteBanner(b.id); return false; } return true; }); LS.set('tt_banners',banners); if(typeof renderCarousel==='function')renderCarousel(); var _bm=document.getElementById('bannerMgrModal'); if(_bm&&_bm.classList.contains('show')&&typeof renderBannerMgr==='function')renderBannerMgr(); }, function(e){console.warn('banners sync',e);});
   window.db.collection('settings').doc('main').onSnapshot(function(d){ if(d.exists){ settings=Object.assign(settings,d.data()); LS.set('tt_settings',settings); if(typeof applySettings==='function')applySettings(); } }, function(e){console.warn('settings sync',e);});
   window.db.collection('categories').onSnapshot(function(snap){ if(snap.empty){ CATEGORIES.forEach(function(c){ window.db.collection('categories').doc(String(c.id)).set(JSON.parse(JSON.stringify(c))); }); return; } var list=snap.docs.map(function(d){return d.data();}); if(!list.some(function(c){return c.id==='all';})) list.unshift({id:'all',name:'All',ic:'🛒'}); CATEGORIES=list; LS.set('tt_categories',CATEGORIES); if(typeof renderCats==='function')renderCats(); if(typeof renderGrid==='function')renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('categories sync',err); });
@@ -1473,7 +1494,7 @@ function printInvoice(){ if(!billItems.length){ toast('🧾','Pehle products add
   });
   if(editIdx<0) makeSellerLines(_it,inv,'Counter',date,'');
   _it.forEach(function(it){ warnIfLow(findP(it.pid)); });
-  LS.set('tt_products',catalog); if(typeof renderGrid==='function')renderGrid();
+  LS.set('tt_products',catalog); if(typeof refreshProductViews==='function')refreshProductViews();
   var _rec={id:inv,date:date,cust:cust,items:_it,sub:t.sub,disc:t.disc,tot:t.tot};
   if(editIdx>=0){ _rec.id=invoices[editIdx].id; _rec.date=invoices[editIdx].date; _rec.edited=date; invoices[editIdx]=_rec; }
   else invoices.push(_rec);
@@ -1688,14 +1709,16 @@ function onPurProd(){
     if(p && typeof p.cost==='number') $('#purCost').value=p.cost;
   } else {
     if(wrap) wrap.style.display='';
-    $('#purCost').value=0;
+    $('#purCost').value='';
   }
 }
-function openPurchase(){ purItems=[]; fillPurProds(); onPurProd(); if($('#purSup'))$('#purSup').value=''; if($('#purItem'))$('#purItem').value=''; if($('#purQty'))$('#purQty').value=1; if($('#purCost'))$('#purCost').value=0; renderPurItems(); renderPurchases(); openModal('purchaseModal'); }
+function openPurchase(){ purItems=[]; fillPurProds(); onPurProd(); if($('#purSup'))$('#purSup').value=''; if($('#purItem'))$('#purItem').value=''; if($('#purQty'))$('#purQty').value=1; if($('#purCost'))$('#purCost').value=''; renderPurItems(); renderPurchases(); openModal('purchaseModal'); }
 function addPurItem(){
   var pid=document.getElementById('purProd')?document.getElementById('purProd').value:'';
   var q=Math.max(1,parseInt($('#purQty').value,10)||1);
-  var c=Math.max(0,parseInt($('#purCost').value,10)||0);
+  var _pc=$('#purCost').value.trim();
+  if(_pc===''||isNaN(parseInt(_pc,10))||parseInt(_pc,10)<1){ toast('⚠️','Unit cost likhein — is ke baghair bill ka total nahi banta'); return; }
+  var c=parseInt(_pc,10);
   var nm, rec;
   if(pid){
     var p=findP(pid); if(!p){ toast('📦','Product nahi mila'); return; }
@@ -1706,7 +1729,7 @@ function addPurItem(){
     rec={name:nm,qty:q,cost:c};
   }
   purItems.push(rec);
-  $('#purItem').value=''; $('#purQty').value=1; $('#purCost').value=0;
+  $('#purItem').value=''; $('#purQty').value=1; $('#purCost').value='';
   if(document.getElementById('purProd')) document.getElementById('purProd').value='';
   onPurProd(); renderPurItems();
 }
@@ -1723,7 +1746,7 @@ function savePurchase(){ if(!purItems.length){ toast('📦','Pehle item add kare
     if(it.cost>0) pr.cost=it.cost;
     fbSaveProduct(pr); added+=(it.qty||0);
   });
-  if(added){ LS.set('tt_products',catalog); if(typeof renderGrid==='function')renderGrid(); if(typeof renderProductsAdmin==='function')renderProductsAdmin(); }
+  if(added){ LS.set('tt_products',catalog); if(typeof refreshProductViews==='function')refreshProductViews(); }
   purchases.push(p); LS.set('tt_purchases',purchases); fbSavePurchase(p); purItems=[]; renderPurItems(); renderPurchases(); toast('✅','Purchase bill save: '+p.serialNo+(added?(' — '+added+' items stock mein add'):'')); }
 function renderPurchases(){ var el=$('#purHist'); if(!el)return; if(!purchases.length){ el.innerHTML='<div style="text-align:center;color:var(--muted);padding:12px;font-size:13px">Abhi koi purchase bill nahi.</div>'; return; } var tot=purchases.reduce(function(s,p){return s+(p.tot||0);},0); el.innerHTML='<div style="font-size:12px;color:var(--muted);margin-bottom:8px">'+purchases.length+' bills · Total '+money(tot)+'</div>'+purchases.map(function(p,i){return {p:p,i:i};}).reverse().map(function(w){ var p=w.p; return '<div class="order"><div class="order-top"><b>'+(p.serialNo||p.id)+'</b><span style="display:flex;gap:6px;align-items:center"><span class="st">'+esc(p.sup||'-')+'</span><button class="ci-del" title="Delete" onclick="deletePurchase('+w.i+')" style="color:#ef4444">\ud83d\uddd1</button></span></div><div class="items">'+(p.items||[]).map(function(i){return esc(i.name)+' ×'+i.qty+(i.pid?' 📦':'');}).join('  ·  ')+'</div><div class="ordfoot"><span>'+p.date+'</span><b>'+money(p.tot||0)+'</b></div></div>'; }).join(''); }
 function fbSavePurchase(p){ if(window.db&&p){ try{ window.db.collection('purchases').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }catch(e){ console.warn('fb pur',e); } } }
@@ -1746,6 +1769,23 @@ function setAccPeriod(v){ accPeriod=v; renderSales(); }
 function setAccTab(t){ accTab=t; renderSales(); }
 function openSales(){ accTab='summary'; renderSales(); openModal('salesModal'); }
 function parseWhen(d){ if(!d) return 0; var t=Date.parse(String(d).replace(',','')); return isNaN(t)?0:t; }
+function findByName(nm){
+  if(!nm) return null;
+  var k=String(nm).trim().toLowerCase();
+  return catalog.find(function(x){ return String(x.name||'').trim().toLowerCase()===k; })||null;
+}
+function productOf(it){
+  if(!it) return null;
+  var p=findP(it.pid);            // pehle id se
+  if(!p) p=findByName(it.name);   // purane orders mein id nahi thi -> naam se
+  return p||null;
+}
+function costOf(it){
+  if(it && typeof it.cost==='number' && it.cost>0) return it.cost;   // order ke waqt ki lagat
+  var p=productOf(it);                                               // warna product ki maujooda lagat
+  if(p && typeof p.cost==='number' && p.cost>0) return p.cost;
+  return null;                                                       // kahin se nahi mili
+}
 function profitInfo(items,discount){
   var pf=0, missing=0;
   (items||[]).forEach(function(it){
@@ -1754,8 +1794,8 @@ function profitInfo(items,discount){
       var r=(typeof it.commRate==='number')?it.commRate:sellerCommRate(it.sellerId);
       pf+=Math.round(line*r/100);              // seller ka maal -> sirf commission hamari
     } else {
-      var c=(typeof it.cost==='number')?it.cost:null;
-      if(c===null){ missing+=qty; c=0; }       // lagat nahi daali -> hisaab adhoora
+      var c=costOf(it);
+      if(c===null){ missing+=qty; return; }    // lagat nahi mili -> is item ka nafa 0, poori sale nahi
       pf+=line-(c*qty);                        // apna maal -> sale - lagat
     }
   });
@@ -1818,7 +1858,7 @@ function customerRows(){
   return Object.keys(m).map(function(k){return m[k];}).sort(function(a,b){return b.amt-a.amt;});
 }
 function profitReport(){
-  var r={ownSale:0,ownCost:0,ownItems:0,sellSale:0,sellComm:0,sellItems:0,orderTotal:0,orders:0,noCost:0,map:{},units:0,onlineSale:0,counterSale:0,counterDisc:0,bills:0,disc:0};
+  var r={ownSale:0,ownCost:0,ownItems:0,sellSale:0,sellComm:0,sellItems:0,orderTotal:0,orders:0,noCost:0,map:{},units:0,onlineSale:0,counterSale:0,counterDisc:0,bills:0,disc:0,unknownSale:0};
   var feed=[];
   allOrders.forEach(function(o){ if((o.status||'')!=='Cancelled' && inPeriod(o.ts||parseWhen(o.date))) feed.push({items:o.items||[],src:'online',total:o.total||0,discount:o.discount||0}); });
   invoices.forEach(function(v){ if(inPeriod(parseWhen(v.date))) feed.push({items:v.items||[],src:'counter',total:v.tot||0,disc:v.disc||0}); });
@@ -1834,10 +1874,10 @@ function profitReport(){
         var rate=(typeof it.commRate==='number')?it.commRate:sellerCommRate(it.sellerId);
         r.sellSale+=line; r.sellComm+=Math.round(line*rate/100); r.sellItems+=qty;
       } else {
-        r.ownSale+=line; r.ownItems+=qty;
-        var c=(typeof it.cost==='number')?it.cost:0;
-        if(!c) r.noCost+=qty;
-        r.ownCost+=c*qty;
+        r.ownItems+=qty;
+        var c=costOf(it);
+        if(c===null){ r.noCost+=qty; r.unknownSale+=line; return; }  // hisaab se bahar
+        r.ownSale+=line; r.ownCost+=c*qty;
       }
     });
   });
@@ -1905,6 +1945,50 @@ function accTabsBar(){
     .map(function(t){ return '<button class="otab '+(accTab===t[0]?'on':'')+'" onclick="setAccTab(\''+t[0]+'\')">'+t[1]+(t[2]!==''?('<span class="n">'+t[2]+'</span>'):'')+'</button>'; }).join('');
 }
 function accBox(bg,col,val,lbl){ return '<div style="flex:1;min-width:150px;background:'+bg+';border-radius:12px;padding:13px;text-align:center"><b style="display:block;font-size:18px;color:'+col+'">'+val+'</b><small style="color:'+col+'">'+lbl+'</small></div>'; }
+function badRecords(){
+  var o=[],v=[];
+  allOrders.forEach(function(x){
+    if((x.status||'')==='Cancelled') return;
+    if(profitInfo(x.items,x.discount||0).missing>0) o.push(x);
+  });
+  invoices.forEach(function(x){
+    if(profitInfo(x.items,x.disc||0).missing>0) v.push(x);
+  });
+  return {orders:o,invoices:v};
+}
+function cleanBadRecords(){
+  if(!isAdmin()){ toast('🔒','Sirf admin'); return; }
+  var b=badRecords();
+  var n=b.orders.length+b.invoices.length;
+  if(!n){ toast('✅','Koi adhoora record nahi'); return; }
+  var list=b.orders.map(function(x){return x.id+' ('+money(x.total||0)+')';})
+        .concat(b.invoices.map(function(x){return x.id+' ('+money(x.tot||0)+')';}));
+  var msg=n+' adhoore records delete karein?\n\n'+list.slice(0,12).join('\n')
+    +(list.length>12?('\n...aur '+(list.length-12)+' aur'):'')
+    +'\n\nIn ke products catalog mein nahi rahe, is liye inka nafa nikala hi nahi ja sakta.\nYe hamesha ke liye mit jayenge.';
+  if(!confirm(msg)) return;
+  b.orders.forEach(function(x){
+    if(window.db){ try{ window.db.collection('orders').doc(String(x.id)).delete(); }catch(e){} }
+  });
+  b.invoices.forEach(function(x){
+    if(window.db){ try{ window.db.collection('invoices').doc(String(x.id)).delete(); }catch(e){} }
+  });
+  var oid={},vid={};
+  b.orders.forEach(function(x){oid[x.id]=1;}); b.invoices.forEach(function(x){vid[x.id]=1;});
+  allOrders=allOrders.filter(function(x){ return !oid[x.id]; });
+  invoices=invoices.filter(function(x){ return !vid[x.id]; });
+  Object.keys(ordersAll).forEach(function(em){ ordersAll[em]=(ordersAll[em]||[]).filter(function(x){ return !oid[x.id]; }); });
+  LS.set('tt_orders',ordersAll); LS.set('tt_invoices',invoices);
+  renderSales(); if(typeof updateOrdersBadge==='function')updateOrdersBadge();
+  toast('🧹',n+' adhoore records saaf ho gaye');
+}
+function cleanupBar(){
+  var b=badRecords(); var n=b.orders.length+b.invoices.length;
+  if(!n) return '';
+  return '<div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">'
+    +'<b style="color:#991b1b;font-size:13px;flex:1">🧹 '+n+' adhoore records — in ke products catalog mein nahi rahe, is liye inka nafa nahi nikal sakta</b>'
+    +'<button class="add" style="width:auto;padding:8px 16px;margin:0;background:#dc2626;color:#fff;border-color:#dc2626" onclick="cleanBadRecords()">Delete karein</button></div>';
+}
 function renderLedger(){
   var rows=ledgerRows();
   var tIn=0,tOut=0,tPf=0;
@@ -1916,9 +2000,10 @@ function renderLedger(){
     + accBox('#dcfce7','#15803d',money(tPf),'Kul Nafa (sales par)')
     + accBox('#f1f5f9','#475569',rows.length,'Entries')
     + '</div>'
+    + cleanupBar()
     + (rows.filter(function(r){return r.miss;}).length
        ? '<div style="background:#fffbeb;border:1px dashed #fde68a;color:#b45309;font-size:12.5px;padding:11px 13px;border-radius:11px;margin-bottom:14px">'
-         +'<b>⚠ Nafa poora sahi nahi hai.</b> '+rows.filter(function(r){return r.miss;}).length+' entries mein aise items hain jinki <b>lagat (cost)</b> product mein daali hi nahi gayi — un ka poora paisa nafa gina ja raha hai. '
+         +'<b>⚠ Kuch items hisaab se bahar hain.</b> '+rows.filter(function(r){return r.miss;}).length+' entries mein aise items hain jinka product ab catalog mein nahi — unki <b>lagat</b> maloom na hone ki wajah se unka nafa gina hi nahi gaya (0 rakha hai). Kul nafa asal se thora kam dikh raha hai, zyada nahi. '
          +'<button class="add" style="width:auto;padding:5px 12px;margin:6px 0 0;font-size:12px" onclick="closeModal(\'salesModal\');openProductsAdmin();setProdFilter(\'nocost\')">Jin ki lagat nahi — dekhein</button></div>'
        : '');
   if(!rows.length) return head+'<div class="empty" style="padding:40px 20px"><div class="big">📒</div><h3>Ledger khali hai</h3><p>Order, counter bill ya purchase — koi bhi entry yahan aayegi.</p></div>';
@@ -1932,8 +2017,8 @@ function renderLedger(){
       +'<td style="text-align:right;white-space:nowrap">'+(r.cr?('<b style="color:#15803d">'+money(r.cr)+'</b>'):'<span style="color:#cbd5cf">—</span>')+'</td>'
       +'<td style="text-align:right;white-space:nowrap">'+(r.dr?('<b style="color:#dc2626">'+money(r.dr)+'</b>'):'<span style="color:#cbd5cf">—</span>')+'</td>'
       +'<td style="text-align:right;white-space:nowrap">'+((typeof r.pf==='number')
-          ?('<b style="color:'+(r.miss?'#d97706':(r.pf>=0?'#15803d':'#dc2626'))+'">'+(r.miss?'⚠ ':'')+money(r.pf)+'</b>'
-            +(r.miss?'<div style="font-size:10px;color:#d97706">lagat nahi</div>':''))
+          ?('<b style="color:'+(r.pf>=0?'#15803d':'#dc2626')+'">'+money(r.pf)+'</b>'
+            +(r.miss?'<div style="font-size:10px;color:#d97706" title="Kuch items ki lagat nahi mili — unka nafa nahi gina gaya">⚠ '+r.miss+' item bahar</div>':''))
           :'<span style="color:#cbd5cf">—</span>')+'</td>'
       +'<td style="text-align:right;white-space:nowrap"><b style="color:'+(r.bal>=0?'#1e40af':'#b45309')+'">'+money(r.bal)+'</b></td>'
       +'</tr>';
@@ -2012,10 +2097,23 @@ function renderSales(){
     + accBox('#fef3c7','#92600a','+ '+money(r.sellComm),'Seller commission')
     + (r.disc? accBox('#fee2e2','#991b1b','− '+money(r.disc),'Di hui chhoot') : '')
     + '</div>'
-    + '<div style="background:linear-gradient(135deg,#15803d,#22c55e);color:#fff;border-radius:14px;padding:18px;text-align:center;margin-bottom:14px">'
-      + '<div style="font-size:13px;opacity:.9">Kul Nafa (Profit)</div>'
-      + '<div style="font-size:30px;font-weight:800;line-height:1.2">'+money(r.profit)+'</div>'
-      + '<div style="font-size:11.5px;opacity:.85;margin-top:4px">Apni sale − lagat + seller commission</div></div>'
+    + (function(){
+        var line=function(lbl,val,col,bold){
+          return '<div style="display:flex;justify-content:space-between;align-items:baseline;padding:7px 0'+(bold?';border-top:2px solid rgba(255,255,255,.35);margin-top:6px;padding-top:11px':'')+'">'
+            +'<span style="font-size:'+(bold?'14px':'13px')+';opacity:'+(bold?'1':'.92')+';font-weight:'+(bold?'800':'500')+'">'+lbl+'</span>'
+            +'<b style="font-size:'+(bold?'24px':'15px')+';color:'+(col||'#fff')+'">'+val+'</b></div>';
+        };
+        var own=r.ownSale-r.ownCost;
+        return '<div style="background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;border-radius:14px;padding:16px 20px;margin-bottom:14px">'
+          +'<div style="font-size:12px;opacity:.85;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px">Nafa ka hisaab</div>'
+          +line('Apni sale (jo maal hamara tha)',money(r.ownSale))
+          +line('− Us maal ki lagat (purchase)','− '+money(r.ownCost),'#fecaca')
+          +line('= Sale aur lagat ka farq',money(own),'#bfdbfe')
+          +(r.sellComm?line('+ Seller commission','+ '+money(r.sellComm),'#fde68a'):'')
+          +(r.disc?line('− Di hui chhoot','− '+money(r.disc),'#fecaca'):'')
+          +line('KUL NAFA',money(r.profit),'#fff',true)
+          +'</div>';
+      })()
     + '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">'
       + accBox('#eff6ff','#1e40af',money(r.onlineSale)+' / '+r.orders,'Online sale / orders')
       + accBox('#ecfeff','#0e7490',money(r.counterSale)+' / '+r.bills,'Counter sale / bills')
@@ -2023,7 +2121,8 @@ function renderSales(){
       + accBox('#f1f5f9','#475569',money(purTotal),'Stock kharidari')
       + accBox('#faf5ff','#7c3aed',money(stockVal),'Maujooda stock')
       + '</div>';
-  if(r.noCost>0) head+='<div style="background:#fffbeb;border:1px dashed #fde68a;color:#b45309;font-size:12.5px;padding:10px 12px;border-radius:11px;margin-bottom:14px"><b>Dhyan dein:</b> '+r.noCost+' items aise bike jinki lagat product mein daali hi nahi gayi. Un ka poora paisa nafa gina gaya hai.</div>';
+  head+=cleanupBar();
+  if(r.noCost>0) head+='<div style="background:#fffbeb;border:1px dashed #fde68a;color:#b45309;font-size:12.5px;padding:10px 12px;border-radius:11px;margin-bottom:14px"><b>Dhyan dein:</b> '+r.noCost+' items ('+money(r.unknownSale)+' ki sale) hisaab se bahar hain — inke products ab catalog mein nahi, is liye lagat maloom nahi. Inka nafa 0 gina gaya hai, taake kul nafa asal se zyada na dikhe.</div>';
   var rows=Object.keys(r.map).map(function(k){return r.map[k];}).sort(function(a,b){return b.val-a.val;});
   if(!rows.length){ el.innerHTML=head+'<div class="empty" style="padding:30px"><div class="big">📊</div><h3>Abhi koi sale nahi</h3><p>Order aate hi har item ka hisab yahan dikhega.</p></div>'; return; }
   var body='<div style="font-size:12px;color:var(--muted);margin:2px 0 8px;text-transform:uppercase;letter-spacing:.5px">Har item ki value</div>'
@@ -2467,21 +2566,23 @@ function setProductStock(id,val){
   if(v===''||isNaN(parseInt(v,10))){ toast('⚠️','Enter a quantity'); renderProductsAdmin(); return; }
   var n=parseInt(v,10); p.stock=(n<0)?0:n;
   LS.set('tt_products',catalog); fbSaveProduct(p);
-  renderGrid(); renderProductsAdmin();
+  refreshProductViews();
   toast('✅',p.name+' → '+p.stock+' stock');
 }
 function bumpStock(id,d){
   var p=findP(id); if(!p) return;
   if(!canManage(p)){ toast('🔒','This product is not yours'); return; }
   p.stock=Math.max(0,(typeof p.stock==='number'?p.stock:0)+d);
-  LS.set('tt_products',catalog); fbSaveProduct(p); renderGrid(); renderProductsAdmin();
+  LS.set('tt_products',catalog); fbSaveProduct(p); refreshProductViews();
 }
 function setProductCost(id,val){
   var p=findP(id); if(!p) return;
   if(!canManage(p)){ toast('🔒','This product is not yours'); return; }
   var v=String(val).trim();
-  if(v===''){ delete p.cost; } else { var n=parseInt(v,10); if(isNaN(n)||n<0){ toast('⚠️','Enter a valid cost'); renderProductsAdmin(); return; } p.cost=n; }
-  LS.set('tt_products',catalog); fbSaveProduct(p); renderProductsAdmin();
+  var n=parseInt(v,10);
+  if(v===''||isNaN(n)||n<1){ toast('⚠️','Lagat likhna zaroori hai'); renderProductsAdmin(); return; }
+  p.cost=n;
+  LS.set('tt_products',catalog); fbSaveProduct(p); refreshProductViews();
   toast('✅',p.name+' cost → '+(typeof p.cost==='number'?money(p.cost):'—'));
 }
 function setProductPrice(id,val){
@@ -2492,7 +2593,7 @@ function setProductPrice(id,val){
   p.price=n;
   if(p.old && p.old<=n) delete p.old;
   LS.set('tt_products',catalog); fbSaveProduct(p);
-  renderGrid(); renderProductsAdmin();
+  refreshProductViews();
   toast('✅',p.name+' → '+money(n));
 }
 function defaultCostFor(p){
@@ -2531,7 +2632,7 @@ function setProductCat(id,cid){
   var p=findP(id); if(!p) return;
   if(!canManage(p)){ toast('🔒','This product is not yours'); return; }
   p.cat=cid; LS.set('tt_products',catalog); fbSaveProduct(p);
-  renderGrid(); renderProductsAdmin();
+  refreshProductViews();
   var c=CATEGORIES.find(function(x){return x.id===cid;});
   toast('✅',p.name+' → '+((c&&c.name)||cid));
 }
@@ -2747,7 +2848,7 @@ function moveProduct(id,dir){
   a.ord=bo; b.ord=ao;
   fbSaveProduct(a); fbSaveProduct(b);
   catalog.sort(function(x,y){var xo=(typeof x.ord==='number'?x.ord:(x.id||0));var yo=(typeof y.ord==='number'?y.ord:(y.id||0));return xo-yo;});
-  LS.set('tt_products',catalog); renderGrid(); renderAcct();
+  LS.set('tt_products',catalog); refreshProductViews();
   toast('✅',a.name+(dir==='up'?' upar chala gaya':' neeche chala gaya'));
 }
 function openAddBanner(){$('#bH').value='';$('#bSt').value='';$('#bP').value='';$('#bBadge').value='';$('#bEm').value='';$('#bfH').classList.remove('invalid');$('#bBg').innerHTML=BANNER_BG.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join('');openModal('bannerModal');}

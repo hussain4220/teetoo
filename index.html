@@ -1065,8 +1065,23 @@ const DEFAULT_PRODUCTS=[
   {id:42,name:'Hand Soap',cat:'care',emoji:'🧼',price:150,unit:'250 ml',rating:4.4}
 ];
 const IMG={1:'banana',2:'apple',3:'tomato',4:'carrot',5:'broccoli',6:'potato',7:'onion',8:'grapes',9:'strawberry',10:'avocado',11:'milk',12:'egg',13:'cheese',14:'butter',15:'yogurt',16:'bread',17:'croissant',18:'baguette',19:'bagel',20:'chicken',21:'steak',22:'fish',23:'shrimp',24:'juice',25:'coffee',26:'tea',27:'cola',28:'water',29:'chips',30:'popcorn',31:'chocolate',32:'cookie',33:'pretzel',34:'rice',35:'pasta',36:'noodles',37:'tissue',38:'sponge',39:'detergent',40:'shampoo',41:'toothpaste',42:'soap'};
-function imgKey(p){return IMG[p.id]||(p.name||'grocery').toLowerCase().split(' ').pop();}
-function imgUrl(p){ if(p.img) return p.img; return 'https://loremflickr.com/320/320/'+encodeURIComponent(imgKey(p))+'?lock='+p.id; }
+const IMG_STOP=['kg','g','gm','gram','grams','ml','l','litre','liter','litres','liters','pc','pcs','piece','pieces',
+  'pack','packet','packets','packs','box','boxes','bag','bags','bottle','bottles','dozen','roll','rolls','tin','cans','can',
+  'jar','jars','tube','tubes','sachet','sachets','tray','combo','pkt','set','units','unit','of','the','a','an','with','and',
+  'large','small','medium','mini','jumbo','fresh','pure','premium','original','new','extra','big'];
+const IMG_CAT_TAG={fruits:'fruit',dairy:'dairy',bakery:'bakery',meat:'meat',beverages:'drink',snacks:'snack',staples:'food',household:'household',care:'cosmetic'};
+function imgKeywords(p){
+  if(IMG[p.id]) return [IMG[p.id]];
+  var words=(p.name||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(function(w){
+    return w && !/^\d+\.?\d*[a-z]*$/.test(w) && IMG_STOP.indexOf(w)===-1;
+  });
+  if(!words.length) words=[(p.name||'grocery').toLowerCase().split(' ').pop()];
+  var keys=words.slice(0,2);
+  if(IMG_CAT_TAG[p.cat]) keys.push(IMG_CAT_TAG[p.cat]);
+  return keys;
+}
+function imgKey(p){return imgKeywords(p).join(',');}
+function imgUrl(p){ if(p.img) return p.img; return 'https://loremflickr.com/320/320/'+imgKeywords(p).map(encodeURIComponent).join(',')+'?lock='+p.id; }
 function imgFallback(el){el.style.display='none';const e=el.parentNode.querySelector('.emoji');if(e)e.style.display='grid';}
 const LS={get:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v===null?d:v}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let catalog=LS.get('tt_products',null);

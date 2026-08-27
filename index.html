@@ -273,6 +273,9 @@
     .rbtn{min-width:0;font-size:12.5px;padding:10px 12px}
     .rbtn .lbl{display:none}
     .rbtn .em{font-size:17px}
+    #admRail.expanded .rbtn{min-width:158px;font-size:13.5px;padding:12px 15px}
+    #admRail.expanded .rbtn .lbl{display:inline}
+    #admRail.expanded .rbtn .em{font-size:18px}
   }
   /* products page */
   .ptbl{width:100%;border-collapse:collapse}
@@ -2861,7 +2864,8 @@ function renderSellers(){
   }).join('')+'</div>';
 }
 var railOpen=true;
-function toggleRail(){ railOpen=!railOpen; var r=document.getElementById('admRail'); if(r)r.classList.toggle('on',railOpen&&isAdmin()); }
+var railExpanded=false;
+function toggleRail(){ railExpanded=!railExpanded; var r=document.getElementById('admRail'); if(r)r.classList.toggle('expanded',railExpanded); }
 var ONLINE_MS=3*60*1000, ADMIN_ONLINE_MS=6*60*1000, _hbT=null, _adminPing=0, subQuery='';
 var presence={adminSeen:0};
 function shopOnline(){ return (Date.now()-(presence.adminSeen||0))<ADMIN_ONLINE_MS; }

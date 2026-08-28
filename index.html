@@ -434,6 +434,40 @@
   #helpFab:hover{transform:translateY(-2px)}
   .mcount{position:absolute;top:-7px;right:-7px;background:#dc2626;color:#fff;font-size:11px;font-weight:700;min-width:18px;height:18px;border-radius:99px;display:grid;place-items:center;padding:0 4px}
   @media(max-width:768px){#helpFab{bottom:78px;right:14px;padding:11px 15px}}
+
+  /* ===== My Orders (customer) ===== */
+  .mo-card{background:#fbfdfc;border:1px solid var(--line);border-radius:15px;padding:14px;margin-bottom:12px}
+  .mo-card.fresh{border-color:var(--green);background:var(--green-soft);box-shadow:0 4px 14px rgba(22,163,74,.13)}
+  .mo-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:9px}
+  .mo-top b{font-size:14px;letter-spacing:.3px}
+  .mo-st{font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:8px;white-space:nowrap}
+  .mo-new{font-size:9.5px;font-weight:800;background:#dc2626;color:#fff;padding:2px 7px;border-radius:6px;letter-spacing:.4px}
+  .mo-items{font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+  .mo-foot{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted);
+    border-top:1px dashed #d7ddd9;padding-top:9px;margin-top:4px}
+  .mo-foot b{color:var(--green-dark);font-size:15px}
+  .mo-addr{font-size:11.5px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 9px;margin-bottom:10px;line-height:1.5}
+  .mo-msg{font-size:12.5px;font-weight:700;border-radius:10px;padding:9px 11px;margin-bottom:11px;line-height:1.5}
+  /* tracker */
+  .trk{display:flex;align-items:flex-start;margin:4px 0 12px}
+  .trk .tstep{flex:1;text-align:center;position:relative;min-width:0}
+  .trk .tdot{width:30px;height:30px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;
+    font-size:14px;background:#e8ebe9;color:#9aa4a0;border:2px solid #e0e5e2;position:relative;z-index:2;transition:.2s}
+  .trk .tstep.done .tdot{background:var(--green);border-color:var(--green);color:#fff}
+  .trk .tstep.now .tdot{background:var(--green);border-color:#bbf7d0;color:#fff;box-shadow:0 0 0 4px rgba(22,163,74,.18)}
+  .trk .tstep.dead .tdot{background:#fee2e2;border-color:#fecaca;color:#dc2626}
+  .trk .tstep .tlbl{font-size:10.5px;font-weight:700;color:#9aa4a0;line-height:1.35}
+  .trk .tstep.done .tlbl,.trk .tstep.now .tlbl{color:var(--green-dark)}
+  .trk .tstep.dead .tlbl{color:#dc2626}
+  .trk .tstep .tdate{font-size:9.5px;color:var(--muted);margin-top:2px;font-weight:600}
+  .trk .tstep::before{content:"";position:absolute;top:14px;left:-50%;width:100%;height:3px;background:#e8ebe9;z-index:1}
+  .trk .tstep:first-child::before{display:none}
+  .trk .tstep.done::before,.trk .tstep.now::before{background:var(--green)}
+  .trk .tstep.dead::before{background:#fecaca}
+  .mo-empty{padding:30px 16px;text-align:center;color:var(--muted)}
+  .mo-empty .big{font-size:44px;margin-bottom:8px}
+  .mo-empty h3{font-size:16px;color:var(--ink);margin-bottom:5px}
+  .mo-empty p{font-size:13px}
 </style>
 </head>
 <body>
@@ -454,6 +488,7 @@
       <button class="h-btn sell-btn" onclick="openSellPage()" title="Sell on TeeToo"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 13h6"/></svg><span>Sell on TeeToo</span></button>
       <button id="myShopBtn" class="h-btn" style="display:none;position:relative;background:#faf5ff;color:#6b21a8;font-weight:800;border:1px solid #e9d5ff" onclick="openMyShop()" title="My Shop"><span style="font-size:15px">🏪</span><span>My Shop</span><span class="mcount" id="shopNewCount" style="display:none">0</span></button>
       <button id="jobBtn" class="h-btn" style="position:relative;background:#fff;color:var(--green-dark);font-weight:700" onclick="openJobApply()" title="Apply for Job"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg><span id="jobBtnLabel">Job</span><span class="mcount" id="jobCount" style="display:none">0</span></button>
+      <button id="myOrdersBtn" class="h-btn" style="display:none;position:relative;background:#eff6ff;color:#1d4ed8;font-weight:800;border:1px solid #bfdbfe" onclick="openMyOrders()" title="My Orders"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18l-1.4 11H4.4z"/><path d="M8 6a4 4 0 0 1 8 0"/></svg><span>My Orders</span><span class="mcount" id="myOrdCount" style="display:none">0</span></button>
       <button id="msgsBtn" class="h-btn" style="display:none;position:relative;background:#fff;color:var(--green-dark);font-weight:700" onclick="openMessages()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H7l-3 3z"/></svg><span>Msgs</span><span class="mcount" id="msgCount" style="display:none">0</span></button>
       <button id="billBtn" class="h-btn" style="display:none;background:#fff;color:var(--green-dark);font-weight:700" onclick="openBilling()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h10l3 3v17l-2.2-1.2L15 22l-2-1.2L11 22l-2-1.2L6.9 22 6 21V2z"/><path d="M9 8h7M9 12h7M9 16h4"/></svg><span>Bill/Invoice</span></button>
       <button id="ordersBtn" class="h-btn" style="display:none;position:relative;background:#fff;color:var(--green-dark);font-weight:700" onclick="openOrders()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18l-1.4 11H4.4z"/><path d="M8 6a4 4 0 0 1 8 0"/></svg><span>Orders</span><span class="mcount" id="ordCount" style="display:none">0</span></button>
@@ -712,7 +747,8 @@
       <h2>Order Placed!</h2>
       <p>Thank you for shopping with T.T 🌿</p>
       <p>Your order <span class="oid" id="confId"></span> is on its way.</p>
-      <button class="btn-primary" style="margin-top:20px" onclick="closeModal('confirmModal')">Continue Shopping</button>
+      <button class="btn-primary" style="margin-top:20px" onclick="closeModal('confirmModal');openMyOrders()">&#128230; Track My Order</button>
+      <button class="add" style="width:100%;margin-top:10px" onclick="closeModal('confirmModal')">Continue Shopping</button>
     </div>
   </div>
 </div>
@@ -812,6 +848,7 @@
   <div class="modal-card">
     <div class="modal-head"><h2>💼 Apply for Job</h2><p>Neeche di gayi tamam details bharein — sab fields zaroori hain</p><button class="x" onclick="closeModal('jobModal')">×</button></div>
     <div class="modal-body">
+      <div id="jobModalNote" style="font-size:12.5px;font-weight:600;color:#15803d;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:11px;padding:10px 12px;margin-bottom:14px;line-height:1.6"></div>
       <div class="field" id="jfName"><label>Full Name</label><input id="jName" placeholder="Apna pura naam"><div class="err">Required</div></div>
       <div class="field" id="jfPhone"><label>Phone Number</label><input id="jPhone" type="tel" placeholder="03XX-XXXXXXX"><div class="err">Required</div></div>
       <div class="field" id="jfAddr"><label>Address</label><input id="jAddr" placeholder="Ghar ka pura pata"><div class="err">Required</div></div>
@@ -902,6 +939,14 @@
     <div class="modal-body"><div class="mwrap"><div id="msgsList"></div></div></div>
   </div>
 </div>
+<div class="modal" id="myOrdersModal">
+  <div class="modal-card full">
+    <div class="modal-head"><button class="backbtn" onclick="closeModal('myOrdersModal')">&larr; Back</button><div class="htxt"><h2>&#128230; My Orders</h2><p>Apne order ka live status yahan dekhein</p></div><button class="x" onclick="closeModal('myOrdersModal')">&times;</button></div>
+    <div class="otabs" id="myOrdTabs"></div>
+    <div class="modal-body" style="padding-top:0"><div class="mwrap"><div id="myOrdersList"></div></div></div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <nav class="botnav">
@@ -921,6 +966,9 @@
     </button>
     <button class="nav-item" id="navJob" onclick="openJobApply()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg><span id="navJobLabel">Job</span><span class="ncount" id="navJobCount">0</span>
+    </button>
+    <button class="nav-item" id="navMyOrders" onclick="openMyOrders()" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18l-1.4 11H4.4z"/><path d="M8 6a4 4 0 0 1 8 0"/></svg><span>Orders</span><span class="ncount" id="navMyOrdCount">0</span>
     </button>
     <button class="nav-item" onclick="openAccount()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>
@@ -1001,8 +1049,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <script>
-try{ firebase.initializeApp({apiKey:"AIzaSyAKQ9jxx707Uq9uiU3YbCpVR6YP-vqfano",authDomain:"teetoo-61aeb.firebaseapp.com",projectId:"teetoo-61aeb",storageBucket:"teetoo-61aeb.firebasestorage.app",messagingSenderId:"823453128850",appId:"1:823453128850:web:ca691f2f24dcca1b2dae4b"}); window.db=firebase.firestore(); window.fbAuth=firebase.auth(); }catch(e){ window.db=null; window.fbAuth=null; console.warn("Firebase init failed",e); }
+try{ firebase.initializeApp({apiKey:"AIzaSyAKQ9jxx707Uq9uiU3YbCpVR6YP-vqfano",authDomain:"teetoo-61aeb.firebaseapp.com",projectId:"teetoo-61aeb",storageBucket:"teetoo-61aeb.firebasestorage.app",messagingSenderId:"823453128850",appId:"1:823453128850:web:ca691f2f24dcca1b2dae4b"}); window.db=firebase.firestore(); window.fbAuth=firebase.auth(); try{ window.stg=firebase.storage(); }catch(se){ window.stg=null; } }catch(e){ window.db=null; window.fbAuth=null; window.stg=null; console.warn("Firebase init failed",e); }
 </script>
 <script>
 const APP_VERSION='v27.08.2026-10';
@@ -1315,9 +1364,9 @@ function submitAuth(){
   });
 }
 
-function finishAuth(){ updateAcctLabel(); closeModal('authModal'); if(pendingCheckout){ pendingCheckout=false; startCheckout(); } }
-function logout(){ session=null; LS.set('tt_session',null); if(window.fbAuth){ try{window.fbAuth.signOut();}catch(e){} } updateAcctLabel(); closeModal('acctModal'); toast('👋','Logged out successfully'); }
-function updateAcctLabel(){ const u=currentUser(); $('#acctLabel').textContent=u?(isAdmin()?'Admin':u.name.split(' ')[0]):'Login'; const ea=document.getElementById('editAds'); if(ea)ea.style.display=isAdmin()?'block':'none'; const bb=document.getElementById('billBtn'); if(bb)bb.style.display='none'; const mb=document.getElementById('msgsBtn'); if(mb)mb.style.display='none'; var ob=document.getElementById('ordersBtn'); if(ob)ob.style.display='none'; var sb=document.getElementById('salesBtn'); if(sb)sb.style.display='none'; var pb=document.getElementById('purchaseBtn'); if(pb)pb.style.display='none'; var sb2=document.getElementById('sellersBtn'); if(sb2)sb2.style.display='none'; var jb=document.getElementById('jobBtn'); if(jb){ jb.style.display=isAdmin()?'none':'flex'; jb.title=isAdmin()?'Employees':'Apply for Job'; } var jbl=document.getElementById('jobBtnLabel'); if(jbl) jbl.textContent=isAdmin()?'Employee':'Job'; var njl=document.getElementById('navJobLabel'); if(njl) njl.textContent=isAdmin()?'Employee':'Job'; updateMsgBadge(); if(typeof updateOrdersBadge==='function')updateOrdersBadge(); if(typeof updateJobsBadge==='function')updateJobsBadge(); if(typeof updateSellersBadge==='function')updateSellersBadge(); if(typeof updateSellerBadge==='function')updateSellerBadge(); if(typeof updateShopBtn==='function')updateShopBtn(); if(typeof renderRail==='function')renderRail(); if(typeof applySettings==='function')applySettings(); }
+function finishAuth(){ updateAcctLabel(); closeModal('authModal'); if(typeof fbUserSync==='function') setTimeout(fbUserSync,300); if(typeof fbSellerSync==='function') setTimeout(fbSellerSync,1000); if(pendingCheckout){ pendingCheckout=false; startCheckout(); } }
+function logout(){ if(typeof fbUserSyncStop==='function') fbUserSyncStop(); _selSeen=null; LS.set('tt_sellerseen',null); session=null; LS.set('tt_session',null); if(window.fbAuth){ try{window.fbAuth.signOut();}catch(e){} } updateAcctLabel(); closeModal('acctModal'); toast('👋','Logged out successfully'); }
+function updateAcctLabel(){ const u=currentUser(); $('#acctLabel').textContent=u?(isAdmin()?'Admin':u.name.split(' ')[0]):'Login'; const ea=document.getElementById('editAds'); if(ea)ea.style.display=isAdmin()?'block':'none'; const bb=document.getElementById('billBtn'); if(bb)bb.style.display='none'; const mb=document.getElementById('msgsBtn'); if(mb)mb.style.display='none'; var ob=document.getElementById('ordersBtn'); if(ob)ob.style.display='none'; var sb=document.getElementById('salesBtn'); if(sb)sb.style.display='none'; var pb=document.getElementById('purchaseBtn'); if(pb)pb.style.display='none'; var sb2=document.getElementById('sellersBtn'); if(sb2)sb2.style.display='none'; var jb=document.getElementById('jobBtn'); if(jb){ jb.style.display=isAdmin()?'none':'flex'; jb.title=isAdmin()?'Employees':'Apply for Job'; } var jbl=document.getElementById('jobBtnLabel'); if(jbl) jbl.textContent=isAdmin()?'Employee':'Job'; var njl=document.getElementById('navJobLabel'); if(njl) njl.textContent=isAdmin()?'Employee':'Job'; updateMsgBadge(); if(typeof updateOrdersBadge==='function')updateOrdersBadge(); if(typeof updateJobsBadge==='function')updateJobsBadge(); if(typeof updateSellersBadge==='function')updateSellersBadge(); if(typeof updateSellerBadge==='function')updateSellerBadge(); if(typeof updateShopBtn==='function')updateShopBtn(); if(typeof renderRail==='function')renderRail(); if(typeof applySettings==='function')applySettings(); if(typeof syncMyOrdersUI==='function')syncMyOrdersUI(); }
 
 function openAcctPanel(){ renderAcct(); openModal('acctModal'); if(!isAdmin()&&isApprovedSeller()) setTimeout(function(){ markSalesSeen(); },1500); }
 function renderAcct(){
@@ -1391,9 +1440,11 @@ function customersSection(){
   return `<div class="acct-sec"><h4>Customers <span style="text-transform:none;letter-spacing:0;color:var(--muted)">${users.length} accounts</span></h4>
     <div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="plist">${users.map(cu=>{const ci=(cu.name||'C').split(' ').map(function(w){return w[0]||'';}).slice(0,2).join('').toUpperCase();const pl={email:'Email',google:'Google',phone:'Phone',admin:'Master'}[cu.provider]||'Email';const oc=allOrders.filter(function(o){return o.userEmail===cu.email;}).length;return `<div class="padmin"><div class="pe" style="background:var(--green-soft);color:var(--green-dark);font-size:13px;font-weight:800">${cu.provider==='admin'?'🛠️':ci}</div><div class="pinfo"><b>${cu.name}</b><small>${cu.email} · ${pl}</small></div><span style="font-size:11.5px;color:var(--muted);white-space:nowrap">${oc} orders</span></div>`;}).join('')}</div></div></div>`;
 }
-var apImgData;
-function uploadProductImg(input){ var f=input.files&&input.files[0]; if(!f)return; toast('⏳','Photo lag rahi hai...'); compressImg(f,function(data){ apImgData=data; $('#apImgPreview').src=data; $('#apImgPreviewWrap').style.display='flex'; }); input.value=''; }
-function removeApImg(){ apImgData=null; $('#apImgPreviewWrap').style.display='none'; }
+var apImgData, apImgPath;
+function uploadProductImg(input){ var f=input.files&&input.files[0]; if(!f)return; toast('\u23f3','Photo upload ho rahi hai...');
+  putImage(f,'products',function(res){ apImgData=res.img; apImgPath=res.imgPath||null; $('#apImgPreview').src=res.img; $('#apImgPreviewWrap').style.display='flex'; toast('\u2705','Photo tayyar'); });
+  input.value=''; }
+function removeApImg(){ if(apImgPath) deleteImage(apImgPath); apImgData=null; apImgPath=null; $('#apImgPreviewWrap').style.display='none'; }
 function pickProductImg(id){
   var p=findP(id); if(!p) return;
   if(!canManage(p)){ toast('\ud83d\udd12','This product is not yours'); return; }
@@ -1402,8 +1453,11 @@ function pickProductImg(id){
   inp.onchange=function(){
     var f=inp.files&&inp.files[0]; inp.value=''; if(!f) return;
     toast('\u23f3','Photo lag rahi hai...');
-    compressImg(f,function(data){
-      p.img=data; LS.set('tt_products',catalog); fbSaveProduct(p);
+    putImage(f,'products',function(res){
+      var oldPath=p.imgPath;
+      p.img=res.img; if(res.imgPath) p.imgPath=res.imgPath; else delete p.imgPath;
+      LS.set('tt_products',catalog); fbSaveProduct(p);
+      if(oldPath && oldPath!==p.imgPath) deleteImage(oldPath);
       if(typeof refreshProductViews==='function') refreshProductViews();
       toast('\u2705',p.name+' ki photo lag gayi');
     });
@@ -1414,7 +1468,7 @@ function openAddProduct(){
   if(!isAdmin() && !isApprovedSeller()){ toast('\ud83d\udd12','Pehle seller approve hona zaroori hai'); return; }
   editingId=null; $('#adminModalTitle').textContent=isAdmin()?'Add Product':'Mera naya product'; $('#apSubmit').textContent='Add Product';
   $('#apEmoji').value=''; $('#apName').value=''; $('#apPrice').value=''; $('#apOld').value=''; $('#apUnit').value=''; $('#apTag').value=''; $('#apStock').value=''; $('#apCost').value='';
-  apImgData=undefined; $('#apImgPreviewWrap').style.display='none';
+  apImgData=undefined; apImgPath=null; $('#apImgPreviewWrap').style.display='none';
   fillCatOptions(); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); var _fs=document.getElementById('apfStock'); if(_fs)_fs.classList.remove('invalid'); var _fc=document.getElementById('apfCost'); if(_fc)_fc.classList.remove('invalid'); var _fu=document.getElementById('apfUnit'); if(_fu)_fu.classList.remove('invalid'); openModal('adminModal');
 }
 function canManage(p){ if(isAdmin()) return true; var m=mySeller(); return !!(m && m.status==='approved' && String(p.sellerId||'')===String(m.id)); }
@@ -1423,7 +1477,7 @@ function openEditProduct(id){
   if(!canManage(p)){ toast('🔒','This product is not yours'); return; }
   editingId=id; $('#adminModalTitle').textContent='Edit Product'; $('#apSubmit').textContent='Save Changes';
   $('#apEmoji').value=p.emoji||''; $('#apName').value=p.name; $('#apPrice').value=p.price; $('#apOld').value=p.old||''; $('#apUnit').value=p.unit||''; $('#apTag').value=p.tag||''; $('#apStock').value=(typeof p.stock==='number'?p.stock:''); $('#apCost').value=(typeof p.cost==='number'?p.cost:'');
-  apImgData=undefined;
+  apImgData=undefined; apImgPath=p.imgPath||null;
   if(p.img){ $('#apImgPreview').src=p.img; $('#apImgPreviewWrap').style.display='flex'; } else { $('#apImgPreviewWrap').style.display='none'; }
   fillCatOptions(p.cat); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); var _fs=document.getElementById('apfStock'); if(_fs)_fs.classList.remove('invalid'); var _fc=document.getElementById('apfCost'); if(_fc)_fc.classList.remove('invalid'); var _fu=document.getElementById('apfUnit'); if(_fu)_fu.classList.remove('invalid'); openModal('adminModal');
 }
@@ -1446,16 +1500,21 @@ function saveProduct(){
   var stVal=Math.max(0,parseInt(stRaw,10)||0);
   var coVal=Math.max(1,parseInt(coRaw,10)||1);
   const data={name,cat:$('#apCat').value,emoji:$('#apEmoji').value.trim()||'📦',price,old:(oldP&&oldP>price)?oldP:undefined,unit:$('#apUnit').value.trim()||'1 pc',tag:$('#apTag').value||undefined,stock:stVal,cost:coVal};
-  if(editingId){ const p=findP(editingId); if(p){ if(!canManage(p)){ toast('🔒','This product is not yours'); return; } var _keepS=p.sellerId,_keepN=p.sellerName; Object.assign(p,data); if(_keepS){p.sellerId=_keepS;p.sellerName=_keepN;}   if(apImgData===null){ delete p.img; } else if(apImgData){ p.img=apImgData; } fbSaveProduct(p); } LS.set('tt_products',catalog); closeModal('adminModal'); refreshProductViews(); toast('✏️',name+' updated'); editingId=null; return; }
+  if(editingId){ const p=findP(editingId); if(p){ if(!canManage(p)){ toast('🔒','This product is not yours'); return; } var _keepS=p.sellerId,_keepN=p.sellerName; Object.assign(p,data); if(_keepS){p.sellerId=_keepS;p.sellerName=_keepN;}   var _oldPath=p.imgPath;
+      if(apImgData===null){ delete p.img; delete p.imgPath; if(_oldPath) deleteImage(_oldPath); }
+      else if(apImgData){ p.img=apImgData; if(apImgPath){ p.imgPath=apImgPath; } else { delete p.imgPath; }
+        if(_oldPath && _oldPath!==p.imgPath) deleteImage(_oldPath); }
+      fbSaveProduct(p); } LS.set('tt_products',catalog); closeModal('adminModal'); refreshProductViews(); toast('✏️',name+' updated'); editingId=null; return; }
   const np={id:(catalog.reduce((m,p)=>Math.max(m,p.id),0))+1,rating:4.5,...data};
   if(!isAdmin()){ var _ms=mySeller(); if(_ms){ np.sellerId=_ms.id; np.sellerName=_ms.shop||_ms.name||''; } }
-  if(apImgData) np.img=apImgData; catalog.push(np); fbSaveProduct(np);
+  if(apImgData){ np.img=apImgData; if(apImgPath) np.imgPath=apImgPath; } catalog.push(np); fbSaveProduct(np);
   LS.set('tt_products',catalog); closeModal('adminModal'); refreshProductViews(); toast('✅',name+' added to store');
 }
 function deleteProduct(id){
   const p=findP(id); if(!p) return;
   if(!canManage(p)){ toast('🔒','This product is not yours'); return; }
   if(!confirm('"'+p.name+'" ko delete karein?\nYe wapas nahi ho sakega.')) return;
+  if(p.imgPath) deleteImage(p.imgPath);
   catalog=catalog.filter(x=>x.id!==id); LS.set('tt_products',catalog); fbDeleteProduct(id);
   if(cart[id]){ delete cart[id]; LS.set('tt_cart',cart); updateCartUI(); }
   refreshProductViews(); toast('🗑',p.name+' removed');
@@ -1475,6 +1534,7 @@ function refreshProductViews(){
   if(ac&&ac.classList.contains('show')&&typeof renderSales==='function') renderSales();
   if(typeof renderRail==='function') renderRail();
 }
+function fbSaveStock(p){ if(window.db&&p){ try{ window.db.collection('products').doc(String(p.id)).set({stock:p.stock},{merge:true}); }catch(e){ console.warn('fb stock',e); } } }
 function fbSaveProduct(p){ if(window.db&&p){ try{ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }catch(e){ console.warn('fb save',e); } } }
 function fbSaveExpense(e){ if(window.db&&e){ try{ window.db.collection('expenses').doc(String(e.id)).set(JSON.parse(JSON.stringify(e))); }catch(x){ console.warn('fb exp',x); } } }
 function fbDeleteExpense(id){ if(window.db){ try{ window.db.collection('expenses').doc(String(id)).delete(); }catch(x){ console.warn('fb exp del',x); } } }
@@ -1486,14 +1546,14 @@ function fbInitSync(){ if(!window.db) return;
   window.db.collection('settings').doc('main').onSnapshot(function(d){ if(d.exists){ settings=Object.assign(settings,d.data()); LS.set('tt_settings',settings); if(typeof applySettings==='function')applySettings(); } }, function(e){console.warn('settings sync',e);});
   window.db.collection('categories').onSnapshot(function(snap){ if(snap.empty){ CATEGORIES.forEach(function(c){ window.db.collection('categories').doc(String(c.id)).set(JSON.parse(JSON.stringify(c))); }); return; } var list=snap.docs.map(function(d){return d.data();}); if(!list.some(function(c){return c.id==='all';})) list.unshift({id:'all',name:'All',ic:'🛒'}); CATEGORIES=list; LS.set('tt_categories',CATEGORIES); if(typeof renderCats==='function')renderCats(); if(typeof renderGrid==='function')renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('categories sync',err); });
 }
-var _selSyncOn=false;
+var _selSyncOn=false; var _selUnsub=null;
 function fbSellerSync(){
   if(!window.db||_selSyncOn) return;
   var m=(typeof mySeller==='function')?mySeller():null;
   if(!m||m.status!=='approved') return;
   _selSyncOn=true;
   try{
-    window.db.collection('sellerSales').where('sellerId','==',String(m.id)).onSnapshot(function(snap){
+    _selUnsub=window.db.collection('sellerSales').where('sellerId','==',String(m.id)).onSnapshot(function(snap){
       mySales=snap.docs.map(function(d){return d.data();});
       LS.set('tt_mysales',mySales);
       if(typeof updateSellerBadge==='function')updateSellerBadge();
@@ -1504,33 +1564,102 @@ function fbSellerSync(){
   }catch(e){ console.warn('sellerSales',e); }
 }
 var _admSyncOn=false;
-var _usrSyncOn=false;
+var _usrSyncOn=false; var _usrSyncTries=0; var _usrUnsub=[];
 function fbUserSync(){
   if(!window.db||_usrSyncOn) return;
   if(typeof isAdmin==='function' && isAdmin()) return;
   var u=(typeof currentUser==='function')?currentUser():null;
-  if(!u||!u.email) return;
-  _usrSyncOn=true;
+  /* profile abhi load ho raha ho to thori der baad dobara koshish karein */
+  if(!u||!u.email){ if(_usrSyncTries++ < 25) setTimeout(fbUserSync,700); return; }
+  _usrSyncOn=true; _usrSyncTries=0;
   try{
-    window.db.collection('messages').where('email','==',String(u.email)).onSnapshot(function(snap){
+    /* ---- apna seller record (har device par) ---- */
+    _usrUnsub.push(window.db.collection('sellers').doc(String(u.email)).onSnapshot(function(d){
+      var em=String(u.email);
+      if(d && d.exists){
+        var rec=d.data()||{}; if(!rec.id) rec.id=em;
+        var i=sellers.findIndex(function(x){ return String(x.id)===em; });
+        if(i>=0) sellers[i]=Object.assign({},sellers[i],rec); else sellers.push(rec);
+      } else {
+        sellers=sellers.filter(function(x){ return String(x.id)!==em; });
+      }
+      LS.set('tt_sellers',sellers);
+      if(typeof onMySellerChange==='function') onMySellerChange();
+    }, function(e){ console.warn('mera seller sync',e); }));
+
+    /* ---- apni job application (har device par) ---- */
+    _usrUnsub.push(window.db.collection('jobApplications').where('email','==',String(u.email)).onSnapshot(function(snap){
+      var em=String(u.email);
+      var mine=snap.docs.map(function(d){ return d.data(); });
+      var ids={}; mine.forEach(function(j){ ids[String(j.id)]=1; });
+      /* apni purani local copies hata kar server wali daal dein */
+      jobs=jobs.filter(function(j){ return !ids[String(j.id)] && String(j.email||'')!==em; }).concat(mine);
+      LS.set('tt_jobs',jobs);
+      if(typeof onMyJobChange==='function') onMyJobChange();
+    }, function(e){ console.warn('meri job sync',e); }));
+
+    _usrUnsub.push(window.db.collection('messages').where('email','==',String(u.email)).onSnapshot(function(snap){
       messages=snap.docs.map(function(d){ return d.data(); })
         .sort(function(a,b){ return String(a.id)>String(b.id)?1:-1; });
       LS.set('tt_messages',messages);
       var hm=document.getElementById('helpModal');
       if(hm&&hm.classList.contains('show')&&typeof renderHpThread==='function') renderHpThread();
       if(typeof updateMsgBadge==='function') updateMsgBadge();
-    }, function(e){ console.warn('meri chat sync',e); });
-    window.db.collection('orders').where('userEmail','==',String(u.email)).onSnapshot(function(snap){
+    }, function(e){ console.warn('meri chat sync',e); }));
+    _usrUnsub.push(window.db.collection('orders').where('userEmail','==',String(u.email)).onSnapshot(function(snap){
       allOrders=snap.docs.map(function(d){ return d.data(); })
         .sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
       var am=document.getElementById('acctModal');
       if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct();
-    }, function(e){ console.warn('mere orders sync',e); });
+      if(typeof checkOrderUpdates==='function') checkOrderUpdates();
+    }, function(e){ console.warn('mere orders sync',e); }));
   }catch(e){ console.warn('user sync',e); }
+}
+/* logout par purane listeners band karein, warna doosra account purana data dekhega */
+function fbUserSyncStop(){
+  try{ _usrUnsub.forEach(function(f){ try{ f&&f(); }catch(e){} }); }catch(e){}
+  _usrUnsub=[]; _usrSyncOn=false; _usrSyncTries=0;
+  try{ if(_selUnsub) _selUnsub(); }catch(e){}
+  _selUnsub=null; _selSyncOn=false;
+}
+/* apni job application update hui -> UI refresh */
+function onMyJobChange(){
+  var jm=document.getElementById('jobModal');
+  if(jm&&jm.classList.contains('show')&&typeof fillJobForm==='function') fillJobForm();
+  var am=document.getElementById('acctModal');
+  if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct();
+  if(typeof updateJobsBadge==='function') updateJobsBadge();
+}
+
+/* apne seller record mein koi tabdeeli aayi -> UI refresh + approval notification */
+var _selSeen=LS.get('tt_sellerseen',null);
+function onMySellerChange(){
+  var me=(typeof mySeller==='function')?mySeller():null;
+  var st=me?String(me.status||'pending'):'';
+
+  if(st && _selSeen && _selSeen!==st){
+    if(st==='approved')      toast('\uD83C\uDF89','Mubarak! Aap ka seller account approve ho gaya \u2014 ab products daal sakte hain');
+    else if(st==='rejected') toast('\u2715','Seller application manzoor nahi hui');
+  }
+  if(st!==_selSeen){ _selSeen=st; LS.set('tt_sellerseen',_selSeen); }
+
+  if(st==='approved' && !_selSyncOn && typeof fbSellerSync==='function') fbSellerSync();
+
+  if(typeof updateShopBtn==='function')    updateShopBtn();
+  if(typeof updateSellerBadge==='function')updateSellerBadge();
+  if(typeof renderGrid==='function')       renderGrid();
+  var sm=document.getElementById('sellModal');
+  if(sm&&sm.classList.contains('show')&&typeof renderSellPage==='function') renderSellPage();
+  var shm=document.getElementById('shopModal');
+  if(shm&&shm.classList.contains('show')&&typeof renderMyShop==='function') renderMyShop();
+  var am=document.getElementById('acctModal');
+  if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct();
+  var pm=document.getElementById('productsModal');
+  if(pm&&pm.classList.contains('show')&&typeof renderProductsAdmin==='function') renderProductsAdmin();
 }
 function fbAdminSync(){ if(!window.db||_admSyncOn||!isAdmin()) return; _admSyncOn=true;
   window.db.collection('expenses').onSnapshot(function(snap){ expenses=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return (b.ts||0)-(a.ts||0);}); LS.set('tt_expenses',expenses); var sm=document.getElementById('salesModal'); if(sm&&sm.classList.contains('show')&&typeof renderSales==='function')renderSales(); }, function(e){console.warn('expenses sync',e);});
-  window.db.collection('orders').onSnapshot(function(snap){ allOrders=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(b.id)>String(a.id)?1:-1;}); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); if(typeof updateOrdersBadge==='function')updateOrdersBadge(); var om=document.getElementById('ordersModal'); if(om&&om.classList.contains('show')&&typeof renderOrders==='function')renderOrders(); var sm=document.getElementById('salesModal'); if(sm&&sm.classList.contains('show')&&typeof renderSales==='function')renderSales(); }, function(e){console.warn('order sync',e);});
+  window.db.collection('orders').onSnapshot(function(snap){ allOrders=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(b.id)>String(a.id)?1:-1;}); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); if(typeof updateOrdersBadge==='function')updateOrdersBadge(); var om=document.getElementById('ordersModal'); if(om&&om.classList.contains('show')&&typeof renderOrders==='function')renderOrders(); var sm=document.getElementById('salesModal'); if(sm&&sm.classList.contains('show')&&typeof renderSales==='function')renderSales(); if(typeof checkOrderUpdates==='function')checkOrderUpdates(); }, function(e){console.warn('order sync',e);});
   window.db.collection('users').onSnapshot(function(snap){ users=snap.docs.map(function(d){return d.data();}); if(!users.some(function(u){return u.email===ADMIN_EMAIL;})) users.push({name:'Store Admin',email:ADMIN_EMAIL,provider:'admin'}); LS.set('tt_users',users); updateAcctLabel(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('users sync',e);});
   window.db.collection('invoices').onSnapshot(function(snap){ invoices=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id)>String(b.id)?1:-1;}); LS.set('tt_invoices',invoices); var _bm=document.getElementById('billModal'); if(_bm&&_bm.classList.contains('show')&&typeof renderBillInvoices==='function')renderBillInvoices(); var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); }, function(e){console.warn('inv sync',e);});
   window.db.collection('purchases').onSnapshot(function(snap){ purchases=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return (a.serial||0)-(b.serial||0);}); LS.set('tt_purchases',purchases); var _pm=document.getElementById('purchaseModal'); if(_pm&&_pm.classList.contains('show')&&typeof renderPurchases==='function')renderPurchases(); }, function(e){console.warn('pur sync',e);});
@@ -1823,7 +1952,7 @@ function setOrderStatus(id,status){ var o=allOrders.find(function(x){return Stri
     if(status==='Accepted'){ _u.acceptedAt=stamp; _u.deliveredAt=null; _u.cancelledAt=null; }
     else if(status==='Delivered') _u.deliveredAt=stamp;
     else if(status==='Cancelled') _u.cancelledAt=stamp;
-    window.db.collection('orders').doc(String(id)).set(_u,{merge:true}); }catch(e){ console.warn('order status',e); } } renderOrders(); updateOrdersBadge(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); toast(status==='Accepted'?'✅':'❌','Order '+id+' '+status); }
+    window.db.collection('orders').doc(String(id)).set(_u,{merge:true}); }catch(e){ console.warn('order status',e); } } renderOrders(); updateOrdersBadge(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function')renderAcct(); if(typeof checkOrderUpdates==='function')checkOrderUpdates(); toast(status==='Accepted'?'✅':'❌','Order '+id+' '+status); }
 function openProductView(id){ var p=findP(id); if(!p) return; var off=p.old?Math.round((1-p.price/p.old)*100):0; $('#pvBody').innerHTML=`<div style="text-align:center"><div onclick="openZoom(${p.id})" title="Bara karne ke liye click karein" style="position:relative;height:min(62vw,300px);border-radius:14px;background:${CAT_BG[p.cat]||'#eef2f0'};display:grid;place-items:center;overflow:hidden;margin-bottom:14px;font-size:70px;cursor:zoom-in">${p.emoji||'📦'}<img src="${imgUrl(p)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'"><span style="position:absolute;right:9px;bottom:9px;background:rgba(15,23,42,.6);color:#fff;font-size:11px;font-weight:700;padding:4px 9px;border-radius:8px;pointer-events:none">\ud83d\udd0d Bara karein</span></div><div style="font-size:12.5px;color:#b8860b;font-weight:600">⭐ ${(p.rating||4.5).toFixed(1)}</div><h2 style="margin:6px 0 2px">${p.name}</h2><div style="color:var(--muted);font-size:13px">${p.unit||''}</div>
   ${p.sellerId?`<div style="display:inline-flex;align-items:center;gap:8px;background:#faf5ff;border:1px solid #e9d5ff;border-radius:11px;padding:8px 14px;margin-top:10px">
     <span style="font-size:18px">🏪</span>
@@ -1872,9 +2001,9 @@ function placeOrder(){
   if(!ordersAll[u.email]) ordersAll[u.email]=[];
   ordersAll[u.email].push(order); LS.set('tt_orders',ordersAll); fbSaveOrder(order,u.email);
   makeSellerLines(items,order.id,'Online',order.date,order.time);
-  items.forEach(function(it){ var p=findP(it.pid); if(p&&hasStock(p)){ p.stock=Math.max(0,p.stock-it.qty); fbSaveProduct(p); } });
+  items.forEach(function(it){ var p=findP(it.pid); if(p&&hasStock(p)){ p.stock=Math.max(0,p.stock-it.qty); fbSaveStock(p); } });
   LS.set('tt_products',catalog); renderGrid();
-  cart={}; LS.set('tt_cart',cart); updateCartUI(); closeModal('checkoutModal'); $('#confId').textContent='#'+order.id; openModal('confirmModal');
+  cart={}; LS.set('tt_cart',cart); updateCartUI(); closeModal('checkoutModal'); $('#confId').textContent='#'+order.id; if(typeof markOrderSeen==='function')markOrderSeen(order.id,order.status); if(typeof syncMyOrdersUI==='function')syncMyOrdersUI(); openModal('confirmModal');
 }
 
 function setVh(){ document.documentElement.style.setProperty('--vh', (window.innerHeight*0.01)+'px'); }
@@ -1932,8 +2061,99 @@ function renderCarousel(){const box=document.getElementById('slides');if(!box)re
 function bannerSection(){return `<div class="acct-sec"><h4>Manage Banners (Status) <span style="text-transform:none;letter-spacing:0;color:var(--muted)">${banners.length} ads</span></h4><div class="admin-panel" style="background:#fff7f2;border-color:var(--green-light)"><button class="admin-add" onclick="openAddBanner()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add Banner</button><div class="plist">${banners.map((b,i)=>`<div class="padmin"><div class="pe" style="background:${b.bg};color:#fff;font-size:18px">${b.em||''}</div><div class="pinfo"><b>${b.h2}</b><small>${b.st}</small></div><button class="pdel" title="Delete" onclick="deleteBanner(${i})" style="color:#ef4444">🗑</button></div>`).join('')}</div></div></div>`;}
 function openBannerMgr(){ renderBannerMgr(); openModal('bannerMgrModal'); }
 function renderBannerMgr(){ var el=document.getElementById('bmgList'); if(!el)return; if(!banners.length){ el.innerHTML='<div style="text-align:center;color:var(--muted);padding:14px;font-size:13px">Koi banner nahi. Upar se photo upload karein.</div>'; return; } el.innerHTML='<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Current banners</div>'+banners.map(function(b,i){ var thumb=b.img?('<img src="'+b.img+'" style="width:58px;height:40px;border-radius:6px;object-fit:cover">'):('<div class="pe" style="background:'+(b.bg||'#ccc')+';color:#fff;font-size:16px;width:58px;height:40px;border-radius:6px;display:grid;place-items:center">'+(b.em||'🛍️')+'</div>'); return '<div class="padmin"><div style="display:flex;align-items:center;gap:10px">'+thumb+'<div class="pinfo"><b>'+(b.img?'Photo banner':(b.h2||''))+'</b><small>'+(b.img?'Uploaded image':(b.st||''))+'</small></div></div><button class="pdel" title="Delete" onclick="deleteBanner('+i+')" style="color:#ef4444">🗑</button></div>'; }).join(''); }
-function compressImg(file,cb){ var r=new FileReader(); r.onload=function(e){ var im=new Image(); im.onload=function(){ var mw=1100; var sc=Math.min(1,mw/im.width); var w=Math.round(im.width*sc),h=Math.round(im.height*sc); var c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(im,0,0,w,h); cb(c.toDataURL('image/jpeg',0.72)); }; im.src=e.target.result; }; r.readAsDataURL(file); }
-function uploadBannerImg(input){ var f=input.files&&input.files[0]; if(!f)return; toast('⏳','Photo lag rahi hai...'); compressImg(f,function(data){ var b={id:'B'+Date.now(),img:data}; banners.unshift(b); LS.set('tt_banners',banners); fbSaveBanner(b); cSlide=0; renderCarousel(); renderBannerMgr(); if(typeof renderAcct==='function')renderAcct(); toast('✅','Banner photo add ho gayi'); }); input.value=''; }
+/* ---------- IMAGE PIPELINE ----------
+   Pehle: 1100px JPEG base64 seedha Firestore doc mein (~200-350 KB per product)
+   Ab   : 900px WebP -> Firebase Storage, Firestore mein sirf chhota sa URL
+   Storage na ho (ya rules band hon) to purana base64 tarika khud chal jata hai. */
+var IMG_MAX_W=900, IMG_Q=0.72;
+var _stgOff=false;   /* Storage abhi on nahi (Blaze plan nahi) -> seedha base64 */
+function _canvasBlob(c,cb){
+  var type=(function(){ try{ return c.toDataURL('image/webp',0.7).indexOf('image/webp')===5?'image/webp':'image/jpeg'; }catch(e){ return 'image/jpeg'; } })();
+  if(c.toBlob){ c.toBlob(function(b){ cb(b,type); }, type, IMG_Q); return; }
+  var d=c.toDataURL(type,IMG_Q), bin=atob(d.split(',')[1]), arr=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
+  cb(new Blob([arr],{type:type}),type);
+}
+/* purana naam bara rehne diya taake baqi code na toote (base64 deta hai) */
+function compressImg(file,cb){
+  var r=new FileReader();
+  r.onload=function(e){ var im=new Image(); im.onload=function(){
+    var sc=Math.min(1,IMG_MAX_W/im.width);
+    var w=Math.round(im.width*sc),h=Math.round(im.height*sc);
+    var c=document.createElement('canvas'); c.width=w; c.height=h;
+    c.getContext('2d').drawImage(im,0,0,w,h);
+    cb(c.toDataURL('image/jpeg',IMG_Q));
+  }; im.src=e.target.result; };
+  r.readAsDataURL(file);
+}
+/* file -> {img:URL, imgPath:'...'}  ya fallback  {img:dataURL} */
+function putImage(file,folder,cb){
+  var r=new FileReader();
+  r.onload=function(e){ var im=new Image(); im.onload=function(){
+    var sc=Math.min(1,IMG_MAX_W/im.width);
+    var w=Math.round(im.width*sc),h=Math.round(im.height*sc);
+    var c=document.createElement('canvas'); c.width=w; c.height=h;
+    c.getContext('2d').drawImage(im,0,0,w,h);
+    if(!window.stg||_stgOff){ cb({img:c.toDataURL('image/jpeg',IMG_Q)}); return; }
+    _canvasBlob(c,function(blob,type){
+      var ext=(type==='image/webp')?'webp':'jpg';
+      var path=folder+'/'+Date.now()+'_'+Math.floor(Math.random()*100000)+'.'+ext;
+      try{
+        window.stg.ref(path).put(blob,{contentType:type,cacheControl:'public,max-age=31536000'})
+          .then(function(snap){ return snap.ref.getDownloadURL(); })
+          .then(function(url){ cb({img:url,imgPath:path}); })
+          .catch(function(err){ console.warn('storage upload',err); _stgOff=true; cb({img:c.toDataURL('image/jpeg',IMG_Q)}); });
+      }catch(err){ console.warn('storage',err); _stgOff=true; cb({img:c.toDataURL('image/jpeg',IMG_Q)}); }
+    });
+  }; im.src=e.target.result; };
+  r.readAsDataURL(file);
+}
+/* Storage se photo bhi hata dein — warna delete ke baad bhi jagah ghirti rahegi */
+/* Purani base64 photos (jo Firestore doc ke andar padi hain) ko Storage par le jayen.
+   Firestore ki jagah khali ho jati hai aur site kaafi tezi se khulti hai. */
+function _dataUrlToBlob(d){
+  var parts=String(d).split(','), mime=(parts[0].match(/:(.*?);/)||[])[1]||'image/jpeg';
+  var bin=atob(parts[1]), arr=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
+  return new Blob([arr],{type:mime});
+}
+function _moveOneToStorage(obj,folder,save,done){
+  var blob=_dataUrlToBlob(obj.img);
+  var ext=(blob.type==='image/webp')?'webp':(blob.type==='image/png'?'png':'jpg');
+  var path=folder+'/'+Date.now()+'_'+Math.floor(Math.random()*100000)+'.'+ext;
+  window.stg.ref(path).put(blob,{contentType:blob.type,cacheControl:'public,max-age=31536000'})
+    .then(function(sn){ return sn.ref.getDownloadURL(); })
+    .then(function(url){ obj.img=url; obj.imgPath=path; save(obj); done(true); })
+    .catch(function(e){ console.warn('migrate',e); done(false); });
+}
+function migrateImagesToStorage(){
+  if(!isAdmin()){ toast('\uD83D\uDD12','Sirf admin'); return; }
+  if(!window.stg||_stgOff){ toast('\u26A0\uFE0F','Firebase Storage abhi on nahi \u2014 pehle Blaze plan + Storage enable karein'); return; }
+  _stgOff=false;
+  var jobsList=[];
+  catalog.forEach(function(p){ if(p.img && String(p.img).slice(0,5)==='data:') jobsList.push({o:p,f:'products',s:fbSaveProduct}); });
+  banners.forEach(function(b){ if(b.img && String(b.img).slice(0,5)==='data:') jobsList.push({o:b,f:'banners',s:fbSaveBanner}); });
+  if(!jobsList.length){ toast('\u2705','Sab photos pehle se Storage par hain'); return; }
+  if(!confirm(jobsList.length+' photos Storage par shift karni hain?\nFirestore ki kaafi jagah khali ho jayegi.')) return;
+  var i=0, ok=0;
+  (function next(){
+    if(i>=jobsList.length){
+      LS.set('tt_products',catalog); LS.set('tt_banners',banners);
+      if(typeof refreshProductViews==='function') refreshProductViews();
+      if(typeof renderCarousel==='function') renderCarousel();
+      toast('\u2705', ok+'/'+jobsList.length+' photos Storage par chali gayin');
+      return;
+    }
+    var j=jobsList[i++];
+    toast('\u23F3','Shift ho rahi hai '+i+'/'+jobsList.length+'...');
+    _moveOneToStorage(j.o,j.f,j.s,function(good){ if(good) ok++; setTimeout(next,120); });
+  })();
+}
+function deleteImage(path){
+  if(!path||!window.stg) return;
+  try{ window.stg.ref(String(path))['delete']().catch(function(e){ console.warn('img del',e); }); }catch(e){}
+}
+function uploadBannerImg(input){ var f=input.files&&input.files[0]; if(!f)return; toast('⏳','Photo upload ho rahi hai...'); putImage(f,'banners',function(res){ var data=res.img; var b={id:'B'+Date.now(),img:data,imgPath:res.imgPath||undefined}; banners.unshift(b); LS.set('tt_banners',banners); fbSaveBanner(b); cSlide=0; renderCarousel(); renderBannerMgr(); if(typeof renderAcct==='function')renderAcct(); toast('✅','Banner photo add ho gayi'); }); input.value=''; }
 function fbSaveBanner(b){ if(window.db&&b){ try{ window.db.collection('banners').doc(String(b.id||('B'+Date.now()))).set(JSON.parse(JSON.stringify(b))); }catch(e){ console.warn('fb banner',e); } } }
 function fbDeleteBanner(id){ if(window.db&&id){ try{ window.db.collection('banners').doc(String(id)).delete(); }catch(e){} } }
 var purItems=[];
@@ -2509,7 +2729,7 @@ function saveSettings(){ var h=document.getElementById('setHelp'); var st=docume
   var st1=document.getElementById('setStripText'); if(st1) settings.stripText=(st1.value||'').trim();
   var st2=document.getElementById('setStripOff'); if(st2) settings.stripOff=(st2.value||'').trim();
   var ls=document.getElementById('setLowStock'); if(ls){ var lv=parseInt(ls.value,10); settings.lowStock=(isNaN(lv)||lv<0)?5:lv; } var sc=document.getElementById('setSellComm'); if(sc){ var sv=parseFloat(sc.value); settings.sellerCommission=(isNaN(sv)||sv<0)?0:sv; } var em=document.getElementById('setEmail'); if(em){ settings.email=(em.value||'').trim(); } settings.help=((h&&h.value)||'').trim(); settings.store=((st&&st.value)||'').trim(); if(cm){ var cv=parseFloat(cm.value); settings.commission=(isNaN(cv)||cv<0)?0:cv; } LS.set('tt_settings',settings); fbSaveSettings(); applySettings(); if(typeof renderAcct==='function'){var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show'))renderAcct();} toast('✅','Settings save ho gayi'); }
-function settingsSection(){ return '<div class="acct-sec"><h4>Store Settings</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="field"><label>Help &amp; Support Number</label><input id="setHelp" value="'+esc(settings.help||'')+'" placeholder="0300-1234567"></div><div class="field"><label>Store Name</label><input id="setStore" value="'+esc(settings.store||'')+'" placeholder="TEETOO"></div><div class="field"><label>Support Email</label><input id="setEmail" type="email" value="'+esc(supportEmail())+'" placeholder="teetoo@teetoo9.com"></div><div class="field"><label>Employee Commission (%)</label><input id="setComm" type="number" min="0" step="any" value="'+esc(String(commissionPct()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Har employee ki sale par itne percent commission bane gi. Aadha percent bhi chalta hai — jaise 2.5 ya 7.25</div></div><div class="field"><label>Delivery Fee (Rs)</label><input id="setDelFee" type="number" min="0" value="'+esc(String(deliveryFeeAmt()))+'" placeholder="99"></div><div class="field"><label>Free delivery is raqam se upar (Rs)</label><input id="setFreeOver" type="number" min="0" value="'+esc(String(freeOverAmt()))+'" placeholder="2000"></div><div class="field"><label>Har delivery par apna kharcha (Rs)</label><input id="setDelCost" type="number" min="0" value="'+esc(String(deliveryCostAmt()))+'" placeholder="0"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Rider ko har order par jitna kharcha aata hai. Accounts mein ye khud ba khud nafe se kat jayega. 0 rakhein to sirf wo kharcha ginega jo aap Kharcha page par khud likhenge.</div></div><div class="field"><label>Deliver to \u2014 kya likha ho</label><input id="setDeliverTo" value="'+esc(settings.deliverTo||'Home')+'" placeholder="Home"></div><div class="field"><label>Ticker \u2014 bara text</label><input id="setStripText" value="'+esc(settings.stripText||'')+'" placeholder="END OF MONTH"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Dono khane khali chhor dein to ticker bilkul chhup jayega.</div></div><div class="field"><label>Ticker \u2014 right side ka text</label><input id="setStripOff" value="'+esc(settings.stripOff||'')+'" placeholder="UPTO 80% OFF"></div><div class="field"><label>Low stock warning (kitne se kam par)</label><input id="setLowStock" type="number" min="0" value="'+esc(String(lowStockLimit()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Is se kam quantity bache to Inventory mein "kam bache" ka warning aayega.</div></div><div class="field"><label>Seller Commission (%) — default</label><input id="setSellComm" type="number" min="0" step="any" value="'+esc(String(sellerCommDefault()))+'" placeholder="10"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Seller ki har sale par T.T itne percent rakhega. Kisi ek seller ka rate alag karna ho to Sellers page se badlein.</div></div><button class="btn-primary" style="margin-top:6px" onclick="saveSettings()">Save Settings</button><div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted);text-align:center">Site version: <b style="color:var(--green-dark);font-family:monospace">'+APP_VERSION+'</b></div></div></div>'; }
+function settingsSection(){ return '<div class="acct-sec"><h4>Store Settings</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="field"><label>Help &amp; Support Number</label><input id="setHelp" value="'+esc(settings.help||'')+'" placeholder="0300-1234567"></div><div class="field"><label>Store Name</label><input id="setStore" value="'+esc(settings.store||'')+'" placeholder="TEETOO"></div><div class="field"><label>Support Email</label><input id="setEmail" type="email" value="'+esc(supportEmail())+'" placeholder="teetoo@teetoo9.com"></div><div class="field"><label>Employee Commission (%)</label><input id="setComm" type="number" min="0" step="any" value="'+esc(String(commissionPct()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Har employee ki sale par itne percent commission bane gi. Aadha percent bhi chalta hai — jaise 2.5 ya 7.25</div></div><div class="field"><label>Delivery Fee (Rs)</label><input id="setDelFee" type="number" min="0" value="'+esc(String(deliveryFeeAmt()))+'" placeholder="99"></div><div class="field"><label>Free delivery is raqam se upar (Rs)</label><input id="setFreeOver" type="number" min="0" value="'+esc(String(freeOverAmt()))+'" placeholder="2000"></div><div class="field"><label>Har delivery par apna kharcha (Rs)</label><input id="setDelCost" type="number" min="0" value="'+esc(String(deliveryCostAmt()))+'" placeholder="0"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Rider ko har order par jitna kharcha aata hai. Accounts mein ye khud ba khud nafe se kat jayega. 0 rakhein to sirf wo kharcha ginega jo aap Kharcha page par khud likhenge.</div></div><div class="field"><label>Deliver to \u2014 kya likha ho</label><input id="setDeliverTo" value="'+esc(settings.deliverTo||'Home')+'" placeholder="Home"></div><div class="field"><label>Ticker \u2014 bara text</label><input id="setStripText" value="'+esc(settings.stripText||'')+'" placeholder="END OF MONTH"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Dono khane khali chhor dein to ticker bilkul chhup jayega.</div></div><div class="field"><label>Ticker \u2014 right side ka text</label><input id="setStripOff" value="'+esc(settings.stripOff||'')+'" placeholder="UPTO 80% OFF"></div><div class="field"><label>Low stock warning (kitne se kam par)</label><input id="setLowStock" type="number" min="0" value="'+esc(String(lowStockLimit()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Is se kam quantity bache to Inventory mein "kam bache" ka warning aayega.</div></div><div class="field"><label>Seller Commission (%) — default</label><input id="setSellComm" type="number" min="0" step="any" value="'+esc(String(sellerCommDefault()))+'" placeholder="10"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Seller ki har sale par T.T itne percent rakhega. Kisi ek seller ka rate alag karna ho to Sellers page se badlein.</div></div><button class="btn-primary" style="margin-top:6px" onclick="saveSettings()">Save Settings</button><div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)"><button class="add" style="width:100%;background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;font-weight:800" onclick="migrateImagesToStorage()">\uD83D\uDDBC\uFE0F Purani photos Storage par shift karein</button><div style="font-size:11.5px;color:var(--muted);margin-top:6px;text-align:center">Photos Firestore doc ke andar se nikal kar Storage mein chali jayengi \u2014 jagah bachegi aur site tez ho jayegi.</div></div><div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted);text-align:center">Site version: <b style="color:var(--green-dark);font-family:monospace">'+APP_VERSION+'</b></div></div></div>'; }
 function copyRefMy(){ var u=currentUser(); if(!u)return; var code=u.refCode||('TT'+String(u.phone||'').slice(-6)); try{ navigator.clipboard.writeText(code); }catch(e){} toast('📋','Code copy: '+code); }
 function referralSection(){ var u=currentUser(); if(!u||isAdmin())return ''; var code=u.refCode||('TT'+String(u.phone||'').slice(-6)); var cnt=u.refCount||0; return '<div class="acct-sec"><h4>Refer &amp; Earn</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line);text-align:center"><div style="font-size:12px;color:var(--muted)">Aap ka referral code</div><div style="font-size:24px;font-weight:800;letter-spacing:2px;color:var(--green-dark);margin:6px 0">'+esc(code)+'</div><button class="add" style="width:auto;padding:6px 16px;margin:0 auto" onclick="copyRefMy()">Copy code</button><div style="margin-top:12px;font-size:13px">Total referrals: <b style="color:var(--green-dark);font-size:16px">'+cnt+'</b></div><div style="font-size:11.5px;color:var(--muted);margin-top:6px">Ye code doston ko dein \u2014 jab wo is se register karenge, aap ka count barhega.</div></div></div>'; }
 function sellerCtaSection(){
@@ -2616,7 +2836,8 @@ function mySalesSection(){
     +'</tr></tfoot></table></div></div>';
 }
 function jobApplySection(){ if(isAdmin())return ''; var app=myJobApp(); return '<div class="acct-sec"><h4>Apply for Job</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line);text-align:center">'+(app?'<div style="font-size:12px;color:var(--green-dark);font-weight:700;margin-bottom:8px">✅ Application submitted — '+esc(app.date||'')+'</div>':'<div style="font-size:12.5px;color:var(--muted);margin-bottom:10px">Hamare saath kaam karne ke liye apply karein — naam, phone, address, father name, city aur professional ID card number chahiye.</div>')+'<button class="add" style="width:auto;padding:8px 20px;margin:0 auto;background:var(--green);color:#fff" onclick="openJobApply()">'+(app?'✏️ Update Application':'💼 Apply Now')+'</button></div></div>'; }
-function openJobApply(){ if(isAdmin()){ closeModal('acctModal'); openJobsAdmin(); return; } if(!currentUser()){ closeModal('acctModal'); toast('\ud83d\udd12','Pehle login karein \u2014 job apply karne ke liye account zaroori hai'); openAuth(); return; } var u=currentUser(); var app=myJobApp(); $('#jName').value=app?(app.name||''):(u?u.name||'':''); $('#jPhone').value=app?(app.phone||''):(u?u.phone||'':''); $('#jAddr').value=app?(app.address||''):(u?u.address||'':''); $('#jFather').value=app?(app.father||''):''; $('#jCity').value=app?(app.city||''):''; $('#jIdCard').value=app?(app.idCard||''):''; $('#jGender').value=app?(app.gender||''):''; $('#jEdu').value=app?(app.education||''):''; $('#jExp').value=app?(app.experience||''):''; ['jfName','jfPhone','jfAddr','jfFather','jfCity','jfId','jfGender','jfEdu','jfExp'].forEach(function(id){ var el=document.getElementById(id); if(el)el.classList.remove('invalid'); }); closeModal('acctModal'); closeModal('authModal'); openModal('jobModal'); }
+function fillJobForm(){ var u=currentUser(); var app=myJobApp(); if(!document.getElementById('jName')) return; $('#jName').value=app?(app.name||''):(u?u.name||'':''); $('#jPhone').value=app?(app.phone||''):(u?u.phone||'':''); $('#jAddr').value=app?(app.address||''):(u?u.address||'':''); $('#jFather').value=app?(app.father||''):''; $('#jCity').value=app?(app.city||''):''; $('#jIdCard').value=app?(app.idCard||''):''; $('#jGender').value=app?(app.gender||''):''; $('#jEdu').value=app?(app.education||''):''; $('#jExp').value=app?(app.experience||''):''; ['jfName','jfPhone','jfAddr','jfFather','jfCity','jfId','jfGender','jfEdu','jfExp'].forEach(function(id){ var el=document.getElementById(id); if(el)el.classList.remove('invalid'); }); var t=document.getElementById('jobModalNote'); if(t) t.style.display=app?'block':'none'; if(t) t.innerHTML=app?('\u2705 Aap ki application pehle se mojood hai \u2014 yahan se update kar sakte hain.'+(app.refCode?(' Referral code: <b>'+esc(app.refCode)+'</b>'):'')):''; }
+function openJobApply(){ if(isAdmin()){ closeModal('acctModal'); openJobsAdmin(); return; } if(!currentUser()){ closeModal('acctModal'); toast('\ud83d\udd12','Pehle login karein \u2014 job apply karne ke liye account zaroori hai'); openAuth(); return; } fillJobForm(); closeModal('acctModal'); closeModal('authModal'); openModal('jobModal'); }
 function submitJobApply(){
   if(isAdmin()){ toast('💼','Admin job apply nahi kar sakte'); return; }
   var name=$('#jName').value.trim(), phone=$('#jPhone').value.trim().replace(/[^0-9]/g,''), addr=$('#jAddr').value.trim(), father=$('#jFather').value.trim(), city=$('#jCity').value.trim(), idc=$('#jIdCard').value.trim(), gen=$('#jGender').value, edu=$('#jEdu').value.trim(), exp=$('#jExp').value.trim();
@@ -3336,7 +3557,7 @@ function moveProduct(id,dir){
 }
 function openAddBanner(){$('#bH').value='';$('#bSt').value='';$('#bP').value='';$('#bBadge').value='';$('#bEm').value='';$('#bfH').classList.remove('invalid');$('#bBg').innerHTML=BANNER_BG.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join('');openModal('bannerModal');}
 function saveBanner(){const h=$('#bH').value.trim();if(!h){$('#bfH').classList.add('invalid');return;}$('#bfH').classList.remove('invalid');const bg=BANNER_BG[(+$('#bBg').value)||0][1];var _nb={id:'B'+Date.now(),st:$('#bSt').value.trim()||'⭐ T.T Offer',h2:h,p:$('#bP').value.trim(),badge:$('#bBadge').value.trim()||'Shop Now',em:$('#bEm').value.trim()||'🛍️',bg};banners.push(_nb);LS.set('tt_banners',banners);fbSaveBanner(_nb);closeModal('bannerModal');renderCarousel();var _bm=document.getElementById('bannerMgrModal');if(_bm&&_bm.classList.contains('show'))renderBannerMgr();renderAcct();toast('✅','Banner added');}
-function deleteBanner(i){var _d=banners[i]; if(!_d) return; if(!confirm('Ye banner delete karein?\nYe wapas nahi ho sakega.')) return; banners.splice(i,1);if(_d&&_d.id)fbDeleteBanner(_d.id);LS.set('tt_banners',banners);renderCarousel();var _m=document.getElementById('bannerMgrModal');if(_m&&_m.classList.contains('show'))renderBannerMgr();renderAcct();toast('🗑','Banner removed');}
+function deleteBanner(i){var _d=banners[i]; if(!_d) return; if(!confirm('Ye banner delete karein?\nYe wapas nahi ho sakega.')) return; banners.splice(i,1);if(_d&&_d.imgPath)deleteImage(_d.imgPath);if(_d&&_d.id)fbDeleteBanner(_d.id);LS.set('tt_banners',banners);renderCarousel();var _m=document.getElementById('bannerMgrModal');if(_m&&_m.classList.contains('show'))renderBannerMgr();renderAcct();toast('🗑','Banner removed');}
 function openSellPage(){
   if(isAdmin()){ closeModal('acctModal'); openSellersAdmin(); return; }
   if(!currentUser()){ closeModal('acctModal'); toast('\ud83d\udd12','Pehle login karein — seller banne ke liye account zaroori hai'); openAuth(); return; }
@@ -3415,5 +3636,187 @@ if(window.fbAuth){
   });
 }
 </script>
+<script>
+/* ================= MY ORDERS - customer order tracking & notifications ================= */
+var _ordSeen = LS.get('tt_ordseen', {});      /* { orderId: status } already seen by customer */
+var myOrdTab = 'active';
+
+function saveOrdSeen(){ LS.set('tt_ordseen', _ordSeen); }
+function markOrderSeen(id, st){ _ordSeen[String(id)] = String(st||'Confirmed'); saveOrdSeen(); }
+
+/* customer-facing label for an internal status */
+function custStatus(st){
+  st = String(st||'');
+  if(st==='Delivered')  return {k:'delivered', t:'Deliver ho gaya',      e:'\uD83D\uDE9A', c:'#1d4ed8', bg:'#dbeafe'};
+  if(st==='Accepted')   return {k:'ready',     t:'Ready to deliver',     e:'\uD83D\uDCE6', c:'#16a34a', bg:'#dcfce7'};
+  if(st==='Cancelled')  return {k:'cancelled', t:'Cancel ho gaya',       e:'\u2715',       c:'#dc2626', bg:'#fee2e2'};
+  return                       {k:'pending',   t:'Confirm hone ka intezar', e:'\u23F3',    c:'#d97706', bg:'#fef3c7'};
+}
+function custMsg(k){
+  if(k==='delivered') return {t:'\uD83C\uDF89 Aapka order deliver ho chuka hai. Shukriya!', c:'#1e40af', bg:'#dbeafe', b:'#bfdbfe'};
+  if(k==='ready')     return {t:'\uD83D\uDCE6 Order ready hai aur raaste mein hai \u2014 jald pohnch jayega.', c:'#15803d', bg:'#dcfce7', b:'#bbf7d0'};
+  if(k==='cancelled') return {t:'\u2715 Ye order cancel kar diya gaya hai. Madad ke liye Help par rabta karein.', c:'#991b1b', bg:'#fee2e2', b:'#fecaca'};
+  return {t:'\u23F3 Order mil gaya hai \u2014 shop confirm karte hi aapko yahan pata chal jayega.', c:'#b45309', bg:'#fffbeb', b:'#fde68a'};
+}
+
+/* orders belonging to the logged-in customer */
+function myOrders(){
+  var u = (typeof currentUser==='function') ? currentUser() : null;
+  if(!u || !u.email) return [];
+  var fb = (allOrders||[]).filter(function(o){ return o.userEmail===u.email || o.email===u.email; });
+  var loc = (ordersAll[u.email]||[]).slice().reverse();
+  var list = fb.length ? fb.slice() : loc;
+  /* merge: agar firestore mein kuch orders na hon to local wale bhi dikhayen */
+  if(fb.length && loc.length){
+    var have = {}; fb.forEach(function(o){ have[String(o.id)]=1; });
+    loc.forEach(function(o){ if(!have[String(o.id)]) list.push(o); });
+  }
+  return list.sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
+}
+
+/* how many of my orders changed status since I last looked */
+function myOrdUnseen(){
+  return myOrders().filter(function(o){
+    return String(_ordSeen[String(o.id)]||'') !== String(o.status||'');
+  });
+}
+
+function updateMyOrdBadge(){
+  var n = (typeof isAdmin==='function' && isAdmin()) ? 0 : myOrdUnseen().length;
+  var b = document.getElementById('myOrdCount');
+  if(b){ b.style.display = n ? 'grid' : 'none'; b.textContent = n; }
+  var nb = document.getElementById('navMyOrdCount');
+  if(nb){ nb.style.display = n ? 'grid' : 'none'; nb.textContent = n; }
+}
+
+/* show/hide the button depending on login state */
+function syncMyOrdersUI(){
+  var u   = (typeof currentUser==='function') ? currentUser() : null;
+  var adm = (typeof isAdmin==='function') && isAdmin();
+  var show = !!(u && !adm);
+  var hb = document.getElementById('myOrdersBtn'); if(hb) hb.style.display = show ? 'flex' : 'none';
+  var nb = document.getElementById('navMyOrders'); if(nb) nb.style.display = show ? 'flex' : 'none';
+  updateMyOrdBadge();
+  var m = document.getElementById('myOrdersModal');
+  if(m && m.classList.contains('show')) renderMyOrders();
+}
+
+/* fires whenever orders data changes -> toast + badge */
+var _ordFirstRun = true;
+function checkOrderUpdates(){
+  if(typeof isAdmin==='function' && isAdmin()){ updateMyOrdBadge(); return; }
+  var list = myOrders(), changed = [];
+  list.forEach(function(o){
+    var id = String(o.id), st = String(o.status||'');
+    if(!(id in _ordSeen)){ _ordSeen[id] = st; return; }   /* pehli dafa dekha - chup chaap seed */
+    if(_ordSeen[id] !== st) changed.push(o);
+  });
+  saveOrdSeen();
+  if(!_ordFirstRun && changed.length){
+    var o = changed[changed.length-1], s = custStatus(o.status);
+    toast(s.e, 'Order ' + o.id + ' \u2014 ' + s.t);
+  }
+  _ordFirstRun = false;
+  updateMyOrdBadge();
+  var m = document.getElementById('myOrdersModal');
+  if(m && m.classList.contains('show')) renderMyOrders();
+}
+
+function openMyOrders(){
+  if(typeof currentUser==='function' && !currentUser()){ if(typeof openAuth==='function') openAuth(); return; }
+  if(typeof isAdmin==='function' && isAdmin()){ if(typeof openOrders==='function') openOrders(); return; }
+  renderMyOrders();
+  openModal('myOrdersModal');
+}
+function setMyOrdTab(t){ myOrdTab = t; renderMyOrders(); }
+
+function myOrdBuckets(){
+  var b = {active:[], delivered:[], cancelled:[]};
+  myOrders().forEach(function(o){
+    var k = custStatus(o.status).k;
+    if(k==='delivered') b.delivered.push(o);
+    else if(k==='cancelled') b.cancelled.push(o);
+    else b.active.push(o);
+  });
+  return b;
+}
+
+function trackerHtml(o){
+  var k = custStatus(o.status).k;
+  if(k==='cancelled'){
+    return '<div class="trk">'
+      + '<div class="tstep done"><div class="tdot">\uD83D\uDCDD</div><div class="tlbl">Order Placed</div><div class="tdate">'+esc(o.date||'')+'</div></div>'
+      + '<div class="tstep dead"><div class="tdot">\u2715</div><div class="tlbl">Cancelled</div><div class="tdate">'+esc(o.cancelledAt||'')+'</div></div>'
+      + '</div>';
+  }
+  var lvl = (k==='delivered') ? 3 : (k==='ready' ? 2 : 1);
+  function cls(n){ return n < lvl ? 'done' : (n === lvl ? 'now' : ''); }
+  return '<div class="trk">'
+    + '<div class="tstep '+cls(1)+'"><div class="tdot">\uD83D\uDCDD</div><div class="tlbl">Order Placed</div><div class="tdate">'+esc(o.date||'')+'</div></div>'
+    + '<div class="tstep '+cls(2)+'"><div class="tdot">\uD83D\uDCE6</div><div class="tlbl">Ready to Deliver</div><div class="tdate">'+esc(o.acceptedAt||'')+'</div></div>'
+    + '<div class="tstep '+cls(3)+'"><div class="tdot">\uD83D\uDE9A</div><div class="tlbl">Delivered</div><div class="tdate">'+esc(o.deliveredAt||'')+'</div></div>'
+    + '</div>';
+}
+
+function renderMyOrders(){
+  var b = myOrdBuckets();
+  var unseen = {}; myOrdUnseen().forEach(function(o){ unseen[String(o.id)] = 1; });
+
+  var tabs = document.getElementById('myOrdTabs');
+  if(tabs){
+    tabs.innerHTML = [['active','\uD83D\uDCE6 Active',b.active.length],
+                      ['delivered','\uD83D\uDE9A Delivered',b.delivered.length],
+                      ['cancelled','\u2715 Cancelled',b.cancelled.length]]
+      .map(function(t){
+        return '<button class="otab'+(myOrdTab===t[0]?' on':'')+'" onclick="setMyOrdTab(\''+t[0]+'\')">'+t[1]+'<span class="n">'+t[2]+'</span></button>';
+      }).join('');
+  }
+
+  var list = b[myOrdTab] || [];
+  var el = document.getElementById('myOrdersList'); if(!el) return;
+
+  if(!list.length){
+    var msg = {active:['\uD83D\uDCE6','Koi active order nahi','Order karte hi uska live status yahan nazar aayega.'],
+               delivered:['\uD83D\uDE9A','Abhi kuch deliver nahi hua','Deliver hone par order yahan aa jayega.'],
+               cancelled:['\u2715','Koi cancelled order nahi','Achi baat hai.']}[myOrdTab];
+    el.innerHTML = '<div class="mo-empty"><div class="big">'+msg[0]+'</div><h3>'+msg[1]+'</h3><p>'+msg[2]+'</p></div>';
+    markAllMyOrdersSeen();
+    return;
+  }
+
+  el.innerHTML = list.map(function(o){
+    var s = custStatus(o.status), m = custMsg(s.k), isNew = !!unseen[String(o.id)];
+    var items = (o.items||[]).map(function(i){ return (i.emoji||'\uD83D\uDCE6')+' '+esc(i.name)+' \u00d7'+i.qty; }).join('  \u00b7  ');
+    return '<div class="mo-card'+(isNew?' fresh':'')+'">'
+      + '<div class="mo-top"><span style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><b>'+esc(o.id)+'</b>'
+        + (isNew ? '<span class="mo-new">NEW UPDATE</span>' : '') + '</span>'
+        + '<span class="mo-st" style="color:'+s.c+';background:'+s.bg+'">'+s.e+' '+s.t+'</span></div>'
+      + trackerHtml(o)
+      + '<div class="mo-msg" style="color:'+m.c+';background:'+m.bg+';border:1px solid '+m.b+'">'+m.t+'</div>'
+      + '<div class="mo-items">'+items+'</div>'
+      + (o.address ? '<div class="mo-addr">\uD83D\uDCCD '+esc(o.address)+(o.phone?(' \u00b7 \u260E '+esc(o.phone)):'')+'</div>' : '')
+      + '<div class="mo-foot"><span>'+esc(o.date||'')+(o.time?(' \u00b7 '+esc(o.time)):'')+' \u00b7 '+esc(o.pay||'')+'</span><b>'+money(o.total||0)+'</b></div>'
+      + '</div>';
+  }).join('');
+
+  markAllMyOrdersSeen();
+}
+
+function markAllMyOrdersSeen(){
+  var ch = false;
+  myOrders().forEach(function(o){
+    var id = String(o.id), st = String(o.status||'');
+    if(_ordSeen[id] !== st){ _ordSeen[id] = st; ch = true; }
+  });
+  if(ch) saveOrdSeen();
+  setTimeout(updateMyOrdBadge, 900);   /* thori der "NEW" highlight rehne dein */
+}
+
+/* boot */
+(function(){
+  try{ syncMyOrdersUI(); checkOrderUpdates(); }catch(e){ console.warn('myOrders init',e); }
+  setInterval(function(){ try{ updateMyOrdBadge(); }catch(e){} }, 4000);
+})();
+<\/script>
 </body>
 </html>

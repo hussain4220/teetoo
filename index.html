@@ -438,6 +438,8 @@
   /* ===== My Orders (customer) ===== */
   .mo-card{background:#fbfdfc;border:1px solid var(--line);border-radius:15px;padding:14px;margin-bottom:12px}
   .mo-card.fresh{border-color:var(--green);background:var(--green-soft);box-shadow:0 4px 14px rgba(22,163,74,.13)}
+  .mo-card.done{border-color:#86efac;background:#f0fdf4}
+  .mo-card.way{border-color:var(--green);background:#f7fef9}
   .mo-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:9px}
   .mo-top b{font-size:14px;letter-spacing:.3px}
   .mo-st{font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:8px;white-space:nowrap}
@@ -3647,14 +3649,16 @@ function markOrderSeen(id, st){ _ordSeen[String(id)] = String(st||'Confirmed'); 
 /* customer-facing label for an internal status */
 function custStatus(st){
   st = String(st||'');
-  if(st==='Delivered')  return {k:'delivered', t:'Deliver ho gaya',      e:'\uD83D\uDE9A', c:'#1d4ed8', bg:'#dbeafe'};
-  if(st==='Accepted')   return {k:'ready',     t:'Ready to deliver',     e:'\uD83D\uDCE6', c:'#16a34a', bg:'#dcfce7'};
-  if(st==='Cancelled')  return {k:'cancelled', t:'Cancel ho gaya',       e:'\u2715',       c:'#dc2626', bg:'#fee2e2'};
-  return                       {k:'pending',   t:'Confirm hone ka intezar', e:'\u23F3',    c:'#d97706', bg:'#fef3c7'};
+  if(st==='Delivered')  return {k:'delivered', t:'DELIVERED',            e:'\u2705',       c:'#15803d', bg:'#dcfce7'};
+  if(st==='Accepted')   return {k:'ready',     t:'ON THE WAY',           e:'\uD83D\uDE9A', c:'#15803d', bg:'#dcfce7'};
+  if(st==='Cancelled')  return {k:'cancelled', t:'CANCELLED',            e:'\u2715',       c:'#dc2626', bg:'#fee2e2'};
+  return                       {k:'pending',   t:'CONFIRM HO RAHA HAI',  e:'\u23F3',       c:'#d97706', bg:'#fef3c7'};
 }
 function custMsg(k){
-  if(k==='delivered') return {t:'\uD83C\uDF89 Aapka order deliver ho chuka hai. Shukriya!', c:'#1e40af', bg:'#dbeafe', b:'#bfdbfe'};
-  if(k==='ready')     return {t:'\uD83D\uDCE6 Order ready hai aur raaste mein hai \u2014 jald pohnch jayega.', c:'#15803d', bg:'#dcfce7', b:'#bbf7d0'};
+  if(k==='delivered') return {t:'\u2705 <b>Your parcel has been delivered.</b><br>Aap ka parcel pohnch gaya hai \u2014 shukriya! \uD83C\uDF89',
+                              c:'#15803d', bg:'#dcfce7', b:'#86efac'};
+  if(k==='ready')     return {t:'\uD83D\uDE9A <b>Your parcel is on the way!</b><br>Order shop se nikal chuka hai \u2014 raaste mein hai, jald pohnch jayega.',
+                              c:'#15803d', bg:'#dcfce7', b:'#86efac'};
   if(k==='cancelled') return {t:'\u2715 Ye order cancel kar diya gaya hai. Madad ke liye Help par rabta karein.', c:'#991b1b', bg:'#fee2e2', b:'#fecaca'};
   return {t:'\u23F3 Order mil gaya hai \u2014 shop confirm karte hi aapko yahan pata chal jayega.', c:'#b45309', bg:'#fffbeb', b:'#fde68a'};
 }
@@ -3713,8 +3717,12 @@ function checkOrderUpdates(){
   });
   saveOrdSeen();
   if(!_ordFirstRun && changed.length){
-    var o = changed[changed.length-1], s = custStatus(o.status);
-    toast(s.e, 'Order ' + o.id + ' \u2014 ' + s.t);
+    var o = changed[changed.length-1], k = custStatus(o.status).k;
+    var m = {ready:['\uD83D\uDE9A','Your parcel is on the way!'],
+             delivered:['\u2705','Your parcel has been delivered \u2014 shukriya!'],
+             cancelled:['\u2715','Order cancel ho gaya'],
+             pending:['\u23F3','Order confirm ho raha hai']}[k];
+    toast(m[0], 'Order ' + o.id + ' \u2014 ' + m[1]);
   }
   _ordFirstRun = false;
   updateMyOrdBadge();
@@ -3753,7 +3761,7 @@ function trackerHtml(o){
   function cls(n){ return n < lvl ? 'done' : (n === lvl ? 'now' : ''); }
   return '<div class="trk">'
     + '<div class="tstep '+cls(1)+'"><div class="tdot">\uD83D\uDCDD</div><div class="tlbl">Order Placed</div><div class="tdate">'+esc(o.date||'')+'</div></div>'
-    + '<div class="tstep '+cls(2)+'"><div class="tdot">\uD83D\uDCE6</div><div class="tlbl">Ready to Deliver</div><div class="tdate">'+esc(o.acceptedAt||'')+'</div></div>'
+    + '<div class="tstep '+cls(2)+'"><div class="tdot">\uD83D\uDE9A</div><div class="tlbl">On the way</div><div class="tdate">'+esc(o.acceptedAt||'')+'</div></div>'
     + '<div class="tstep '+cls(3)+'"><div class="tdot">\uD83D\uDE9A</div><div class="tlbl">Delivered</div><div class="tdate">'+esc(o.deliveredAt||'')+'</div></div>'
     + '</div>';
 }
@@ -3787,7 +3795,8 @@ function renderMyOrders(){
   el.innerHTML = list.map(function(o){
     var s = custStatus(o.status), m = custMsg(s.k), isNew = !!unseen[String(o.id)];
     var items = (o.items||[]).map(function(i){ return (i.emoji||'\uD83D\uDCE6')+' '+esc(i.name)+' \u00d7'+i.qty; }).join('  \u00b7  ');
-    return '<div class="mo-card'+(isNew?' fresh':'')+'">'
+    var kls = s.k==='delivered' ? ' done' : (s.k==='ready' ? ' way' : '');
+    return '<div class="mo-card'+kls+(isNew?' fresh':'')+'">'
       + '<div class="mo-top"><span style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><b>'+esc(o.id)+'</b>'
         + (isNew ? '<span class="mo-new">NEW UPDATE</span>' : '') + '</span>'
         + '<span class="mo-st" style="color:'+s.c+';background:'+s.bg+'">'+s.e+' '+s.t+'</span></div>'
@@ -3817,6 +3826,6 @@ function markAllMyOrdersSeen(){
   try{ syncMyOrdersUI(); checkOrderUpdates(); }catch(e){ console.warn('myOrders init',e); }
   setInterval(function(){ try{ updateMyOrdBadge(); }catch(e){} }, 4000);
 })();
-<\/script>
+</script>
 </body>
 </html>

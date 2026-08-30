@@ -1769,7 +1769,7 @@ function printInvoice(){ if(!billItems.length){ toast('🧾','Pehle products add
   else invoices.push(_rec);
   editingInvId=null; if(typeof renderBillEditBar==='function')renderBillEditBar();
   LS.set('tt_invoices',invoices); fbSaveInvoice(_rec); var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show'))renderAcct(); closeModal('billModal'); openModal('invoiceModal'); }
-function renderInvoiceDoc(inv){ var rows=inv.items.map(function(it){ return `<tr><td>${it.name}</td><td style="text-align:center">${it.qty}</td><td style="text-align:right">${money(it.price)}</td><td style="text-align:right">${money(it.price*it.qty)}</td></tr>`; }).join(''); document.getElementById('invoicePrint').innerHTML=`<div class="inv-doc"><div class="inv-top"><div><div class="inv-logo">TEE<span style="color:#e14d16">TOO</span></div><div class="inv-sub">Fresh Grocery • Fast Delivery</div></div><div style="text-align:right"><h2 style="margin:0;letter-spacing:2px">INVOICE</h2><div style="font-size:12px;color:#555">${inv.id}<br>${inv.date}</div></div></div>${(inv.status==='Cancelled')?'<div style="background:#fee2e2;border:2px dashed #dc2626;color:#991b1b;text-align:center;font-weight:800;letter-spacing:3px;padding:10px;border-radius:10px;margin-bottom:14px">CANCELLED \u00b7 REFUNDED</div>':''}<div class="inv-cust">Bill To: <b>${inv.cust}</b>${inv.fromOrder?`<div style="font-size:11.5px;color:#666;margin-top:3px">Order: ${inv.fromOrder}</div>`:''}${inv.address?`<div style="font-size:11.5px;color:#666">${inv.address}</div>`:''}</div><table class="inv-tbl"><thead><tr><th>Item</th><th style="text-align:center">Qty</th><th style="text-align:right">Price</th><th style="text-align:right">Amount</th></tr></thead><tbody>${rows}</tbody></table><div class="inv-tot"><div><span>Subtotal</span><b>${money(inv.sub)}</b></div>${inv.disc>0?`<div><span>Discount</span><b>- ${money(inv.disc)}</b></div>`:''}<div class="inv-grand"><span>Total</span><b>${money(inv.tot)}</b></div></div><div class="inv-thanks">Thank you for shopping with T.T!</div></div>`; }
+function renderInvoiceDoc(inv){ var rows=inv.items.map(function(it){ return `<tr><td>${it.name}</td><td style="text-align:center">${it.qty}</td><td style="text-align:right">${money(it.price)}</td><td style="text-align:right">${money(it.price*it.qty)}</td></tr>`; }).join(''); document.getElementById('invoicePrint').innerHTML=`<div class="inv-doc"><div class="inv-top"><div><div class="inv-logo">TEE<span style="color:#e14d16">TOO</span></div><div class="inv-sub">Fresh Grocery • Fast Delivery</div></div><div style="text-align:right"><h2 style="margin:0;letter-spacing:2px">INVOICE</h2><div style="font-size:12px;color:#555">${inv.id}<br>${inv.date}</div></div></div>${(inv.status==='Cancelled')?'<div style="background:#fee2e2;border:2px dashed #dc2626;color:#991b1b;text-align:center;font-weight:800;letter-spacing:3px;padding:10px;border-radius:10px;margin-bottom:14px">CANCELLED \u00b7 REFUNDED</div>':''}<div class="inv-cust">Bill To: <b>${esc(invCustName(inv))}</b>${invCustPhone(inv)?`<div style="font-size:12px;color:#444;margin-top:2px">📞 ${esc(invCustPhone(inv))}</div>`:''}${inv.fromOrder?`<div style="font-size:11.5px;color:#666;margin-top:3px">Order: ${inv.fromOrder}</div>`:''}${inv.address?`<div style="font-size:11.5px;color:#666">${inv.address}</div>`:''}</div><table class="inv-tbl"><thead><tr><th>Item</th><th style="text-align:center">Qty</th><th style="text-align:right">Price</th><th style="text-align:right">Amount</th></tr></thead><tbody>${rows}</tbody></table><div class="inv-tot"><div><span>Subtotal</span><b>${money(inv.sub)}</b></div>${inv.disc>0?`<div><span>Discount</span><b>- ${money(inv.disc)}</b></div>`:''}<div class="inv-grand"><span>Total</span><b>${money(inv.tot)}</b></div></div><div class="inv-thanks">Thank you for shopping with T.T!</div></div>`; }
 function viewInvoice(i){ if(invoices[i]){ renderInvoiceDoc(invoices[i]); openModal('invoiceModal'); } }
 function nextInvId(){
   var base='INV'+Date.now().toString().slice(-6), id=base, n=1;
@@ -1791,9 +1791,10 @@ function autoInvoice(o,stamp){
             sellerId:it.sellerId||'',sellerName:it.sellerName||'',commRate:it.commRate};
   });
   var sub=items.reduce(function(a,i){ return a+(i.price||0)*(i.qty||0); },0);
-  var cu=(typeof userByKey==='function')?userByKey(o.userEmail||o.phone):null;
+  var cu=(typeof userByKey==='function')?userByKey(o.custEmail||o.userEmail||o.phone):null;
   var rec={id:nextInvId(),date:stamp||nowStamp(),
-           cust:(cu&&cu.name)||o.userEmail||o.phone||'Online Customer',
+           cust:o.custName||(cu&&cu.name)||o.userEmail||o.phone||'Online Customer',
+           custPhone:o.phone||o.userEmail||'',
            items:items,sub:sub,disc:o.discount||0,delivery:o.delivery||0,
            tot:(typeof o.total==='number')?o.total:Math.max(0,sub-(o.discount||0)),
            fromOrder:String(o.id),status:'Active',address:o.address||''};
@@ -1845,7 +1846,7 @@ function renderBillInvoices(){
       +'</span></div></div>';
   }).join('');
 }
-function invoicesSection(){ if(!invoices.length) return `<div class="acct-sec"><h4>Invoice History</h4><div class="empty" style="padding:20px"><div class="big">🧾</div><h3>No invoices yet</h3><p>Billing se invoice banayen — yahan save hongi.</p></div></div>`; var tot=countableInvoices().reduce(function(s,v){return s+(v.tot||0);},0); var body=invoices.map(function(v,idx){return {v:v,idx:idx};}).reverse().map(function(o){ var v=o.v; return `<div class="order"${(v.status==='Cancelled')?' style="opacity:.72;border-color:#fca5a5"':''}><div class="order-top"><span style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><b>${v.id}</b>${invBadges(v)}</span><span style="display:flex;gap:6px"><button class="add" style="width:auto;padding:5px 12px;font-size:12px;margin:0" onclick="viewInvoice(${o.idx})">View / Print</button><button class="add" style="width:auto;padding:5px 12px;font-size:12px;margin:0;background:#eff6ff;color:#1e40af;border-color:#bfdbfe" onclick="editInvoice(${o.idx})">✏️ Edit</button><button class="ci-del" title="Delete" onclick="deleteInvoice(${o.idx})" style="color:#ef4444">🗑</button></span></div><div class="items">${v.items.map(function(i){return i.name+' ×'+i.qty;}).join('  ·  ')}</div><div class="ordfoot"><span>${v.date} · ${v.cust}</span><b>${money(v.tot)}</b></div></div>`; }).join(''); return `<div class="acct-sec"><h4>Invoice History <span style="text-transform:none;letter-spacing:0;color:var(--muted)">${invoices.length} bills · ${money(tot)}</span></h4>${body}</div>`; }
+function invoicesSection(){ if(!invoices.length) return `<div class="acct-sec"><h4>Invoice History</h4><div class="empty" style="padding:20px"><div class="big">🧾</div><h3>No invoices yet</h3><p>Billing se invoice banayen — yahan save hongi.</p></div></div>`; var tot=countableInvoices().reduce(function(s,v){return s+(v.tot||0);},0); var body=invoices.map(function(v,idx){return {v:v,idx:idx};}).reverse().map(function(o){ var v=o.v; return `<div class="order"${(v.status==='Cancelled')?' style="opacity:.72;border-color:#fca5a5"':''}><div class="order-top"><span style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><b>${v.id}</b>${invBadges(v)}</span><span style="display:flex;gap:6px"><button class="add" style="width:auto;padding:5px 12px;font-size:12px;margin:0" onclick="viewInvoice(${o.idx})">View / Print</button><button class="add" style="width:auto;padding:5px 12px;font-size:12px;margin:0;background:#eff6ff;color:#1e40af;border-color:#bfdbfe" onclick="editInvoice(${o.idx})">✏️ Edit</button><button class="ci-del" title="Delete" onclick="deleteInvoice(${o.idx})" style="color:#ef4444">🗑</button></span></div><div class="items">${v.items.map(function(i){return i.name+' ×'+i.qty;}).join('  ·  ')}</div><div class="ordfoot"><span>${v.date} · ${esc(invCustName(v))}</span><b>${money(v.tot)}</b></div></div>`; }).join(''); return `<div class="acct-sec"><h4>Invoice History <span style="text-transform:none;letter-spacing:0;color:var(--muted)">${invoices.length} bills · ${money(tot)}</span></h4>${body}</div>`; }
 function deleteInvoice(i){
   var v=invoices[i]; if(!v) return;
   if(v.fromOrder){ toast('\ud83d\udd12','Ye invoice order '+v.fromOrder+' se khud bani hai \u2014 Orders page se cancel karein'); return; }
@@ -1915,6 +1916,14 @@ function renderOrders(){
         +(o.deliveredAt?('<div style="color:#1d4ed8">\ud83d\ude9a Delivered: <b>'+esc(o.deliveredAt)+'</b></div>'):'')
         +(o.cancelledAt?('<div style="color:#dc2626">\u2715 Cancel: <b>'+esc(o.cancelledAt)+'</b></div>'):'')
       +'</div>'
+      +(function(){ var cn=orderCust(o); return cn
+          ? ('<div style="display:flex;align-items:center;gap:9px;background:var(--green-soft);border:1px solid var(--green-light);'
+            +'border-radius:11px;padding:8px 11px;margin-top:8px">'
+            +'<span style="width:30px;height:30px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;'
+            +'font-weight:800;font-size:12.5px;flex-shrink:0">'+esc(cn.split(" ").map(function(w){return w[0]||"";}).slice(0,2).join("").toUpperCase())+'</span>'
+            +'<span style="min-width:0"><b style="display:block;font-size:13.5px;color:var(--ink)">'+esc(cn)+'</b>'
+            +'<small style="font-size:11px;color:var(--muted)">'+esc(o.phone||o.userEmail||'')+'</small></span></div>')
+          : ''; })()
       +'<div class="oitems">'+(items||'—')+'</div>'
       +(o.address?'<div class="oaddr">📍 '+esc(o.address)+(o.phone?'<br>📞 '+esc(o.phone):'')+'</div>':'')
       +'<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:12px;color:var(--muted)">'+esc(o.pay||'')+'</span><span class="oamt">'+money(o.total||0)+'</span></div>'
@@ -1999,7 +2008,7 @@ function placeOrder(){
   Object.entries(cart).forEach(function(e){ var p=findP(e[0]); if(p&&hasStock(p)&&e[1]>stockLeft(p)) short.push(p.name+' (sirf '+stockLeft(p)+')'); });
   if(short.length){ toast('📦','Stock kam hai: '+short.join(', ')); return; }
   const items=Object.entries(cart).map(([id,q])=>{ const p=findP(id); if(!p) return null; var sid=String(p.sellerId||''); return {name:p.name,emoji:p.emoji||'📦',qty:q,price:p.price,cost:(typeof p.cost==='number'?p.cost:0),pid:p.id,sellerId:sid,sellerName:sid?sellerName(sid):'',commRate:sid?sellerCommRate(sid):0}; }).filter(Boolean);
-  const order={id:'TT'+Date.now().toString().slice(-7),date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),ts:Date.now(),items,total:Math.max(0,cartTotal()-voucherDiscount()),delivery:deliveryFee(),discount:voucherDiscount(),stockTaken:true,stockReturned:false,pay:selectedPay,voucher:voucher||undefined,status:'Confirmed',read:false,address:addr,phone};
+  const order={id:'TT'+Date.now().toString().slice(-7),date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),ts:Date.now(),items,total:Math.max(0,cartTotal()-voucherDiscount()),delivery:deliveryFee(),discount:voucherDiscount(),stockTaken:true,stockReturned:false,pay:selectedPay,voucher:voucher||undefined,status:'Confirmed',read:false,address:addr,phone,custName:name,custEmail:u.email};
   if(!ordersAll[u.email]) ordersAll[u.email]=[];
   ordersAll[u.email].push(order); LS.set('tt_orders',ordersAll); fbSaveOrder(order,u.email);
   makeSellerLines(items,order.id,'Online',order.date,order.time);
@@ -3107,6 +3116,38 @@ function toggleRail(){ railExpanded=!railExpanded; var r=document.getElementById
 var ONLINE_MS=3*60*1000, ADMIN_ONLINE_MS=6*60*1000, _hbT=null, _adminPing=0, subQuery='';
 var presence={adminSeen:0};
 function shopOnline(){ return (Date.now()-(presence.adminSeen||0))<ADMIN_ONLINE_MS; }
+/* order par customer ka naam — order mein likha ho to wahi, warna users se dhoondein */
+/* invoice par customer ka naam — hamesha taza dhoondein */
+function invOrder(v){
+  if(!v||!v.fromOrder) return null;
+  var o=(typeof allOrders!=='undefined'? allOrders:[]).filter(function(x){ return String(x.id)===String(v.fromOrder); })[0];
+  if(o) return o;
+  var all=[]; try{ Object.keys(ordersAll||{}).forEach(function(k){ all=all.concat(ordersAll[k]||[]); }); }catch(e){}
+  return all.filter(function(x){ return String(x.id)===String(v.fromOrder); })[0]||null;
+}
+function invCustPhone(v){
+  if(!v) return '';
+  if(v.custPhone) return v.custPhone;
+  var o=invOrder(v); if(o) return o.phone||o.userEmail||'';
+  var c=String(v.cust||''); return /^[0-9]{10,}$/.test(c)? c : '';
+}
+function invCustName(v){
+  if(!v) return '';
+  var o=invOrder(v);
+  if(o){ var n=orderCust(o); if(n) return n; }
+  var u=(typeof userByKey==='function')? userByKey(v.custPhone||v.cust) : null;
+  if(u&&u.name) return u.name;
+  var c=String(v.cust||'').trim();
+  if(!c || /^[0-9]+$/.test(c)) return c? ('Customer '+c) : 'Online Customer';
+  return c;
+}
+function orderCust(o){
+  if(!o) return '';
+  if(o.custName) return o.custName;
+  var u=userByKey(o.custEmail||o.userEmail||o.phone);
+  if(u&&u.name) return u.name;
+  return '';
+}
 function userByKey(k){ if(!k) return null; return users.find(function(u){ return u.email===k || (u.phone&&String(u.phone)===String(k)); })||null; }
 function presenceBadge(on){
   return on

@@ -1053,7 +1053,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <script>
-try{ firebase.initializeApp({apiKey:"AIzaSyAKQ9jxx707Uq9uiU3YbCpVR6YP-vqfano",authDomain:"teetoo-61aeb.firebaseapp.com",projectId:"teetoo-61aeb",storageBucket:"teetoo-61aeb.firebasestorage.app",messagingSenderId:"823453128850",appId:"1:823453128850:web:ca691f2f24dcca1b2dae4b"}); window.db=firebase.firestore(); window.fbAuth=firebase.auth(); try{ window.stg=firebase.storage(); }catch(se){ window.stg=null; } }catch(e){ window.db=null; window.fbAuth=null; window.stg=null; console.warn("Firebase init failed",e); }
+try{ firebase.initializeApp({apiKey:"AIzaSyAKQ9jxx707Uq9uiU3YbCpVR6YP-vqfano",authDomain:"teetoo-61aeb.firebaseapp.com",projectId:"teetoo-61aeb",storageBucket:"teetoo-61aeb.firebasestorage.app",messagingSenderId:"823453128850",appId:"1:823453128850:web:ca691f2f24dcca1b2dae4b"}); window.db=firebase.firestore(); window.fbAuth=firebase.auth(); try{ window.stg=firebase.storage();
+   try{ window.stg.setMaxUploadRetryTime(8000); window.stg.setMaxOperationRetryTime(8000); }catch(e2){}
+ }catch(se){ window.stg=null; } }catch(e){ window.db=null; window.fbAuth=null; window.stg=null; console.warn("Firebase init failed",e); }
 </script>
 <script>
 const APP_VERSION='v27.08.2026-10';
@@ -1444,7 +1446,8 @@ function customersSection(){
 }
 var apImgData, apImgPath;
 function uploadProductImg(input){ var f=input.files&&input.files[0]; if(!f)return; toast('\u23f3','Photo upload ho rahi hai...');
-  putImage(f,'products',function(res){ apImgData=res.img; apImgPath=res.imgPath||null; $('#apImgPreview').src=res.img; $('#apImgPreviewWrap').style.display='flex'; toast('\u2705','Photo tayyar'); });
+  putImage(f,'products',function(res){ apImgData=res.img; apImgPath=res.imgPath||null; $('#apImgPreview').src=res.img; $('#apImgPreviewWrap').style.display='flex'; toast('\u2705','Photo tayyar'); },
+    function(msg){ toast('\u26a0\ufe0f',msg); });
   input.value=''; }
 function removeApImg(){ if(apImgPath) deleteImage(apImgPath); apImgData=null; apImgPath=null; $('#apImgPreviewWrap').style.display='none'; }
 function pickProductImg(id){
@@ -1458,11 +1461,14 @@ function pickProductImg(id){
     putImage(f,'products',function(res){
       var oldPath=p.imgPath;
       p.img=res.img; if(res.imgPath) p.imgPath=res.imgPath; else delete p.imgPath;
-      LS.set('tt_products',catalog); fbSaveProduct(p);
+      try{ LS.set('tt_products',catalog); }catch(e){}
+      fbSaveProduct(p);
       if(oldPath && oldPath!==p.imgPath) deleteImage(oldPath);
       if(typeof refreshProductViews==='function') refreshProductViews();
+      if(typeof renderGrid==='function') renderGrid();
+      if(typeof renderAccount==='function' && document.getElementById('accountPage')) try{renderAccount();}catch(e){}
       toast('\u2705',p.name+' ki photo lag gayi');
-    });
+    },function(msg){ toast('\u26a0\ufe0f',msg); });
   };
   inp.click();
 }
@@ -1537,7 +1543,15 @@ function refreshProductViews(){
   if(typeof renderRail==='function') renderRail();
 }
 function fbSaveStock(p){ if(window.db&&p){ try{ window.db.collection('products').doc(String(p.id)).set({stock:p.stock},{merge:true}); }catch(e){ console.warn('fb stock',e); } } }
-function fbSaveProduct(p){ if(window.db&&p){ try{ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }catch(e){ console.warn('fb save',e); } } }
+function fbSaveProduct(p){ if(window.db&&p){ try{
+    window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p)))
+      .catch(function(e){ console.warn('fb save',e);
+        var m=String(e&&e.code||'');
+        if(m.indexOf('permission')>=0) toast('\ud83d\udd12','Server ne save nahi kiya \u2014 ijazat nahi (rules)');
+        else if(m.indexOf('invalid-argument')>=0||String(e&&e.message||'').indexOf('longer than')>=0) toast('\u26a0\ufe0f','Photo bohat bari hai \u2014 chhoti photo lagayen');
+        else toast('\u26a0\ufe0f','Server par save nahi hua \u2014 internet check karein');
+      });
+  }catch(e){ console.warn('fb save',e); } } }
 function fbSaveExpense(e){ if(window.db&&e){ try{ window.db.collection('expenses').doc(String(e.id)).set(JSON.parse(JSON.stringify(e))); }catch(x){ console.warn('fb exp',x); } } }
 function fbDeleteExpense(id){ if(window.db){ try{ window.db.collection('expenses').doc(String(id)).delete(); }catch(x){ console.warn('fb exp del',x); } } }
 function fbDeleteProduct(id){ if(window.db){ try{ window.db.collection('products').doc(String(id)).delete(); }catch(e){ console.warn('fb del',e); } } }
@@ -2097,27 +2111,87 @@ function compressImg(file,cb){
   }; im.src=e.target.result; };
   r.readAsDataURL(file);
 }
-/* file -> {img:URL, imgPath:'...'}  ya fallback  {img:dataURL} */
-function putImage(file,folder,cb){
-  var r=new FileReader();
-  r.onload=function(e){ var im=new Image(); im.onload=function(){
-    var sc=Math.min(1,IMG_MAX_W/im.width);
-    var w=Math.round(im.width*sc),h=Math.round(im.height*sc);
+/* Firestore doc 1 MiB se bara nahi ho sakta \u2014 photo ko us se neeche laayen */
+var IMG_MAX_BYTES=620000;
+function _fitDataUrl(c){
+  var q=IMG_Q, d=c.toDataURL('image/jpeg',q), guard=0;
+  while(d.length>IMG_MAX_BYTES && guard++<6){
+    if(q>0.45){ q-=0.12; }
+    else{ /* aur chhota kar dein */
+      var c2=document.createElement('canvas');
+      c2.width=Math.max(220,Math.round(c.width*0.75)); c2.height=Math.max(220,Math.round(c.height*0.75));
+      c2.getContext('2d').drawImage(c,0,0,c2.width,c2.height); c=c2;
+    }
+    d=c.toDataURL('image/jpeg',q);
+  }
+  return d;
+}
+/* file -> {img:URL, imgPath:'...'}  ya fallback  {img:dataURL}
+   Har surat mein cb ya errCb chalta hai \u2014 kabhi atakta nahi. */
+function putImage(file,folder,cb,errCb){
+  var done=false;
+  function fail(msg){ if(done) return; done=true;
+    console.warn('putImage',msg);
+    if(errCb) errCb(msg); else toast('\u26a0\ufe0f', msg||'Photo nahi lagi \u2014 dobara koshish karein');
+  }
+  function ok(res){ if(done) return; done=true; cb(res); }
+
+  if(!file){ fail('Koi file nahi chuni'); return; }
+  if(file.size>18*1024*1024){ fail('Photo bohat bari hai (18 MB se kam honi chahiye)'); return; }
+
+  /* agar 25 sec mein kuch na ho to bhi user ko bata dein */
+  var watchdog=setTimeout(function(){ fail('Photo lagne mein dair ho gayi \u2014 dobara koshish karein'); },25000);
+  var _ok=ok, _fail=fail;
+  ok=function(r){ clearTimeout(watchdog); _ok(r); };
+  fail=function(m){ clearTimeout(watchdog); _fail(m); };
+
+  function draw(src,W,H){
+    var sc=Math.min(1,IMG_MAX_W/W);
+    var w=Math.max(1,Math.round(W*sc)), h=Math.max(1,Math.round(H*sc));
     var c=document.createElement('canvas'); c.width=w; c.height=h;
-    c.getContext('2d').drawImage(im,0,0,w,h);
-    if(!window.stg||_stgOff){ cb({img:c.toDataURL('image/jpeg',IMG_Q)}); return; }
+    try{ c.getContext('2d').drawImage(src,0,0,w,h); }
+    catch(e){ fail('Ye photo parh nahi sake \u2014 doosri photo try karein'); return; }
+    finish(c);
+  }
+  function finish(c){
+    var data;
+    try{ data=_fitDataUrl(c); }
+    catch(e){ fail('Photo save nahi ho saki'); return; }
+    if(!window.stg||_stgOff){ ok({img:data}); return; }
+    /* Storage try karein, magar 12 sec se zyada intezaar nahi \u2014 phir base64 */
+    var settled=false;
+    var t=setTimeout(function(){ if(settled) return; settled=true; _stgOff=true;
+      console.warn('storage timeout \u2192 base64'); ok({img:data}); },12000);
     _canvasBlob(c,function(blob,type){
       var ext=(type==='image/webp')?'webp':'jpg';
       var path=folder+'/'+Date.now()+'_'+Math.floor(Math.random()*100000)+'.'+ext;
       try{
         window.stg.ref(path).put(blob,{contentType:type,cacheControl:'public,max-age=31536000'})
           .then(function(snap){ return snap.ref.getDownloadURL(); })
-          .then(function(url){ cb({img:url,imgPath:path}); })
-          .catch(function(err){ console.warn('storage upload',err); _stgOff=true; cb({img:c.toDataURL('image/jpeg',IMG_Q)}); });
-      }catch(err){ console.warn('storage',err); _stgOff=true; cb({img:c.toDataURL('image/jpeg',IMG_Q)}); }
+          .then(function(url){ if(settled) return; settled=true; clearTimeout(t); ok({img:url,imgPath:path}); })
+          .catch(function(err){ if(settled) return; settled=true; clearTimeout(t);
+            console.warn('storage upload',err); _stgOff=true; ok({img:data}); });
+      }catch(err){ if(settled) return; settled=true; clearTimeout(t);
+        console.warn('storage',err); _stgOff=true; ok({img:data}); }
     });
-  }; im.src=e.target.result; };
-  r.readAsDataURL(file);
+  }
+
+  /* iPhone ki HEIC/HEIF photo browser mein nahi khulti \u2014 createImageBitmap se koshish */
+  function viaBitmap(){
+    if(!window.createImageBitmap){ fail('Ye photo is browser mein nahi khulti. JPG ya PNG chunein (iPhone: Settings > Camera > Formats > Most Compatible).'); return; }
+    window.createImageBitmap(file).then(function(bm){ draw(bm,bm.width,bm.height); })
+      .catch(function(){ fail('Ye photo is browser mein nahi khulti. JPG ya PNG chunein (iPhone: Settings > Camera > Formats > Most Compatible).'); });
+  }
+
+  var r=new FileReader();
+  r.onerror=function(){ viaBitmap(); };
+  r.onload=function(e){
+    var im=new Image();
+    im.onload=function(){ if(!im.width||!im.height){ viaBitmap(); return; } draw(im,im.width,im.height); };
+    im.onerror=function(){ viaBitmap(); };
+    try{ im.src=e.target.result; }catch(er){ viaBitmap(); }
+  };
+  try{ r.readAsDataURL(file); }catch(er){ viaBitmap(); }
 }
 /* Storage se photo bhi hata dein — warna delete ke baad bhi jagah ghirti rahegi */
 /* Purani base64 photos (jo Firestore doc ke andar padi hain) ko Storage par le jayen.
@@ -3032,6 +3106,55 @@ function sellerOrderStats(sid){
       comm+=Math.round(line*r/100); }); });
   return {sale:sale,items:items,comm:comm,cost:cost,payable:Math.max(0,sale-comm)};
 }
+var _sellOpen={};
+function toggleSellerProducts(id){ _sellOpen[id]=!_sellOpen[id]; renderSellers(); }
+function sellerSoldMap(sid){
+  var m={};
+  allOrders.forEach(function(o){ if((o.status||'')==='Cancelled') return;
+    (o.items||[]).forEach(function(it){ if(String(it.sellerId||'')!==String(sid)) return;
+      var k=String(it.id!==undefined?it.id:it.name);
+      m[k]=(m[k]||0)+(it.qty||0); }); });
+  return m;
+}
+function sellerStockStats(sid){
+  var mine=catalog.filter(function(p){ return String(p.sellerId||'')===String(sid); });
+  var sold=sellerSoldMap(sid);
+  var qty=0,val=0,out=0,low=0,sq=0;
+  mine.forEach(function(p){
+    var q=(typeof p.stock==='number')?p.stock:0;
+    qty+=q; val+=q*(p.price||0);
+    if(q<=0) out++; else if(q<=lowStockLimit()) low++;
+    sq+=(sold[String(p.id)]||0);
+  });
+  return {list:mine,sold:sold,qty:qty,val:val,out:out,low:low,soldQty:sq,count:mine.length};
+}
+function sellerProductRows(sid){
+  var s=sellerStockStats(sid);
+  if(!s.count) return '<div style="background:#f8fafc;border:1px dashed var(--line);border-radius:10px;padding:14px;text-align:center;font-size:12px;color:var(--muted);margin-bottom:9px">Is seller ne abhi koi product nahi daala</div>';
+  return '<div style="border:1px solid var(--line);border-radius:11px;overflow:hidden;margin-bottom:9px">'
+    +'<div style="display:flex;background:#f1f5f9;font-size:10.5px;font-weight:800;color:#475569;padding:6px 9px;text-transform:uppercase;letter-spacing:.3px">'
+      +'<span style="flex:1">Product</span><span style="width:62px;text-align:right">Rate</span>'
+      +'<span style="width:52px;text-align:right">Bika</span><span style="width:62px;text-align:right">Baqi</span></div>'
+    +s.list.map(function(p){
+      var q=(typeof p.stock==='number')?p.stock:0;
+      var sd=s.sold[String(p.id)]||0;
+      var em=String(p.emoji||'').trim();
+      var icon=/^[\u0000-\u007F]{2,}$/.test(em)?'\ud83d\udce6':(em||'\ud83d\udce6');
+      var col=q<=0?'#dc2626':(q<=lowStockLimit()?'#d97706':'#15803d');
+      return '<div style="display:flex;align-items:center;gap:7px;padding:6px 9px;border-top:1px solid var(--line);font-size:12px">'
+        +(p.img?('<img src="'+p.img+'" style="width:26px;height:26px;border-radius:6px;object-fit:cover;flex-shrink:0">')
+               :('<span style="width:26px;height:26px;border-radius:6px;display:grid;place-items:center;font-size:14px;flex-shrink:0;background:'+(CAT_BG[p.cat]||'#eef2f0')+'">'+icon+'</span>'))
+        +'<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><b>'+esc(p.name)+'</b>'
+          +'<small style="display:block;color:var(--muted);font-size:10px">'+esc(p.unit||'')+'</small></span>'
+        +'<span style="width:62px;text-align:right;color:var(--muted)">'+money(p.price)+'</span>'
+        +'<span style="width:52px;text-align:right;font-weight:800;color:#1d4ed8">'+sd+'</span>'
+        +'<span style="width:62px;text-align:right;font-weight:800;color:'+col+'">'+(q<=0?'OUT':q)+'</span></div>';
+    }).join('')
+    +'<div style="display:flex;background:#f8fafc;border-top:2px solid var(--line);padding:7px 9px;font-size:12px;font-weight:800">'
+      +'<span style="flex:1">Total \u2014 stock ki maliyat '+money(s.val)+'</span>'
+      +'<span style="width:52px;text-align:right;color:#1d4ed8">'+s.soldQty+'</span>'
+      +'<span style="width:62px;text-align:right;color:#15803d">'+s.qty+'</span></div></div>';
+}
 function setSellerStatus(id,st){
   var x=findSeller(id); if(!x) return;
   if(st==='rejected' && !confirm('Is seller ko reject karein?\nUske products site se chhup jayenge.')) return;
@@ -3115,7 +3238,8 @@ function renderSellers(){
   el.innerHTML=head+'<div class="egrid">'+list.map(function(x){
     var st=sellerOrderStats(x.id);
     var rate=sellerCommRate(x.id);
-    var mine=catalog.filter(function(pp){ return String(pp.sellerId||'')===String(x.id); }).length;
+    var ss=sellerStockStats(x.id);
+    var mine=ss.count;
     var acts='';
     if(sellTab==='pending') acts='<div class="oacts"><button style="background:#16a34a" onclick="setSellerStatus(\''+x.id+'\',\'approved\')">\u2713 Approve</button><button style="background:#dc2626" onclick="setSellerStatus(\''+x.id+'\',\'rejected\')">\u2715 Reject</button></div>';
     else if(sellTab==='approved') acts='<div class="oacts"><button style="background:#dc2626" onclick="setSellerStatus(\''+x.id+'\',\'rejected\')">\u2715 Band karein</button></div>';
@@ -3128,7 +3252,15 @@ function renderSellers(){
         +'<span style="flex:1;min-width:90px;background:#f0fdf4;border-radius:9px;padding:7px;text-align:center"><b style="display:block;font-size:13px;color:#15803d">'+money(st.sale)+'</b><small style="font-size:10px;color:#15803d">Sale</small></span>'
         +'<span style="flex:1;min-width:90px;background:#fef3c7;border-radius:9px;padding:7px;text-align:center"><b style="display:block;font-size:13px;color:#b45309">'+money(st.comm)+'</b><small style="font-size:10px;color:#92600a">T.T ka hissa</small></span>'
         +'<span style="flex:1;min-width:90px;background:#faf5ff;border-radius:9px;padding:7px;text-align:center"><b style="display:block;font-size:13px;color:#7c3aed">'+money(st.payable)+'</b><small style="font-size:10px;color:#6b21a8">Payout</small></span></div>'
-      +'<div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">'+mine+' products \u00b7 '+st.items+' items bike \u00b7 '+esc(x.date||'')+'</div>'
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">'
+        +'<span style="flex:1;min-width:90px;background:#eff6ff;border-radius:9px;padding:7px;text-align:center"><b style="display:block;font-size:13px;color:#1d4ed8">'+mine+'</b><small style="font-size:10px;color:#1d4ed8">Products</small></span>'
+        +'<span style="flex:1;min-width:90px;background:#f0fdf4;border-radius:9px;padding:7px;text-align:center"><b style="display:block;font-size:13px;color:#15803d">'+ss.qty+'</b><small style="font-size:10px;color:#15803d">Stock baqi</small></span>'
+        +'<span style="flex:1;min-width:90px;background:#f0fdf4;border-radius:9px;padding:7px;text-align:center"><b style="display:block;font-size:13px;color:#15803d">'+money(ss.val)+'</b><small style="font-size:10px;color:#15803d">Stock maliyat</small></span>'
+        +'<span style="flex:1;min-width:90px;background:'+(ss.out?'#fef2f2':'#f8fafc')+';border-radius:9px;padding:7px;text-align:center"><b style="display:block;font-size:13px;color:'+(ss.out?'#dc2626':'#64748b')+'">'+ss.out+'</b><small style="font-size:10px;color:'+(ss.out?'#dc2626':'#64748b')+'">Khatam</small></span></div>'
+      +'<button class="add" style="width:100%;margin:0 0 9px;padding:8px;font-size:12.5px;background:#f1f5f9;color:#334155;border:1px solid var(--line)" onclick="toggleSellerProducts(\''+x.id+'\')">'
+        +(_sellOpen[x.id]?'\u25b2 Products chhupayen':('\ud83d\udce6 '+mine+' products dekhein'))+'</button>'
+      +(_sellOpen[x.id]? sellerProductRows(x.id) : '')
+      +'<div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">'+st.items+' items bike \u00b7 '+esc(x.date||'')+'</div>'
       +'<div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 9px;margin-bottom:4px">'
         +'<span style="font-size:12px;color:var(--muted);flex:1">Commission %</span>'
         +'<input id="sc_'+x.id+'" type="number" min="0" step="any" value="'+(typeof x.commission==="number"?x.commission:"")+'" placeholder="'+sellerCommDefault()+'" style="width:70px;padding:6px;border:1px solid var(--line);border-radius:8px;font-size:13px;text-align:center">'

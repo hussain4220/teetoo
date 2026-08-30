@@ -1053,7 +1053,14 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <script>
-try{ firebase.initializeApp({apiKey:"AIzaSyAKQ9jxx707Uq9uiU3YbCpVR6YP-vqfano",authDomain:"teetoo-61aeb.firebaseapp.com",projectId:"teetoo-61aeb",storageBucket:"teetoo-61aeb.firebasestorage.app",messagingSenderId:"823453128850",appId:"1:823453128850:web:ca691f2f24dcca1b2dae4b"}); window.db=firebase.firestore(); window.fbAuth=firebase.auth(); try{ window.stg=firebase.storage();
+try{ firebase.initializeApp({apiKey:"AIzaSyAKQ9jxx707Uq9uiU3YbCpVR6YP-vqfano",authDomain:"teetoo-61aeb.firebaseapp.com",projectId:"teetoo-61aeb",storageBucket:"teetoo-61aeb.firebasestorage.app",messagingSenderId:"823453128850",appId:"1:823453128850:web:ca691f2f24dcca1b2dae4b"}); window.db=firebase.firestore();
+ /* Offline cache: dobara aane wale ko poora data phir se download nahi karna parta.
+    Isse Firebase ka reads aur data-transfer bohat bach jata hai aur site foran khulti hai. */
+ try{ window.db.enablePersistence({synchronizeTabs:true})
+        .then(function(){ window._cacheOn=true; })
+        .catch(function(e){ window._cacheOn=false; console.warn('cache off',e&&e.code); }); }
+ catch(e){ window._cacheOn=false; }
+ window.fbAuth=firebase.auth(); try{ window.stg=firebase.storage();
    try{ window.stg.setMaxUploadRetryTime(8000); window.stg.setMaxOperationRetryTime(8000); }catch(e2){}
  }catch(se){ window.stg=null; } }catch(e){ window.db=null; window.fbAuth=null; window.stg=null; console.warn("Firebase init failed",e); }
 </script>
@@ -2090,7 +2097,7 @@ function renderBannerMgr(){ var el=document.getElementById('bmgList'); if(!el)re
    Pehle: 1100px JPEG base64 seedha Firestore doc mein (~200-350 KB per product)
    Ab   : 900px WebP -> Firebase Storage, Firestore mein sirf chhota sa URL
    Storage na ho (ya rules band hon) to purana base64 tarika khud chal jata hai. */
-var IMG_MAX_W=900, IMG_Q=0.72;
+var IMG_MAX_W=600, IMG_Q=0.68;   /* 900px/0.72 se ghata kar \u2014 photo aadhi se bhi kam wazan ki */
 var _stgOff=false;   /* Storage abhi on nahi (Blaze plan nahi) -> seedha base64 */
 function _canvasBlob(c,cb){
   var type=(function(){ try{ return c.toDataURL('image/webp',0.7).indexOf('image/webp')===5?'image/webp':'image/jpeg'; }catch(e){ return 'image/jpeg'; } })();
@@ -2210,6 +2217,49 @@ function _moveOneToStorage(obj,folder,save,done){
     .then(function(sn){ return sn.ref.getDownloadURL(); })
     .then(function(url){ obj.img=url; obj.imgPath=path; save(obj); done(true); })
     .catch(function(e){ console.warn('migrate',e); done(false); });
+}
+/* Purani (900px wali) photos ko chhota kar ke wapas save karta hai \u2014 Blaze ke baghair bhi kaam karta hai */
+function _shrinkDataUrl(d,cb){
+  var im=new Image();
+  im.onload=function(){
+    var sc=Math.min(1,IMG_MAX_W/im.width);
+    if(sc>=1 && d.length<90000){ cb(null); return; }   /* pehle se chhoti hai */
+    var w=Math.max(1,Math.round(im.width*sc)),h=Math.max(1,Math.round(im.height*sc));
+    var c=document.createElement('canvas'); c.width=w; c.height=h;
+    try{ c.getContext('2d').drawImage(im,0,0,w,h); }catch(e){ cb(null); return; }
+    var nd;
+    try{ nd=_fitDataUrl(c); }catch(e){ cb(null); return; }
+    cb(nd.length < d.length-2000 ? nd : null);
+  };
+  im.onerror=function(){ cb(null); };
+  im.src=d;
+}
+function shrinkAllImages(){
+  if(!isAdmin()){ toast('\ud83d\udd12','Sirf admin'); return; }
+  var jobs=[];
+  catalog.forEach(function(p){ if(p.img && String(p.img).slice(0,5)==='data:') jobs.push({o:p,s:fbSaveProduct}); });
+  banners.forEach(function(b){ if(b.img && String(b.img).slice(0,5)==='data:') jobs.push({o:b,s:fbSaveBanner}); });
+  if(!jobs.length){ toast('\u2705','Koi purani photo nahi mili'); return; }
+  var before=0; jobs.forEach(function(j){ before+=j.o.img.length; });
+  if(!confirm(jobs.length+' photos chhoti ki jayengi.\nAbhi ka wazan: '+Math.round(before/1024)+' KB\n\nSite tez ho jayegi aur Firebase ka kharcha bachega. Shuru karein?')) return;
+  var i=0, done=0, after=0;
+  toast('\u23f3','Photos chhoti ho rahi hain...');
+  (function next(){
+    if(i>=jobs.length){
+      try{ LS.set('tt_products',catalog); LS.set('tt_banners',banners); }catch(e){}
+      if(typeof refreshProductViews==='function') refreshProductViews();
+      if(typeof renderCarousel==='function') renderCarousel();
+      var saved=Math.round((before-after-  (before? 0:0))/1024);
+      toast('\u2705', done+' photos chhoti ho gayin \u2014 '+Math.max(0,Math.round((before-after)/1024))+' KB bacha');
+      return;
+    }
+    var j=jobs[i++];
+    _shrinkDataUrl(j.o.img,function(nd){
+      if(nd){ after+=nd.length; j.o.img=nd; j.s(j.o); done++; }
+      else { after+=j.o.img.length; }
+      setTimeout(next,60);
+    });
+  })();
 }
 function migrateImagesToStorage(){
   if(!isAdmin()){ toast('\uD83D\uDD12','Sirf admin'); return; }
@@ -2814,7 +2864,7 @@ function saveSettings(){ var h=document.getElementById('setHelp'); var st=docume
   var st1=document.getElementById('setStripText'); if(st1) settings.stripText=(st1.value||'').trim();
   var st2=document.getElementById('setStripOff'); if(st2) settings.stripOff=(st2.value||'').trim();
   var ls=document.getElementById('setLowStock'); if(ls){ var lv=parseInt(ls.value,10); settings.lowStock=(isNaN(lv)||lv<0)?5:lv; } var sc=document.getElementById('setSellComm'); if(sc){ var sv=parseFloat(sc.value); settings.sellerCommission=(isNaN(sv)||sv<0)?0:sv; } var em=document.getElementById('setEmail'); if(em){ settings.email=(em.value||'').trim(); } settings.help=((h&&h.value)||'').trim(); settings.store=((st&&st.value)||'').trim(); if(cm){ var cv=parseFloat(cm.value); settings.commission=(isNaN(cv)||cv<0)?0:cv; } LS.set('tt_settings',settings); fbSaveSettings(); applySettings(); if(typeof renderAcct==='function'){var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show'))renderAcct();} toast('✅','Settings save ho gayi'); }
-function settingsSection(){ return '<div class="acct-sec"><h4>Store Settings</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="field"><label>Help &amp; Support Number</label><input id="setHelp" value="'+esc(settings.help||'')+'" placeholder="0300-1234567"></div><div class="field"><label>Store Name</label><input id="setStore" value="'+esc(settings.store||'')+'" placeholder="TEETOO"></div><div class="field"><label>Support Email</label><input id="setEmail" type="email" value="'+esc(supportEmail())+'" placeholder="teetoo@teetoo9.com"></div><div class="field"><label>Employee Commission (%)</label><input id="setComm" type="number" min="0" step="any" value="'+esc(String(commissionPct()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Har employee ki sale par itne percent commission bane gi. Aadha percent bhi chalta hai — jaise 2.5 ya 7.25</div></div><div class="field"><label>Delivery Fee (Rs)</label><input id="setDelFee" type="number" min="0" value="'+esc(String(deliveryFeeAmt()))+'" placeholder="99"></div><div class="field"><label>Free delivery is raqam se upar (Rs)</label><input id="setFreeOver" type="number" min="0" value="'+esc(String(freeOverAmt()))+'" placeholder="2000"></div><div class="field"><label>Har delivery par apna kharcha (Rs)</label><input id="setDelCost" type="number" min="0" value="'+esc(String(deliveryCostAmt()))+'" placeholder="0"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Rider ko har order par jitna kharcha aata hai. Accounts mein ye khud ba khud nafe se kat jayega. 0 rakhein to sirf wo kharcha ginega jo aap Kharcha page par khud likhenge.</div></div><div class="field"><label>Deliver to \u2014 kya likha ho</label><input id="setDeliverTo" value="'+esc(settings.deliverTo||'Home')+'" placeholder="Home"></div><div class="field"><label>Ticker \u2014 bara text</label><input id="setStripText" value="'+esc(settings.stripText||'')+'" placeholder="END OF MONTH"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Dono khane khali chhor dein to ticker bilkul chhup jayega.</div></div><div class="field"><label>Ticker \u2014 right side ka text</label><input id="setStripOff" value="'+esc(settings.stripOff||'')+'" placeholder="UPTO 80% OFF"></div><div class="field"><label>Low stock warning (kitne se kam par)</label><input id="setLowStock" type="number" min="0" value="'+esc(String(lowStockLimit()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Is se kam quantity bache to Inventory mein "kam bache" ka warning aayega.</div></div><div class="field"><label>Seller Commission (%) — default</label><input id="setSellComm" type="number" min="0" step="any" value="'+esc(String(sellerCommDefault()))+'" placeholder="10"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Seller ki har sale par T.T itne percent rakhega. Kisi ek seller ka rate alag karna ho to Sellers page se badlein.</div></div><button class="btn-primary" style="margin-top:6px" onclick="saveSettings()">Save Settings</button><div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)"><button class="add" style="width:100%;background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;font-weight:800" onclick="migrateImagesToStorage()">\uD83D\uDDBC\uFE0F Purani photos Storage par shift karein</button><div style="font-size:11.5px;color:var(--muted);margin-top:6px;text-align:center">Photos Firestore doc ke andar se nikal kar Storage mein chali jayengi \u2014 jagah bachegi aur site tez ho jayegi.</div></div><div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted);text-align:center">Site version: <b style="color:var(--green-dark);font-family:monospace">'+APP_VERSION+'</b></div></div></div>'; }
+function settingsSection(){ return '<div class="acct-sec"><h4>Store Settings</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="field"><label>Help &amp; Support Number</label><input id="setHelp" value="'+esc(settings.help||'')+'" placeholder="0300-1234567"></div><div class="field"><label>Store Name</label><input id="setStore" value="'+esc(settings.store||'')+'" placeholder="TEETOO"></div><div class="field"><label>Support Email</label><input id="setEmail" type="email" value="'+esc(supportEmail())+'" placeholder="teetoo@teetoo9.com"></div><div class="field"><label>Employee Commission (%)</label><input id="setComm" type="number" min="0" step="any" value="'+esc(String(commissionPct()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Har employee ki sale par itne percent commission bane gi. Aadha percent bhi chalta hai — jaise 2.5 ya 7.25</div></div><div class="field"><label>Delivery Fee (Rs)</label><input id="setDelFee" type="number" min="0" value="'+esc(String(deliveryFeeAmt()))+'" placeholder="99"></div><div class="field"><label>Free delivery is raqam se upar (Rs)</label><input id="setFreeOver" type="number" min="0" value="'+esc(String(freeOverAmt()))+'" placeholder="2000"></div><div class="field"><label>Har delivery par apna kharcha (Rs)</label><input id="setDelCost" type="number" min="0" value="'+esc(String(deliveryCostAmt()))+'" placeholder="0"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Rider ko har order par jitna kharcha aata hai. Accounts mein ye khud ba khud nafe se kat jayega. 0 rakhein to sirf wo kharcha ginega jo aap Kharcha page par khud likhenge.</div></div><div class="field"><label>Deliver to \u2014 kya likha ho</label><input id="setDeliverTo" value="'+esc(settings.deliverTo||'Home')+'" placeholder="Home"></div><div class="field"><label>Ticker \u2014 bara text</label><input id="setStripText" value="'+esc(settings.stripText||'')+'" placeholder="END OF MONTH"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Dono khane khali chhor dein to ticker bilkul chhup jayega.</div></div><div class="field"><label>Ticker \u2014 right side ka text</label><input id="setStripOff" value="'+esc(settings.stripOff||'')+'" placeholder="UPTO 80% OFF"></div><div class="field"><label>Low stock warning (kitne se kam par)</label><input id="setLowStock" type="number" min="0" value="'+esc(String(lowStockLimit()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Is se kam quantity bache to Inventory mein "kam bache" ka warning aayega.</div></div><div class="field"><label>Seller Commission (%) — default</label><input id="setSellComm" type="number" min="0" step="any" value="'+esc(String(sellerCommDefault()))+'" placeholder="10"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Seller ki har sale par T.T itne percent rakhega. Kisi ek seller ka rate alag karna ho to Sellers page se badlein.</div></div><button class="btn-primary" style="margin-top:6px" onclick="saveSettings()">Save Settings</button><div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)"><button class="add" style="width:100%;background:#f0fdf4;color:#15803d;border-color:#bbf7d0;font-weight:800" onclick="shrinkAllImages()">\uD83D\uDDDC\uFE0F Purani photos chhoti karein (site tez ho gi)</button><div style="font-size:11.5px;color:var(--muted);margin:6px 0 12px;text-align:center">Photos ka wazan aadhe se bhi kam ho jayega. Blaze plan ke baghair bhi chalta hai \u2014 mahine mein 4 guna zyada log site khol sakenge.</div><button class="add" style="width:100%;background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;font-weight:800" onclick="migrateImagesToStorage()">\uD83D\uDDBC\uFE0F Purani photos Storage par shift karein</button><div style="font-size:11.5px;color:var(--muted);margin-top:6px;text-align:center">Photos Firestore doc ke andar se nikal kar Storage mein chali jayengi \u2014 jagah bachegi aur site tez ho jayegi.</div></div><div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted);text-align:center">Site version: <b style="color:var(--green-dark);font-family:monospace">'+APP_VERSION+'</b></div></div></div>'; }
 function copyRefMy(){ var u=currentUser(); if(!u)return; var code=u.refCode||('TT'+String(u.phone||'').slice(-6)); try{ navigator.clipboard.writeText(code); }catch(e){} toast('📋','Code copy: '+code); }
 function referralSection(){ var u=currentUser(); if(!u||isAdmin())return ''; var code=u.refCode||('TT'+String(u.phone||'').slice(-6)); var cnt=u.refCount||0; return '<div class="acct-sec"><h4>Refer &amp; Earn</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line);text-align:center"><div style="font-size:12px;color:var(--muted)">Aap ka referral code</div><div style="font-size:24px;font-weight:800;letter-spacing:2px;color:var(--green-dark);margin:6px 0">'+esc(code)+'</div><button class="add" style="width:auto;padding:6px 16px;margin:0 auto" onclick="copyRefMy()">Copy code</button><div style="margin-top:12px;font-size:13px">Total referrals: <b style="color:var(--green-dark);font-size:16px">'+cnt+'</b></div><div style="font-size:11.5px;color:var(--muted);margin-top:6px">Ye code doston ko dein \u2014 jab wo is se register karenge, aap ka count barhega.</div></div></div>'; }
 function sellerCtaSection(){

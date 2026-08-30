@@ -1071,7 +1071,7 @@ try{ firebase.initializeApp({apiKey:"AIzaSyAKQ9jxx707Uq9uiU3YbCpVR6YP-vqfano",au
  }catch(se){ window.stg=null; } }catch(e){ window.db=null; window.fbAuth=null; window.stg=null; console.warn("Firebase init failed",e); }
 </script>
 <script>
-const APP_VERSION='v30.08.2026-11';
+const APP_VERSION='v30.08.2026-14';
 const CURRENCY='Rs', DELIVERY_FEE=99, FREE_OVER=2000, ADMIN_EMAIL='teetoo@teetoo9.com';
 const DEFAULT_CATEGORIES=[
   {id:'all',name:'All',ic:'🛒'},{id:'fruits',name:'Fruits & Veg',ic:'🥦'},{id:'dairy',name:'Dairy & Eggs',ic:'🥛'},
@@ -1152,8 +1152,9 @@ function emojiOf(p){ var e=String((p&&p.emoji)||'').trim();
 function imgUrl(p){ return p.img || ''; }   /* internet ki random photo nahi \u2014 sirf apni lagayi hui */
 function imgFallback(el){el.style.display='none';const e=el.parentNode.querySelector('.emoji');if(e)e.style.display='grid';}
 const LS={get:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v===null?d:v}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+var NOSEED=(function(){try{return localStorage.getItem('tt_noseed')==='1';}catch(e){return false;}})();
 let catalog=LS.get('tt_products',null);
-if(!Array.isArray(catalog)||!catalog.length){catalog=DEFAULT_PRODUCTS.map(p=>({...p}));}
+if(!Array.isArray(catalog)||(!catalog.length&&!NOSEED)){catalog=NOSEED?[]:DEFAULT_PRODUCTS.map(p=>({...p}));}
 catalog.forEach(function(p){ if(typeof p.stock!=='number') p.stock=50; if(typeof p.cost!=='number') p.cost=defaultCostFor(p); });
 LS.set('tt_products',catalog);
 let CATEGORIES=LS.get('tt_categories',null);
@@ -1350,7 +1351,7 @@ function submitAuth(){
     window.fbAuth.createUserWithEmailAndPassword(authEmail,pass).then(function(cred){
       var refInput=($('#inRef')?$('#inRef').value.trim().toUpperCase():'');
       var nu={name:name,email:key,phone:phoneDigits,address:addr,provider:'phone',uid:cred.user.uid,
-              refCode:'TT'+phoneDigits.slice(-6),refCount:0,referredBy:refInput||'',
+              refCode:newRefCode(),refCount:0,referredBy:refInput||'',
               createdAt:Date.now(),lastSeen:Date.now()};
       upsertLocalUser(nu); fbSaveUser(nu);
       session=key; LS.set('tt_session',session); authBusy(false);
@@ -1455,8 +1456,38 @@ function deleteCategory(id){
   renderCats(); renderGrid(); renderAcct(); toast('🗑',c.name+' category hata di gayi');
 }
 function fillCatOptions(sel){ $('#apCat').innerHTML=CATEGORIES.filter(c=>c.id!=='all').map(c=>`<option value="${c.id}" ${c.id===sel?'selected':''}>${c.ic} ${c.name}</option>`).join(''); }
+function _dayStart(off){ var d=new Date(); d.setHours(0,0,0,0); return d.getTime()-(off||0)*86400000; }
+function _monthStart(){ var d=new Date(); return new Date(d.getFullYear(),d.getMonth(),1).getTime(); }
+function tileHtml(val,label,bg,col){
+  return '<div style="flex:1;min-width:104px;background:'+bg+';border-radius:12px;padding:12px;text-align:center">'
+    +'<b style="display:block;font-size:21px;line-height:1.1;color:'+col+'">'+val+'</b>'
+    +'<small style="color:'+col+';font-size:11px;font-weight:700">'+label+'</small></div>';
+}
+function customerCounts(){
+  var list=(users||[]).filter(function(u){ return u && u.provider!=='admin'; });
+  var t0=_dayStart(0), y0=_dayStart(1), m0=_monthStart();
+  var today=0,yest=0,month=0,withOrder=0,refJoined=0;
+  var buyers={}; (allOrders||[]).forEach(function(o){ if(o&&o.userEmail) buyers[o.userEmail]=1; });
+  list.forEach(function(u){
+    var c=u.createdAt||0;
+    if(c>=t0) today++;
+    else if(c>=y0) yest++;
+    if(c>=m0) month++;
+    if(buyers[u.email]) withOrder++;
+    if(u.referredBy) refJoined++;
+  });
+  return {total:list.length,today:today,yest:yest,month:month,withOrder:withOrder,ref:refJoined};
+}
 function customersSection(){
-  return `<div class="acct-sec"><h4>Customers <span style="text-transform:none;letter-spacing:0;color:var(--muted)">${users.length} accounts</span></h4>
+  const cc=customerCounts();
+  return `<div class="acct-sec"><h4>Subscribers <span style="text-transform:none;letter-spacing:0;color:var(--muted)">${cc.total} registered</span></h4>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      ${tileHtml(cc.total,'Kul subscribers','#f0fdf4','#15803d')}
+      ${tileHtml(cc.today,'Aaj naye','#eff6ff','#1d4ed8')}
+      ${tileHtml(cc.month,'Is mahine','#faf5ff','#7c3aed')}
+      ${tileHtml(cc.withOrder,'Jinhon ne order kiya','#fef3c7','#b45309')}
+      ${cc.ref?tileHtml(cc.ref,'Referral se aaye','#fdf2f8','#be185d'):''}
+    </div>
     <div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="plist">${users.map(cu=>{const ci=(cu.name||'C').split(' ').map(function(w){return w[0]||'';}).slice(0,2).join('').toUpperCase();const pl={email:'Email',google:'Google',phone:'Phone',admin:'Master'}[cu.provider]||'Email';const oc=allOrders.filter(function(o){return o.userEmail===cu.email;}).length;return `<div class="padmin"><div class="pe" style="background:var(--green-soft);color:var(--green-dark);font-size:13px;font-weight:800">${cu.provider==='admin'?'🛠️':ci}</div><div class="pinfo"><b>${cu.name}</b><small>${cu.email} · ${pl}</small></div><span style="font-size:11.5px;color:var(--muted);white-space:nowrap">${oc} orders</span></div>`;}).join('')}</div></div></div>`;
 }
 var apImgData, apImgPath;
@@ -1583,6 +1614,86 @@ function flashProduct(id){
     }
   },250);
 }
+/* ===== POORI SITE KHALI KARNE KA TOOL ===== */
+var RESET_PARTS=[
+  ['products','Products',            function(){ return catalog.length; }],
+  ['orders',  'Orders + Invoices',   function(){ return (allOrders||[]).length+(invoices||[]).length; }],
+  ['money',   'Sale, Kharcha, Purchase', function(){ return (mySales||[]).length+(expenses||[]).length+(purchases||[]).length; }],
+  ['customers','Customers/Subscribers', function(){ return (users||[]).filter(function(u){return u.provider!=='admin';}).length; }],
+  ['staff',   'Employees + Sellers', function(){ return (jobs||[]).length+(sellers||[]).length; }],
+  ['messages','Messages',            function(){ return (messages||[]).length; }]
+];
+function _wipeCol(name){
+  if(!window.db) return;
+  try{ window.db.collection(name).get().then(function(sn){
+    sn.forEach(function(d){ try{ d.ref.delete(); }catch(e){} });
+  }).catch(function(e){ console.warn('wipe '+name,e); }); }catch(e){ console.warn('wipe '+name,e); }
+}
+function factoryReset(){
+  if(!isAdmin()){ toast('\ud83d\udd12','Sirf admin'); return; }
+  var lines=RESET_PARTS.map(function(p){ return '\u2022 '+p[1]+': '+p[2](); });
+  if(!confirm('\u26a0\ufe0f POORI SITE KHALI HO JAYEGI\n\n'+lines.join('\n')
+    +'\n\nSab kuch mit jayega \u2014 wapas nahi aa sakega.\nSirf aap ka admin account, settings, categories aur banners rahenge.\n\nAage barhein?')) return;
+  var t=prompt('Tasdeeq ke liye niche RESET likhein:');
+  if(String(t||'').trim().toUpperCase()!=='RESET'){ toast('\u2715','Mansookh'); return; }
+
+  /* photos Storage se bhi hata dein */
+  (catalog||[]).forEach(function(p){ if(p.imgPath && typeof deleteImage==='function') deleteImage(p.imgPath); });
+
+  ['products','orders','invoices','sellerSales','expenses','purchases','messages','jobApplications','sellers','users']
+    .forEach(function(c){ _wipeCol(c); });
+
+  /* admin ka apna account wapas rakhein */
+  var adm=(users||[]).filter(function(u){ return u.provider==='admin' || u.email===ADMIN_EMAIL; });
+  if(!adm.length) adm=[{name:'Store Admin',email:ADMIN_EMAIL,provider:'admin'}];
+  adm.forEach(function(u){ if(typeof fbSaveUser==='function') fbSaveUser(u); });
+
+  try{ localStorage.setItem('tt_noseed','1'); }catch(e){}
+  NOSEED=true;
+  catalog=[];    LS.set('tt_products',catalog);
+  allOrders=[];  LS.set('tt_orders',{});
+  invoices=[];   LS.set('tt_invoices',invoices);
+  mySales=[];    LS.set('tt_mysales',mySales);
+  expenses=[];   LS.set('tt_expenses',expenses);
+  purchases=[];  LS.set('tt_purchases',purchases);
+  messages=[];   LS.set('tt_messages',messages);
+  jobs=[];       LS.set('tt_jobs',jobs);
+  sellers=[];    LS.set('tt_sellers',sellers);
+  users=adm;     LS.set('tt_users',users);
+  cart={};       LS.set('tt_cart',cart);
+  wishlist=[];   LS.set('tt_wishlist',wishlist);
+  try{ localStorage.removeItem('tt_ordseen'); localStorage.removeItem('tt_sellerseen'); }catch(e){}
+  if(window.db){ try{ window.db.collection('settings').doc('main').set({noSeed:true},{merge:true}); }catch(e){} }
+
+  ['renderGrid','refreshProductViews','updateCartUI','updateMsgBadge','updateOrdersBadge',
+   'updateJobsBadge','updateSellersBadge','updateSellerBadge','renderAcct']
+    .forEach(function(f){ if(typeof window[f]==='function'){ try{ window[f](); }catch(e){} } });
+  toast('\ud83e\uddf9','Site bilkul khali \u2014 ab naye sire se shuru karein');
+}
+/* Sari products mita dein \u2014 client apni khud daalega */
+function clearAllProducts(){
+  if(!isAdmin()){ toast('\ud83d\udd12','Sirf admin'); return; }
+  var n=catalog.length;
+  if(!n){ toast('\u2705','Pehle se koi product nahi'); return; }
+  if(!confirm('\u26a0\ufe0f SARI '+n+' PRODUCTS MIT JAYENGI\n\nYe wapas nahi aa sakengi. Sellers ki daali hui products bhi jayengi.\nOrders aur invoices mehfooz rahenge.\n\nAage barhein?')) return;
+  var t=prompt('Tasdeeq ke liye niche DELETE likhein:');
+  if(String(t||'').trim().toUpperCase()!=='DELETE'){ toast('\u2715','Mansookh'); return; }
+  var list=catalog.slice();
+  try{ localStorage.setItem('tt_noseed','1'); }catch(e){}
+  NOSEED=true;
+  list.forEach(function(p){
+    if(p.imgPath && typeof deleteImage==='function') deleteImage(p.imgPath);
+    fbDeleteProduct(p.id);
+  });
+  catalog=[]; LS.set('tt_products',catalog);
+  cart={}; LS.set('tt_cart',cart); if(typeof updateCartUI==='function') updateCartUI();
+  wishlist=[]; LS.set('tt_wishlist',wishlist);
+  if(window.db){ try{ window.db.collection('settings').doc('main').set({noSeed:true},{merge:true}); }catch(e){} }
+  refreshProductViews();
+  toast('\ud83d\uddd1', n+' products mit gayin \u2014 ab apni products daalein');
+}
+/* jo bhi device khole, use bhi pata chale ke demo products wapas nahi laani */
+function applyNoSeed(){ if(settings&&settings.noSeed){ NOSEED=true; try{ localStorage.setItem('tt_noseed','1'); }catch(e){} } }
 function deleteProduct(id){
   const p=findP(id); if(!p) return;
   if(!canManage(p)){ toast('🔒','This product is not yours'); return; }
@@ -1621,10 +1732,10 @@ function fbSaveExpense(e){ if(window.db&&e){ try{ window.db.collection('expenses
 function fbDeleteExpense(id){ if(window.db){ try{ window.db.collection('expenses').doc(String(id)).delete(); }catch(x){ console.warn('fb exp del',x); } } }
 function fbDeleteProduct(id){ if(window.db){ try{ window.db.collection('products').doc(String(id)).delete(); }catch(e){ console.warn('fb del',e); } } }
 function fbInitSync(){ if(!window.db) return;
-  window.db.collection('products').onSnapshot(function(snap){ if(snap.empty){ catalog.forEach(function(p){ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }); return; } catalog=snap.docs.map(function(d){ return d.data(); }).sort(function(a,b){ var ao=(typeof a.ord==='number'?a.ord:(a.id||0)); var bo=(typeof b.ord==='number'?b.ord:(b.id||0)); return ao-bo; }); if(typeof migrateStock==='function')migrateStock(); LS.set('tt_products',catalog); if(typeof maybeStockAlert==='function') setTimeout(maybeStockAlert,900); if(typeof refreshProductViews==='function') refreshProductViews(); }, function(err){ console.warn('products sync',err); });
+  window.db.collection('products').onSnapshot(function(snap){ if(snap.empty){ if(NOSEED){ catalog=[]; LS.set('tt_products',catalog); if(typeof refreshProductViews==='function') refreshProductViews(); return; } catalog.forEach(function(p){ window.db.collection('products').doc(String(p.id)).set(JSON.parse(JSON.stringify(p))); }); return; } catalog=snap.docs.map(function(d){ return d.data(); }).sort(function(a,b){ var ao=(typeof a.ord==='number'?a.ord:(a.id||0)); var bo=(typeof b.ord==='number'?b.ord:(b.id||0)); return ao-bo; }); if(typeof migrateStock==='function')migrateStock(); LS.set('tt_products',catalog); if(typeof maybeStockAlert==='function') setTimeout(maybeStockAlert,900); if(typeof refreshProductViews==='function') refreshProductViews(); }, function(err){ console.warn('products sync',err); });
   window.db.collection('banners').onSnapshot(function(snap){ if(snap.empty){ banners.forEach(function(b){ if(!b.id)b.id='B'+Date.now()+Math.floor(Math.random()*999); fbSaveBanner(b); }); if(typeof renderCarousel==='function')renderCarousel(); return; } banners=snap.docs.map(function(d){return d.data();}).sort(function(a,b){return String(a.id||'')<String(b.id||'')?1:-1;}); var _defH=['UP TO 80% OFF','FREE DELIVERY','END OF MONTH SALE']; banners=banners.filter(function(b){ if(!b.img&&_defH.indexOf(b.h2)>=0){ if(b.id&&typeof fbDeleteBanner==='function')fbDeleteBanner(b.id); return false; } return true; }); LS.set('tt_banners',banners); if(typeof renderCarousel==='function')renderCarousel(); var _bm=document.getElementById('bannerMgrModal'); if(_bm&&_bm.classList.contains('show')&&typeof renderBannerMgr==='function')renderBannerMgr(); }, function(e){console.warn('banners sync',e);});
   window.db.collection('settings').doc('presence').onSnapshot(function(d){ if(d.exists){ presence=d.data()||{adminSeen:0}; if(typeof refreshChatPresence==='function') refreshChatPresence(); } }, function(e){console.warn('presence sync',e);});
-  window.db.collection('settings').doc('main').onSnapshot(function(d){ if(d.exists){ settings=Object.assign(settings,d.data()); LS.set('tt_settings',settings); if(typeof applySettings==='function')applySettings(); } }, function(e){console.warn('settings sync',e);});
+  window.db.collection('settings').doc('main').onSnapshot(function(d){ if(d.exists){ settings=Object.assign(settings,d.data()); LS.set('tt_settings',settings); if(typeof applyNoSeed==='function')applyNoSeed(); if(typeof applySettings==='function')applySettings(); } }, function(e){console.warn('settings sync',e);});
   window.db.collection('categories').onSnapshot(function(snap){ if(snap.empty){ CATEGORIES.forEach(function(c){ window.db.collection('categories').doc(String(c.id)).set(JSON.parse(JSON.stringify(c))); }); return; } var list=snap.docs.map(function(d){return d.data();}); if(!list.some(function(c){return c.id==='all';})) list.unshift({id:'all',name:'All',ic:'🛒'}); CATEGORIES=list; LS.set('tt_categories',CATEGORIES); if(typeof renderCats==='function')renderCats(); if(typeof renderGrid==='function')renderGrid(); var am=document.getElementById('acctModal'); if(am&&am.classList.contains('show')&&typeof renderAcct==='function') renderAcct(); }, function(err){ console.warn('categories sync',err); });
 }
 var _selSyncOn=false; var _selUnsub=null;
@@ -2923,7 +3034,41 @@ function saveSettings(){ var h=document.getElementById('setHelp'); var st=docume
   var st1=document.getElementById('setStripText'); if(st1) settings.stripText=(st1.value||'').trim();
   var st2=document.getElementById('setStripOff'); if(st2) settings.stripOff=(st2.value||'').trim();
   var ls=document.getElementById('setLowStock'); if(ls){ var lv=parseInt(ls.value,10); settings.lowStock=(isNaN(lv)||lv<0)?5:lv; } var sc=document.getElementById('setSellComm'); if(sc){ var sv=parseFloat(sc.value); settings.sellerCommission=(isNaN(sv)||sv<0)?0:sv; } var em=document.getElementById('setEmail'); if(em){ settings.email=(em.value||'').trim(); } settings.help=((h&&h.value)||'').trim(); settings.store=((st&&st.value)||'').trim(); if(cm){ var cv=parseFloat(cm.value); settings.commission=(isNaN(cv)||cv<0)?0:cv; } LS.set('tt_settings',settings); fbSaveSettings(); applySettings(); if(typeof renderAcct==='function'){var _am=document.getElementById('acctModal'); if(_am&&_am.classList.contains('show'))renderAcct();} toast('✅','Settings save ho gayi'); }
-function settingsSection(){ return '<div class="acct-sec"><h4>Store Settings</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="field"><label>Help &amp; Support Number</label><input id="setHelp" value="'+esc(settings.help||'')+'" placeholder="0300-1234567"></div><div class="field"><label>Store Name</label><input id="setStore" value="'+esc(settings.store||'')+'" placeholder="TEETOO"></div><div class="field"><label>Support Email</label><input id="setEmail" type="email" value="'+esc(supportEmail())+'" placeholder="teetoo@teetoo9.com"></div><div class="field"><label>Employee Commission (%)</label><input id="setComm" type="number" min="0" step="any" value="'+esc(String(commissionPct()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Har employee ki sale par itne percent commission bane gi. Aadha percent bhi chalta hai — jaise 2.5 ya 7.25</div></div><div class="field"><label>Delivery Fee (Rs)</label><input id="setDelFee" type="number" min="0" value="'+esc(String(deliveryFeeAmt()))+'" placeholder="99"></div><div class="field"><label>Free delivery is raqam se upar (Rs)</label><input id="setFreeOver" type="number" min="0" value="'+esc(String(freeOverAmt()))+'" placeholder="2000"></div><div class="field"><label>Har delivery par apna kharcha (Rs)</label><input id="setDelCost" type="number" min="0" value="'+esc(String(deliveryCostAmt()))+'" placeholder="0"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Rider ko har order par jitna kharcha aata hai. Accounts mein ye khud ba khud nafe se kat jayega. 0 rakhein to sirf wo kharcha ginega jo aap Kharcha page par khud likhenge.</div></div><div class="field"><label>Deliver to \u2014 kya likha ho</label><input id="setDeliverTo" value="'+esc(settings.deliverTo||'Home')+'" placeholder="Home"></div><div class="field"><label>Ticker \u2014 bara text</label><input id="setStripText" value="'+esc(settings.stripText||'')+'" placeholder="END OF MONTH"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Dono khane khali chhor dein to ticker bilkul chhup jayega.</div></div><div class="field"><label>Ticker \u2014 right side ka text</label><input id="setStripOff" value="'+esc(settings.stripOff||'')+'" placeholder="UPTO 80% OFF"></div><div class="field"><label>Low stock warning (kitne se kam par)</label><input id="setLowStock" type="number" min="0" value="'+esc(String(lowStockLimit()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Is se kam quantity bache to Inventory mein "kam bache" ka warning aayega.</div></div><div class="field"><label>Seller Commission (%) — default</label><input id="setSellComm" type="number" min="0" step="any" value="'+esc(String(sellerCommDefault()))+'" placeholder="10"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Seller ki har sale par T.T itne percent rakhega. Kisi ek seller ka rate alag karna ho to Sellers page se badlein.</div></div><button class="btn-primary" style="margin-top:6px" onclick="saveSettings()">Save Settings</button><div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)"><button class="add" style="width:100%;background:#f0fdf4;color:#15803d;border-color:#bbf7d0;font-weight:800" onclick="shrinkAllImages()">\uD83D\uDDDC\uFE0F Purani photos chhoti karein (site tez ho gi)</button><div style="font-size:11.5px;color:var(--muted);margin:6px 0 12px;text-align:center">Photos ka wazan aadhe se bhi kam ho jayega. Blaze plan ke baghair bhi chalta hai \u2014 mahine mein 4 guna zyada log site khol sakenge.</div><button class="add" style="width:100%;background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;font-weight:800" onclick="migrateImagesToStorage()">\uD83D\uDDBC\uFE0F Purani photos Storage par shift karein</button><div style="font-size:11.5px;color:var(--muted);margin-top:6px;text-align:center">Photos Firestore doc ke andar se nikal kar Storage mein chali jayengi \u2014 jagah bachegi aur site tez ho jayegi.</div></div><div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted);text-align:center">Site version: <b style="color:var(--green-dark);font-family:monospace">'+APP_VERSION+'</b></div></div></div>'; }
+function settingsSection(){ return '<div class="acct-sec"><h4>Store Settings</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="field"><label>Help &amp; Support Number</label><input id="setHelp" value="'+esc(settings.help||'')+'" placeholder="0300-1234567"></div><div class="field"><label>Store Name</label><input id="setStore" value="'+esc(settings.store||'')+'" placeholder="TEETOO"></div><div class="field"><label>Support Email</label><input id="setEmail" type="email" value="'+esc(supportEmail())+'" placeholder="teetoo@teetoo9.com"></div><div class="field"><label>Employee Commission (%)</label><input id="setComm" type="number" min="0" step="any" value="'+esc(String(commissionPct()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Har employee ki sale par itne percent commission bane gi. Aadha percent bhi chalta hai — jaise 2.5 ya 7.25</div></div><div class="field"><label>Delivery Fee (Rs)</label><input id="setDelFee" type="number" min="0" value="'+esc(String(deliveryFeeAmt()))+'" placeholder="99"></div><div class="field"><label>Free delivery is raqam se upar (Rs)</label><input id="setFreeOver" type="number" min="0" value="'+esc(String(freeOverAmt()))+'" placeholder="2000"></div><div class="field"><label>Har delivery par apna kharcha (Rs)</label><input id="setDelCost" type="number" min="0" value="'+esc(String(deliveryCostAmt()))+'" placeholder="0"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Rider ko har order par jitna kharcha aata hai. Accounts mein ye khud ba khud nafe se kat jayega. 0 rakhein to sirf wo kharcha ginega jo aap Kharcha page par khud likhenge.</div></div><div class="field"><label>Deliver to \u2014 kya likha ho</label><input id="setDeliverTo" value="'+esc(settings.deliverTo||'Home')+'" placeholder="Home"></div><div class="field"><label>Ticker \u2014 bara text</label><input id="setStripText" value="'+esc(settings.stripText||'')+'" placeholder="END OF MONTH"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Dono khane khali chhor dein to ticker bilkul chhup jayega.</div></div><div class="field"><label>Ticker \u2014 right side ka text</label><input id="setStripOff" value="'+esc(settings.stripOff||'')+'" placeholder="UPTO 80% OFF"></div><div class="field"><label>Low stock warning (kitne se kam par)</label><input id="setLowStock" type="number" min="0" value="'+esc(String(lowStockLimit()))+'" placeholder="5"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Is se kam quantity bache to Inventory mein "kam bache" ka warning aayega.</div></div><div class="field"><label>Seller Commission (%) — default</label><input id="setSellComm" type="number" min="0" step="any" value="'+esc(String(sellerCommDefault()))+'" placeholder="10"><div style="font-size:11.5px;color:var(--muted);margin-top:5px">Seller ki har sale par T.T itne percent rakhega. Kisi ek seller ka rate alag karna ho to Sellers page se badlein.</div></div><button class="btn-primary" style="margin-top:6px" onclick="saveSettings()">Save Settings</button><div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)"><button class="add" style="width:100%;background:#f0fdf4;color:#15803d;border-color:#bbf7d0;font-weight:800" onclick="shrinkAllImages()">\uD83D\uDDDC\uFE0F Purani photos chhoti karein (site tez ho gi)</button><div style="font-size:11.5px;color:var(--muted);margin:6px 0 12px;text-align:center">Photos ka wazan aadhe se bhi kam ho jayega. Blaze plan ke baghair bhi chalta hai \u2014 mahine mein 4 guna zyada log site khol sakenge.</div><button class="add" style="width:100%;background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;font-weight:800" onclick="migrateImagesToStorage()">\uD83D\uDDBC\uFE0F Purani photos Storage par shift karein</button><div style="font-size:11.5px;color:var(--muted);margin-top:6px;text-align:center">Photos Firestore doc ke andar se nikal kar Storage mein chali jayengi \u2014 jagah bachegi aur site tez ho jayegi.</div></div><div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)"><button class="add" style="width:100%;background:#faf5ff;color:#7c3aed;border-color:#e9d5ff;font-weight:800" onclick="renumberRefCodes()">\ud83d\udd22 Referral codes 0 se dobara number karein</button><div style="font-size:11.5px;color:var(--muted);margin-top:6px;text-align:center">Customers ko TT0000, TT0001 ... aur employees ko JT0000, JT0001 ... mil jayenge. Naye codes waise bhi khud ba khud serial mein bante hain.</div></div><div style="margin-top:16px;padding:12px;border:1px solid #fecaca;background:#fef2f2;border-radius:12px"><div style="font-size:11px;font-weight:800;color:#991b1b;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">\u26a0\ufe0f Khatarnak</div><button class="add" style="width:100%;background:#dc2626;color:#fff;border-color:#dc2626;font-weight:800" onclick="clearAllProducts()">\ud83d\uddd1 Sirf products mita dein</button><div style="font-size:11.5px;color:#991b1b;margin:6px 0 12px;text-align:center">Sirf products jayengi. Orders, invoices, sellers aur customers mehfooz rahenge.</div><button class="add" style="width:100%;background:#7f1d1d;color:#fff;border-color:#7f1d1d;font-weight:800" onclick="factoryReset()">\ud83e\uddf9 Poori site khali karein (sab kuch 0)</button><div style="font-size:11.5px;color:#991b1b;margin-top:6px;text-align:center">Products, orders, invoices, sale, kharcha, purchase, customers, employees, sellers aur messages \u2014 sab 0. Sirf aap ka admin account, settings, categories aur banners rahenge. Client ko bilkul nayi site milegi.</div></div><div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted);text-align:center">Site version: <b style="color:var(--green-dark);font-family:monospace">'+APP_VERSION+'</b></div></div></div>'; }
+/* Referral codes ab serial hain \u2014 0 se shuru: TT0000, TT0001 ... aur JT0000, JT0001 ... */
+var REF_PAD=4;
+function _padSer(n){ var t=String(Math.max(0,n)); while(t.length<REF_PAD) t='0'+t; return t; }
+function nextSerial(prefix,list){
+  var mx=-1;
+  (list||[]).forEach(function(x){
+    var c=String((x&&x.refCode)||'');
+    if(c.slice(0,prefix.length)!==prefix) return;
+    var d=c.slice(prefix.length);
+    if(!/^[0-9]+$/.test(d)) return;
+    var n=parseInt(d,10); if(n>mx) mx=n;
+  });
+  return prefix+_padSer(mx+1);
+}
+function newRefCode(){ return nextSerial('TT', typeof users!=='undefined'?users:[]); }
+function newJobCode(){ return nextSerial('JT', typeof jobs!=='undefined'?jobs:[]); }
+/* purane codes ko bhi 0 se dobara number kar dein */
+function renumberRefCodes(){
+  if(!isAdmin()){ toast('\ud83d\udd12','Sirf admin'); return; }
+  var cu=(users||[]).filter(function(u){ return u && u.provider!=='admin'; });
+  var jb=(jobs||[]);
+  if(!cu.length && !jb.length){ toast('\u2705','Abhi koi code nahi'); return; }
+  if(!confirm('Sab referral codes 0 se dobara number honge:\n\n\u2022 '+cu.length+' customers \u2192 TT'+_padSer(0)+', TT'+_padSer(1)+' ...\n\u2022 '+jb.length+' employees \u2192 JT'+_padSer(0)+', JT'+_padSer(1)+' ...\n\n\u26a0\ufe0f Jo purane code log ko de chuke hain wo badal jayenge. Aage barhein?')) return;
+  var map={};
+  cu.forEach(function(u,i){ var old=u.refCode||''; u.refCode='TT'+_padSer(i); if(old) map[old]=u.refCode; });
+  jb.forEach(function(j,i){ var old=j.refCode||''; j.refCode='JT'+_padSer(i); if(old) map[old]=j.refCode; });
+  /* jinhon ne purane code se register kiya tha unka rishta na toote */
+  (users||[]).forEach(function(u){ if(u.referredBy && map[u.referredBy]) u.referredBy=map[u.referredBy]; });
+  LS.set('tt_users',users); LS.set('tt_jobs',jobs);
+  (users||[]).forEach(function(u){ if(typeof fbSaveUser==='function') fbSaveUser(u); });
+  jb.forEach(function(j){ if(typeof fbSaveJob==='function') fbSaveJob(j); });
+  if(typeof renderAcct==='function') try{ renderAcct(); }catch(e){}
+  toast('\ud83d\udd22',(cu.length+jb.length)+' codes 0 se number ho gaye');
+}
 function copyRefMy(){ var u=currentUser(); if(!u)return; var code=u.refCode||('TT'+String(u.phone||'').slice(-6)); try{ navigator.clipboard.writeText(code); }catch(e){} toast('📋','Code copy: '+code); }
 function referralSection(){ var u=currentUser(); if(!u||isAdmin())return ''; var code=u.refCode||('TT'+String(u.phone||'').slice(-6)); var cnt=u.refCount||0; return '<div class="acct-sec"><h4>Refer &amp; Earn</h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line);text-align:center"><div style="font-size:12px;color:var(--muted)">Aap ka referral code</div><div style="font-size:24px;font-weight:800;letter-spacing:2px;color:var(--green-dark);margin:6px 0">'+esc(code)+'</div><button class="add" style="width:auto;padding:6px 16px;margin:0 auto" onclick="copyRefMy()">Copy code</button><div style="margin-top:12px;font-size:13px">Total referrals: <b style="color:var(--green-dark);font-size:16px">'+cnt+'</b></div><div style="font-size:11.5px;color:var(--muted);margin-top:6px">Ye code doston ko dein \u2014 jab wo is se register karenge, aap ka count barhega.</div></div></div>'; }
 function sellerCtaSection(){
@@ -3076,7 +3221,7 @@ function submitJobApply(){
   if(bad){ toast('⚠️','Saari fields zaroori hain'); return; }
   var u=currentUser();
   var existing=jobs.find(function(j){return j.phone===phone;})||myJobApp();
-  var app={ id: existing?existing.id:('JOB'+Date.now()), email:(u&&u.email)||'', name:name, phone:phone, address:addr, father:father, city:city, idCard:idc, gender:gen, education:edu, experience:exp, refCode: existing?(existing.refCode||('JT'+phone.slice(-6))):('JT'+phone.slice(-6)), refCount: existing?(existing.refCount||0):0, date:new Date().toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}), read:false };
+  var app={ id: existing?existing.id:('JOB'+Date.now()), email:(u&&u.email)||'', name:name, phone:phone, address:addr, father:father, city:city, idCard:idc, gender:gen, education:edu, experience:exp, refCode: existing?(existing.refCode||newJobCode()):newJobCode(), refCount: existing?(existing.refCount||0):0, date:new Date().toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}), createdAt:(existing&&existing.createdAt)||Date.now(), read:false };
   if(existing){ Object.assign(existing,app); } else { jobs.push(app); }
   LS.set('tt_jobs',jobs); fbSaveJob(app);
   closeModal('jobModal'); toast('✅','Application submit ho gayi — aap ka referral code: '+app.refCode);
@@ -3105,7 +3250,8 @@ function jobsBodyHtml(grid){
   }).join('');
   var totClients=jobs.reduce(function(s,j){return s+jobReferredUsers(j.refCode).length;},0);
   var totSale=jobs.reduce(function(s,j){return s+jobSalesAmt(j.refCode);},0);
-  var head='<div style="display:flex;gap:8px;margin-bottom:14px"><div style="flex:1;background:#f0fdf4;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:19px;color:#15803d">'+jobs.length+'</b><small style="color:#15803d">Applicants</small></div><div style="flex:1;background:#eff6ff;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:19px;color:#1e40af">'+totClients+'</b><small style="color:#1e40af">Clients</small></div><div style="flex:1;background:#fef3c7;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:16px;color:#d97706">'+money(totSale)+'</b><small style="color:#92600a">Sale</small></div></div>';
+  var _ec=(typeof employeeCounts==='function')?employeeCounts():{total:jobs.length,today:0,month:0};
+  var head='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"><div style="flex:1;min-width:100px;background:#f0fdf4;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:19px;color:#15803d">'+_ec.total+'</b><small style="color:#15803d">Kul employees</small></div><div style="flex:1;min-width:100px;background:#ecfeff;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:19px;color:#0e7490">'+_ec.today+'</b><small style="color:#0e7490">Aaj naye</small></div><div style="flex:1;background:#eff6ff;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:19px;color:#1e40af">'+totClients+'</b><small style="color:#1e40af">Clients</small></div><div style="flex:1;background:#fef3c7;border-radius:12px;padding:12px;text-align:center"><b style="display:block;font-size:16px;color:#d97706">'+money(totSale)+'</b><small style="color:#92600a">Sale</small></div></div>';
   return head+(grid?('<div class="egrid">'+rows+'</div>'):rows);
 }
 function deliveryCostAmt(){ var v=parseInt(settings.deliveryCost,10); return (isNaN(v)||v<0)?0:v; }
@@ -3187,8 +3333,29 @@ function renderEmpDetail(j){
     : '<div class="empty" style="padding:26px"><div class="big">\ud83d\udc65</div><h3>Koi client nahi</h3><p>Jab is code se log register karenge, yahan nazar aayenge.</p></div>';
   document.getElementById('empBody').innerHTML=head+stats+table;
 }
+function employeeCounts(){
+  var list=(jobs||[]);
+  var t0=_dayStart(0), m0=_monthStart();
+  var today=0,month=0,active=0,clients=0;
+  list.forEach(function(j){
+    var c=j.createdAt||0;
+    if(c>=t0) today++;
+    if(c>=m0) month++;
+    var n=(typeof jobReferredUsers==='function')? jobReferredUsers(j.refCode).length : 0;
+    clients+=n; if(n>0) active++;
+  });
+  return {total:list.length,today:today,month:month,active:active,clients:clients};
+}
 function jobsSection(){
-  return '<div class="acct-sec"><h4>Employees <span style="text-transform:none;letter-spacing:0;color:var(--muted)">'+jobs.length+' total</span></h4><div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="plist">'+jobsBodyHtml()+'</div></div></div>';
+  var ec=employeeCounts();
+  return '<div class="acct-sec"><h4>Employees <span style="text-transform:none;letter-spacing:0;color:var(--muted)">'+ec.total+' total</span></h4>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">'
+      +tileHtml(ec.total,'Kul employees','#f0fdf4','#15803d')
+      +tileHtml(ec.today,'Aaj naye','#eff6ff','#1d4ed8')
+      +tileHtml(ec.month,'Is mahine','#faf5ff','#7c3aed')
+      +tileHtml(ec.active,'Jinke clients hain','#fef3c7','#b45309')
+    +'</div>'
+    +'<div class="admin-panel" style="background:#f7fbf8;border-color:var(--line)"><div class="plist">'+jobsBodyHtml()+'</div></div></div>';
 }
 function updateJobsBadge(){ var n=isAdmin()?jobs.filter(function(j){ return !j.read; }).length:0;
   var b=document.getElementById('jobCount'); if(b){ b.style.display=n?'grid':'none'; b.textContent=n; }

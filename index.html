@@ -2798,9 +2798,24 @@ function sellerShopSection(){
   var mine=catalog.filter(function(p){ return String(p.sellerId||'')===String(me.id); });
   var st=sellerOrderStats(me.id);
   var rate=sellerCommRate(me.id);
+  /* mere stock ka hisab */
+  var sQty=0, sVal=0, sOut=0, sLow=0;
+  mine.forEach(function(p){
+    var q=(typeof p.stock==='number')?p.stock:0;
+    sQty+=q; sVal+=q*(p.price||0);
+    if(q<=0) sOut++; else if(q<=lowStockLimit()) sLow++;
+  });
   var rows=mine.length? mine.map(function(p){
+    var em=String(p.emoji||'').trim();
+    var icon = /^[\u0000-\u007F]{2,}$/.test(em) ? '\ud83d\udce6' : (em||'\ud83d\udce6');
     return '<div class="padmin">'
-      +(p.img?('<img src="'+p.img+'" style="width:34px;height:34px;border-radius:8px;object-fit:cover;flex-shrink:0">'):('<div class="pe" style="background:'+(CAT_BG[p.cat]||'#eef2f0')+'">'+(p.emoji||'\ud83d\udce6')+'</div>'))
+      +(p.img
+        ? ('<img src="'+p.img+'" onclick="pickProductImg('+p.id+')" title="Photo badlein"'
+          +' style="width:44px;height:44px;border-radius:9px;object-fit:cover;flex-shrink:0;cursor:pointer">')
+        : ('<div class="pe" onclick="pickProductImg('+p.id+')" title="Photo lagayen" style="position:relative;cursor:pointer;'
+          +'width:44px;height:44px;background:'+(CAT_BG[p.cat]||'#eef2f0')+'">'+icon
+          +'<span style="position:absolute;right:-4px;bottom:-4px;background:var(--green);color:#fff;border-radius:50%;'
+          +'width:19px;height:19px;display:grid;place-items:center;font-size:10px;border:2px solid #fff">\ud83d\udcf7</span></div>'))
       +'<div class="pinfo"><b>'+esc(p.name)+'</b><small>'+money(p.price)+' \u00b7 '+esc(p.unit||'')+' \u00b7 <span style="color:'+(hasStock(p)?(p.stock>lowStockLimit()?'#0f766e':(p.stock>0?'#d97706':'#dc2626')):'#9ca3af')+';font-weight:700">'+(p.stock>0?(p.stock+' stock'):'OUT OF STOCK')+'</span></small></div>'
       +'<button class="pdel" title="Edit" onclick="openEditProduct('+p.id+')" style="color:#64748b">\u270f\ufe0f</button>'
       +'<button class="pdel" title="Delete" onclick="deleteProduct('+p.id+')" style="color:#ef4444">\ud83d\uddd1</button></div>';
@@ -2811,8 +2826,20 @@ function sellerShopSection(){
       +'<div class="stat" style="min-width:110px;background:#fef3c7"><b style="color:#b45309">'+money(st.comm)+'</b><small>T.T ka hissa '+rate+'%</small></div>'
       +'<div class="stat" style="min-width:110px;background:#faf5ff"><b style="color:#7c3aed">'+money(st.payable)+'</b><small>Mujhe milega</small></div>'
       +'<div class="stat" style="min-width:110px"><b>'+st.items+'</b><small>Items bike</small></div></div>'
+    +'<div class="acct-stats" style="padding:0 0 12px;flex-wrap:wrap">'
+      +'<div class="stat" style="min-width:110px;background:#eff6ff"><b style="color:#1d4ed8">'+mine.length+'</b><small>Mere products</small></div>'
+      +'<div class="stat" style="min-width:110px;background:#f0fdf4"><b style="color:#15803d">'+sQty+'</b><small>Kul stock (tadad)</small></div>'
+      +'<div class="stat" style="min-width:110px;background:#f0fdf4"><b style="color:#15803d">'+money(sVal)+'</b><small>Stock ki maliyat</small></div>'
+      +'<div class="stat" style="min-width:110px;background:'+(sOut?'#fef2f2':'#f8fafc')+'"><b style="color:'+(sOut?'#dc2626':'#64748b')+'">'+sOut+'</b><small>Khatam ho gaye</small></div>'
+      + (sLow? ('<div class="stat" style="min-width:110px;background:#fffbeb"><b style="color:#b45309">'+sLow+'</b><small>Kam bache</small></div>'):'')
+      +'</div>'
     +'<div class="admin-panel"><button class="admin-add" onclick="openAddProduct()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Naya Product daalein</button>'
-    +'<div class="plist">'+rows+'</div></div>'
+    +'<div class="plist">'+rows+'</div>'
+    + (mine.filter(function(p){return !p.img;}).length
+        ? ('<div style="background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;border-radius:11px;padding:9px 12px;margin-top:9px;font-size:12px;font-weight:600">'
+          +'\ud83d\udcf7 '+mine.filter(function(p){return !p.img;}).length+' product ki photo nahi lagi \u2014 product par click karke photo lagayen. Photo wale products zyada bikte hain.</div>')
+        : '')
+    +'</div>'
     +'<div style="font-size:11.5px;color:var(--muted);margin-top:8px;text-align:center">Payout aap ke account par: '+esc(me.bank||'-')+'</div></div>'
     +mySalesSection();
 }

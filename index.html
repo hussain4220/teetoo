@@ -1032,6 +1032,7 @@
 <div class="modal" id="productsModal">
   <div class="modal-card full">
     <div class="modal-head"><button class="backbtn" onclick="closeModal('productsModal')">&larr; Back</button><div class="htxt"><h2>📦 Inventory</h2><p>Stock, price and quantity — all in one place</p></div><button class="x" onclick="closeModal('productsModal')">&times;</button></div>
+    <div id="invDanger" style="display:none;padding:0 16px 10px"><div style="border:1px solid #fecaca;background:#fef2f2;border-radius:12px;padding:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center"><b style="font-size:12px;color:#991b1b;flex:1;min-width:150px">Nayi shuruaat karni hai?</b><button class="add" style="width:auto;margin:0;padding:8px 14px;background:#dc2626;color:#fff;border-color:#dc2626;font-weight:800;font-size:12.5px" onclick="clearAllProducts()">🗑 Sari products 0 karein</button><button class="add" style="width:auto;margin:0;padding:8px 14px;background:#7f1d1d;color:#fff;border-color:#7f1d1d;font-weight:800;font-size:12.5px" onclick="factoryReset()">🧹 Poori site 0 karein</button></div></div>
     <div class="modal-body" style="padding-top:0"><div class="mwrap"><div id="productsBody"></div></div></div>
   </div>
 </div>
@@ -1071,7 +1072,7 @@ try{ firebase.initializeApp({apiKey:"AIzaSyAKQ9jxx707Uq9uiU3YbCpVR6YP-vqfano",au
  }catch(se){ window.stg=null; } }catch(e){ window.db=null; window.fbAuth=null; window.stg=null; console.warn("Firebase init failed",e); }
 </script>
 <script>
-const APP_VERSION='v30.08.2026-14';
+const APP_VERSION='v30.08.2026-15';
 const CURRENCY='Rs', DELIVERY_FEE=99, FREE_OVER=2000, ADMIN_EMAIL='teetoo@teetoo9.com';
 const DEFAULT_CATEGORIES=[
   {id:'all',name:'All',ic:'🛒'},{id:'fruits',name:'Fruits & Veg',ic:'🥦'},{id:'dairy',name:'Dairy & Eggs',ic:'🥛'},
@@ -1086,7 +1087,8 @@ const CAT_BG={
   staples:'linear-gradient(135deg,#f1f5f9,#e2e8f0)',household:'linear-gradient(135deg,#cffafe,#a5f3fc)',
   care:'linear-gradient(135deg,#fce7f3,#fbcfe8)'
 };
-const DEFAULT_PRODUCTS=[
+const DEFAULT_PRODUCTS=[];   /* site khali shuru hoti hai — apni products khud daalein */
+var _DEMO_PRODUCTS=[
   {id:1,name:'Fresh Bananas',cat:'fruits',emoji:'🍌',price:120,old:150,unit:'1 dozen',rating:4.7,tag:'Fresh'},
   {id:2,name:'Red Apples',cat:'fruits',emoji:'🍎',price:260,old:300,unit:'1 kg',rating:4.6},
   {id:3,name:'Tomatoes',cat:'fruits',emoji:'🍅',price:90,old:120,unit:'1 kg',rating:4.3},
@@ -1623,11 +1625,32 @@ var RESET_PARTS=[
   ['staff',   'Employees + Sellers', function(){ return (jobs||[]).length+(sellers||[]).length; }],
   ['messages','Messages',            function(){ return (messages||[]).length; }]
 ];
-function _wipeCol(name){
-  if(!window.db) return;
-  try{ window.db.collection(name).get().then(function(sn){
-    sn.forEach(function(d){ try{ d.ref.delete(); }catch(e){} });
-  }).catch(function(e){ console.warn('wipe '+name,e); }); }catch(e){ console.warn('wipe '+name,e); }
+/* ek collection ko poora mita kar batata hai kitne mite aur kitne nahi */
+function _wipeCol(name,keepFn){
+  if(!window.db) return Promise.resolve({name:name,ok:0,fail:0,err:''});
+  return window.db.collection(name).get({source:'server'})
+    .then(function(sn){
+      var jobs=[];
+      sn.forEach(function(d){ if(keepFn && keepFn(d)) return; jobs.push(d.ref.delete().then(function(){return 1;},function(e){ return {e:e}; })); });
+      return Promise.all(jobs).then(function(res){
+        var ok=0,fail=0,err='';
+        res.forEach(function(r){ if(r===1) ok++; else { fail++; if(!err) err=String((r.e&&r.e.code)||r.e||''); } });
+        return {name:name,ok:ok,fail:fail,err:err};
+      });
+    })
+    .catch(function(e){ return {name:name,ok:0,fail:-1,err:String((e&&e.code)||e)}; });
+}
+function _wipeReport(list){
+  var okT=0,badT=0,msgs=[];
+  list.forEach(function(r){
+    okT+=r.ok;
+    if(r.fail>0||r.fail===-1){ badT++; msgs.push(r.name+' ('+(r.err||'nakaam')+')'); }
+  });
+  if(badT){
+    alert('\u26a0\ufe0f Kuch cheezein server se nahi mit sakin:\n\n'+msgs.join('\n')
+      +'\n\nMatlab Firestore rules ijazat nahi de rahe. Firebase Console \u2192 Firestore \u2192 Rules kholein, ya mujhe ye message dikha dein.');
+  }
+  return {ok:okT,bad:badT};
 }
 function factoryReset(){
   if(!isAdmin()){ toast('\ud83d\udd12','Sirf admin'); return; }
@@ -1640,13 +1663,19 @@ function factoryReset(){
   /* photos Storage se bhi hata dein */
   (catalog||[]).forEach(function(p){ if(p.imgPath && typeof deleteImage==='function') deleteImage(p.imgPath); });
 
-  ['products','orders','invoices','sellerSales','expenses','purchases','messages','jobApplications','sellers','users']
-    .forEach(function(c){ _wipeCol(c); });
-
-  /* admin ka apna account wapas rakhein */
+  toast('\u23f3','Server se mitaya ja raha hai...');
   var adm=(users||[]).filter(function(u){ return u.provider==='admin' || u.email===ADMIN_EMAIL; });
   if(!adm.length) adm=[{name:'Store Admin',email:ADMIN_EMAIL,provider:'admin'}];
-  adm.forEach(function(u){ if(typeof fbSaveUser==='function') fbSaveUser(u); });
+  Promise.all([
+    _wipeCol('products'), _wipeCol('orders'), _wipeCol('invoices'), _wipeCol('sellerSales'),
+    _wipeCol('expenses'), _wipeCol('purchases'), _wipeCol('messages'), _wipeCol('jobApplications'),
+    _wipeCol('sellers'),
+    _wipeCol('users',function(d){ return String(d.id)===String(ADMIN_EMAIL); })
+  ]).then(function(res){
+    var r=_wipeReport(res);
+    adm.forEach(function(u){ if(typeof fbSaveUser==='function') fbSaveUser(u); });
+    if(!r.bad) toast('\ud83e\uddf9', r.ok+' cheezein server se mit gayin \u2014 site bilkul khali');
+  });
 
   try{ localStorage.setItem('tt_noseed','1'); }catch(e){}
   NOSEED=true;
@@ -1668,7 +1697,6 @@ function factoryReset(){
   ['renderGrid','refreshProductViews','updateCartUI','updateMsgBadge','updateOrdersBadge',
    'updateJobsBadge','updateSellersBadge','updateSellerBadge','renderAcct']
     .forEach(function(f){ if(typeof window[f]==='function'){ try{ window[f](); }catch(e){} } });
-  toast('\ud83e\uddf9','Site bilkul khali \u2014 ab naye sire se shuru karein');
 }
 /* Sari products mita dein \u2014 client apni khud daalega */
 function clearAllProducts(){
@@ -1681,9 +1709,11 @@ function clearAllProducts(){
   var list=catalog.slice();
   try{ localStorage.setItem('tt_noseed','1'); }catch(e){}
   NOSEED=true;
-  list.forEach(function(p){
-    if(p.imgPath && typeof deleteImage==='function') deleteImage(p.imgPath);
-    fbDeleteProduct(p.id);
+  list.forEach(function(p){ if(p.imgPath && typeof deleteImage==='function') deleteImage(p.imgPath); });
+  toast('\u23f3','Server se mitaya ja raha hai...');
+  _wipeCol('products').then(function(r){
+    var x=_wipeReport([r]);
+    if(!x.bad) toast('\ud83d\uddd1', r.ok+' products server se mit gayin');
   });
   catalog=[]; LS.set('tt_products',catalog);
   cart={}; LS.set('tt_cart',cart); if(typeof updateCartUI==='function') updateCartUI();
@@ -3870,6 +3900,7 @@ function exportInventory(){
 function openProductsAdmin(){ prodQuery=''; prodFilter='all'; prodSort=''; renderProductsAdmin(); openModal('productsModal'); }
 function renderProductsAdmin(){
   var el=document.getElementById('productsBody'); if(!el) return;
+  var _dz=document.getElementById('invDanger'); if(_dz) _dz.style.display=isAdmin()?'block':'none';
   var all=isAdmin()?catalog.slice():catalog.filter(function(p){ var m=mySeller(); return m&&String(p.sellerId||'')===String(m.id); });
   var mine0=!prodQuery?all:all.filter(function(p){
     var cn=(CATEGORIES.find(function(c){return c.id===p.cat;})||{}).name||'';

@@ -633,14 +633,20 @@
       <button class="x" onclick="closeModal('adminModal')">×</button>
     </div>
     <div class="modal-body">
+      <div style="background:#f6faf8;border:1px solid var(--line);border-radius:14px;padding:11px;margin-bottom:14px">
+        <div style="font-size:10.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;text-align:center;margin-bottom:8px">Grahak ko aise nazar aayega</div>
+        <div style="display:flex;justify-content:center">
+          <div id="apCard" style="width:178px;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05)"></div>
+        </div>
+      </div>
       <div class="row2">
         <div class="field" style="max-width:110px">
           <label>Emoji</label>
-          <input id="apEmoji" type="text" placeholder="🍎" maxlength="4" style="text-align:center;font-size:20px" />
+          <input id="apEmoji" type="text" placeholder="🍎" maxlength="4" style="text-align:center;font-size:20px" oninput="apPreview()" />
         </div>
         <div class="field" id="apfName">
           <label>Product Name</label>
-          <input id="apName" type="text" placeholder="e.g. Fresh Mangoes" />
+          <input id="apName" type="text" placeholder="e.g. Fresh Mangoes" oninput="apPreview()" />
           <div class="err">Required</div>
         </div>
       </div>
@@ -655,23 +661,23 @@
       </div>
       <div class="field">
         <label>Category</label>
-        <select id="apCat"></select>
+        <select id="apCat" onchange="apPreview()"></select>
       </div>
       <div class="row2">
         <div class="field" id="apfPrice">
           <label>Price (Rs)</label>
-          <input id="apPrice" type="number" min="1" placeholder="250" />
+          <input id="apPrice" oninput="apPreview()" type="number" min="1" placeholder="250" />
           <div class="err">Enter price</div>
         </div>
         <div class="field">
           <label>Old Price <span style="color:#9aa4a0;font-weight:400">(optional)</span></label>
-          <input id="apOld" type="number" min="0" placeholder="300" />
+          <input id="apOld" oninput="apPreview()" type="number" min="0" placeholder="300" />
         </div>
       </div>
       <div class="row2">
         <div class="field" id="apfStock">
           <label>Quantity (kitne maujood hain) <span style="color:#ef4444">*</span></label>
-          <input id="apStock" type="number" min="0" placeholder="e.g. 25" />
+          <input id="apStock" oninput="apPreview()" type="number" min="0" placeholder="e.g. 25" />
           <div class="err">Quantity likhna zaroori hai</div>
         </div>
         <div class="field" id="apfCost">
@@ -683,7 +689,7 @@
       <div class="row2">
         <div class="field" id="apfUnit">
           <label>Unit <span style="color:#ef4444">*</span></label>
-          <input id="apUnit" type="text" placeholder="1 kg / 1 pc / 500 g" />
+          <input id="apUnit" oninput="apPreview()" type="text" placeholder="1 kg / 1 pc / 500 g" />
           <div class="err">Unit likhna zaroori hai — bill par chapta hai</div>
         </div>
         <div class="field">
@@ -1065,7 +1071,7 @@ try{ firebase.initializeApp({apiKey:"AIzaSyAKQ9jxx707Uq9uiU3YbCpVR6YP-vqfano",au
  }catch(se){ window.stg=null; } }catch(e){ window.db=null; window.fbAuth=null; window.stg=null; console.warn("Firebase init failed",e); }
 </script>
 <script>
-const APP_VERSION='v27.08.2026-10';
+const APP_VERSION='v30.08.2026-11';
 const CURRENCY='Rs', DELIVERY_FEE=99, FREE_OVER=2000, ADMIN_EMAIL='teetoo@teetoo9.com';
 const DEFAULT_CATEGORIES=[
   {id:'all',name:'All',ic:'🛒'},{id:'fruits',name:'Fruits & Veg',ic:'🥦'},{id:'dairy',name:'Dairy & Eggs',ic:'🥛'},
@@ -1141,7 +1147,9 @@ function imgKeywords(p){
   return keys;
 }
 function imgKey(p){return imgKeywords(p).join(',');}
-function imgUrl(p){ if(p.img) return p.img; return 'https://loremflickr.com/320/320/'+imgKeywords(p).map(encodeURIComponent).join(',')+'?lock='+p.id; }
+function emojiOf(p){ var e=String((p&&p.emoji)||'').trim();
+  return /^[\u0000-\u007F]{2,}$/.test(e) ? '\ud83d\udce6' : (e||'\ud83d\udce6'); }
+function imgUrl(p){ return p.img || ''; }   /* internet ki random photo nahi \u2014 sirf apni lagayi hui */
 function imgFallback(el){el.style.display='none';const e=el.parentNode.querySelector('.emoji');if(e)e.style.display='grid';}
 const LS={get:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v===null?d:v}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let catalog=LS.get('tt_products',null);
@@ -1200,7 +1208,7 @@ function renderGrid(){
       ?`<div class="qty-mini"><button onclick="changeQty(${p.id},-1)" title="Kam karein">−</button><span>${qty}</span><button onclick="changeQty(${p.id},1)" title="Aur daalein">+</button></div>`
       :`<button class="add btn-cart" onclick="changeQty(${p.id},1)" title="Cart mein daalein">\ud83d\uded2</button>`)+`</div>`;
     const lowTag=(!oos&&hasStock(p)&&p.stock<=lowStockLimit())?`<span style="position:absolute;bottom:8px;left:8px;z-index:2;background:#fef3c7;color:#92600a;font-size:10px;font-weight:800;padding:3px 8px;border-radius:7px">Sirf ${p.stock} bache</span>`:'';
-    return `<div class="card"><div class="card-img" style="background:${CAT_BG[p.cat]||'#eef2f0'}"><button class="wish ${wishlist.includes(p.id)?'on':''}" onclick="toggleWish(${p.id})" title="Wishlist">${wishlist.includes(p.id)?'❤️':'🤍'}</button><img class="pimg" src="${imgUrl(p)}" alt="${p.name}" loading="lazy" data-k="${imgKey(p)}" data-id="${p.id}" onerror="imgFallback(this)" onclick="openProductView(${p.id})" style="cursor:pointer"><span class="emoji" style="display:none">${p.emoji||'📦'}</span>${p.tag?`<span class="tag">${p.tag}</span>`:''}${off>0?`<span class="off">-${off}%</span>`:''}${lowTag}${oos?`<div style="position:absolute;inset:0;background:rgba(255,255,255,.66);display:grid;place-items:center;font-weight:800;font-size:13px;color:#64748b;letter-spacing:.5px;pointer-events:none">OUT OF STOCK</div>`:''}</div>
+    return `<div class="card"><div class="card-img" style="background:${CAT_BG[p.cat]||'#eef2f0'}"><button class="wish ${wishlist.includes(p.id)?'on':''}" onclick="toggleWish(${p.id})" title="Wishlist">${wishlist.includes(p.id)?'❤️':'🤍'}</button>${p.img?`<img class="pimg" src="${p.img}" alt="${p.name}" loading="lazy" data-id="${p.id}" onerror="imgFallback(this)" onclick="openProductView(${p.id})" style="cursor:pointer">`:''}<span class="emoji" style="display:${p.img?'none':'grid'};cursor:pointer" onclick="openProductView(${p.id})">${emojiOf(p)}</span>${p.tag?`<span class="tag">${p.tag}</span>`:''}${off>0?`<span class="off">-${off}%</span>`:''}${lowTag}${oos?`<div style="position:absolute;inset:0;background:rgba(255,255,255,.66);display:grid;place-items:center;font-weight:800;font-size:13px;color:#64748b;letter-spacing:.5px;pointer-events:none">OUT OF STOCK</div>`:''}</div>
       <div class="card-body"><span class="rate">⭐ ${(p.rating||4.5).toFixed(1)}</span><h3 onclick="openProductView(${p.id})" style="cursor:pointer">${p.name}</h3><div class="unit">${p.unit||''}</div>
       ${p.sellerId?`<div style="display:inline-flex;align-items:center;gap:4px;background:#faf5ff;border:1px solid #e9d5ff;border-radius:7px;padding:2px 7px;margin:-4px 0 8px;font-size:10px;font-weight:700;color:#6b21a8;max-width:100%;overflow:hidden"><span style="font-size:11px">🏪</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Sold by ${esc(p.sellerName||sellerName(p.sellerId)||'Seller')}</span></div>`:''}
       <div class="price-row"><span class="price">${money(p.price)}</span>${p.old?`<span class="old">${money(p.old)}</span>`:''}</div>${ctrl}</div></div>`;
@@ -1453,10 +1461,10 @@ function customersSection(){
 }
 var apImgData, apImgPath;
 function uploadProductImg(input){ var f=input.files&&input.files[0]; if(!f)return; toast('\u23f3','Photo upload ho rahi hai...');
-  putImage(f,'products',function(res){ apImgData=res.img; apImgPath=res.imgPath||null; $('#apImgPreview').src=res.img; $('#apImgPreviewWrap').style.display='flex'; toast('\u2705','Photo tayyar'); },
+  putImage(f,'products',function(res){ apImgData=res.img; apImgPath=res.imgPath||null; $('#apImgPreview').src=res.img; $('#apImgPreviewWrap').style.display='flex'; apPreview(); toast('\u2705','Photo lag gayi \u2014 upar dekh lein'); },
     function(msg){ toast('\u26a0\ufe0f',msg); });
   input.value=''; }
-function removeApImg(){ if(apImgPath) deleteImage(apImgPath); apImgData=null; apImgPath=null; $('#apImgPreviewWrap').style.display='none'; }
+function removeApImg(){ if(apImgPath) deleteImage(apImgPath); apImgData=null; apImgPath=null; $('#apImgPreviewWrap').style.display='none'; apPreview(); }
 function pickProductImg(id){
   var p=findP(id); if(!p) return;
   if(!canManage(p)){ toast('\ud83d\udd12','This product is not yours'); return; }
@@ -1479,12 +1487,44 @@ function pickProductImg(id){
   };
   inp.click();
 }
+/* form bharte hi neeche wala card badalta rahega \u2014 seller ko dashboard par dhoondhna nahi parega */
+function apPreview(){
+  var box=document.getElementById('apCard'); if(!box) return;
+  var g=function(id){ var e=document.getElementById(id); return e? e.value : ''; };
+  var img = (apImgData===null) ? '' : (apImgData || (editingId? ((findP(editingId)||{}).img||'') : ''));
+  var name=(g('apName')||'').trim()||'Product ka naam';
+  var em=String(g('apEmoji')||'').trim();
+  var icon = /^[\u0000-\u007F]{2,}$/.test(em) ? '\ud83d\udce6' : (em||'\ud83d\udce6');
+  var price=parseInt(g('apPrice'),10)||0;
+  var oldp=parseInt(g('apOld'),10)||0;
+  var unit=(g('apUnit')||'').trim()||'1 pc';
+  var stRaw=String(g('apStock')||'').trim();
+  var st=stRaw===''?null:Math.max(0,parseInt(stRaw,10)||0);
+  var cat=g('apCat'); var bg=(typeof CAT_BG!=='undefined'&&CAT_BG[cat])||'#eef2f0';
+  var off=(oldp&&oldp>price&&price)?Math.round((1-price/oldp)*100):0;
+  box.innerHTML=
+    '<div style="position:relative;height:132px;display:grid;place-items:center;background:'+bg+'">'
+      +(img?('<img src="'+img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">')
+           :('<span style="font-size:52px">'+icon+'</span>'
+            +'<span style="position:absolute;left:8px;bottom:8px;background:#dc2626;color:#fff;font-size:9px;font-weight:800;padding:3px 7px;border-radius:6px">PHOTO NAHI LAGI</span>'))
+      +(off>0?('<span style="position:absolute;right:8px;top:8px;background:var(--orange,#f97316);color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:7px">-'+off+'%</span>'):'')
+      +(st===0?'<div style="position:absolute;inset:0;background:rgba(255,255,255,.65);display:grid;place-items:center;font-size:11px;font-weight:800;color:#dc2626">OUT OF STOCK</div>':'')
+    +'</div>'
+    +'<div style="padding:9px 10px 11px">'
+      +'<div style="font-size:11px;color:#b8860b;font-weight:700">\u2b50 4.5</div>'
+      +'<div style="font-weight:800;font-size:13.5px;margin:2px 0 1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(name)+'</div>'
+      +'<div style="font-size:11.5px;color:var(--muted)">'+esc(unit)+'</div>'
+      +'<div style="margin-top:7px;font-weight:800;font-size:15px">'+(price?money(price):'Rs \u2014')
+        +(off>0?(' <span style="font-size:11px;color:var(--muted);font-weight:600;text-decoration:line-through">'+money(oldp)+'</span>'):'')+'</div>'
+      +(st!==null?('<div style="margin-top:5px;font-size:11px;font-weight:700;color:'+(st>0?'#15803d':'#dc2626')+'">\ud83d\udce6 '+(st>0?(st+' stock'):'Stock khatam')+'</div>'):'')
+    +'</div>';
+}
 function openAddProduct(){
   if(!isAdmin() && !isApprovedSeller()){ toast('\ud83d\udd12','Pehle seller approve hona zaroori hai'); return; }
   editingId=null; $('#adminModalTitle').textContent=isAdmin()?'Add Product':'Mera naya product'; $('#apSubmit').textContent='Add Product';
   $('#apEmoji').value=''; $('#apName').value=''; $('#apPrice').value=''; $('#apOld').value=''; $('#apUnit').value=''; $('#apTag').value=''; $('#apStock').value=''; $('#apCost').value='';
   apImgData=undefined; apImgPath=null; $('#apImgPreviewWrap').style.display='none';
-  fillCatOptions(); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); var _fs=document.getElementById('apfStock'); if(_fs)_fs.classList.remove('invalid'); var _fc=document.getElementById('apfCost'); if(_fc)_fc.classList.remove('invalid'); var _fu=document.getElementById('apfUnit'); if(_fu)_fu.classList.remove('invalid'); openModal('adminModal');
+  fillCatOptions(); apPreview(); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); var _fs=document.getElementById('apfStock'); if(_fs)_fs.classList.remove('invalid'); var _fc=document.getElementById('apfCost'); if(_fc)_fc.classList.remove('invalid'); var _fu=document.getElementById('apfUnit'); if(_fu)_fu.classList.remove('invalid'); openModal('adminModal');
 }
 function canManage(p){ if(isAdmin()) return true; var m=mySeller(); return !!(m && m.status==='approved' && String(p.sellerId||'')===String(m.id)); }
 function openEditProduct(id){
@@ -1494,7 +1534,7 @@ function openEditProduct(id){
   $('#apEmoji').value=p.emoji||''; $('#apName').value=p.name; $('#apPrice').value=p.price; $('#apOld').value=p.old||''; $('#apUnit').value=p.unit||''; $('#apTag').value=p.tag||''; $('#apStock').value=(typeof p.stock==='number'?p.stock:''); $('#apCost').value=(typeof p.cost==='number'?p.cost:'');
   apImgData=undefined; apImgPath=p.imgPath||null;
   if(p.img){ $('#apImgPreview').src=p.img; $('#apImgPreviewWrap').style.display='flex'; } else { $('#apImgPreviewWrap').style.display='none'; }
-  fillCatOptions(p.cat); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); var _fs=document.getElementById('apfStock'); if(_fs)_fs.classList.remove('invalid'); var _fc=document.getElementById('apfCost'); if(_fc)_fc.classList.remove('invalid'); var _fu=document.getElementById('apfUnit'); if(_fu)_fu.classList.remove('invalid'); openModal('adminModal');
+  fillCatOptions(p.cat); apPreview(); $('#apfName').classList.remove('invalid'); $('#apfPrice').classList.remove('invalid'); var _fs=document.getElementById('apfStock'); if(_fs)_fs.classList.remove('invalid'); var _fc=document.getElementById('apfCost'); if(_fc)_fc.classList.remove('invalid'); var _fu=document.getElementById('apfUnit'); if(_fu)_fu.classList.remove('invalid'); openModal('adminModal');
 }
 function saveProduct(){
   if(!isAdmin() && !isApprovedSeller()){ toast('🔒','Sirf approved seller ya admin product daal sakta hai'); return; }
@@ -1519,11 +1559,29 @@ function saveProduct(){
       if(apImgData===null){ delete p.img; delete p.imgPath; if(_oldPath) deleteImage(_oldPath); }
       else if(apImgData){ p.img=apImgData; if(apImgPath){ p.imgPath=apImgPath; } else { delete p.imgPath; }
         if(_oldPath && _oldPath!==p.imgPath) deleteImage(_oldPath); }
-      fbSaveProduct(p); } LS.set('tt_products',catalog); closeModal('adminModal'); refreshProductViews(); toast('✏️',name+' updated'); editingId=null; return; }
+      fbSaveProduct(p); } LS.set('tt_products',catalog); var _eid=editingId; closeModal('adminModal'); refreshProductViews(); flashProduct(_eid); toast('✏️',name+' updated'); editingId=null; return; }
   const np={id:(catalog.reduce((m,p)=>Math.max(m,p.id),0))+1,rating:4.5,...data};
   if(!isAdmin()){ var _ms=mySeller(); if(_ms){ np.sellerId=_ms.id; np.sellerName=_ms.shop||_ms.name||''; } }
   if(apImgData){ np.img=apImgData; if(apImgPath) np.imgPath=apImgPath; } catalog.push(np); fbSaveProduct(np);
-  LS.set('tt_products',catalog); closeModal('adminModal'); refreshProductViews(); toast('✅',name+' added to store');
+  LS.set('tt_products',catalog); closeModal('adminModal'); refreshProductViews(); flashProduct(np.id);
+  toast('✅',name+(np.img?' — photo ke sath store mein aa gaya':' — store mein aa gaya (photo abhi nahi lagi)'));
+}
+/* save ke baad product ko My Shop mein dikha kar chamka dein */
+function flashProduct(id){
+  setTimeout(function(){
+    var rows=document.querySelectorAll('.padmin');
+    for(var i=0;i<rows.length;i++){
+      var h=rows[i].innerHTML||'';
+      if(h.indexOf('openEditProduct('+id+')')>=0 || h.indexOf('pickProductImg('+id+')')>=0){
+        try{ rows[i].scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){ rows[i].scrollIntoView(); }
+        var o=rows[i].style.cssText;
+        rows[i].style.transition='background .4s'; rows[i].style.background='#dcfce7';
+        rows[i].style.boxShadow='0 0 0 2px #16a34a';
+        setTimeout(function(r,c){ return function(){ r.style.cssText=c; }; }(rows[i],o),2200);
+        break;
+      }
+    }
+  },250);
 }
 function deleteProduct(id){
   const p=findP(id); if(!p) return;
@@ -1997,8 +2055,9 @@ function openProductView(id){ var p=findP(id); if(!p) return; var off=p.old?Math
   ${hasStock(p)?`<div style="font-size:12.5px;margin-top:8px;font-weight:700;color:${p.stock>lowStockLimit()?'#0f766e':(p.stock>0?'#d97706':'#dc2626')}">${p.stock>0?('📦 '+p.stock+' stock mein maujood'):'📦 Abhi stock mein nahi'}</div>`:''}<div style="margin:12px 0"><span style="font-size:24px;font-weight:800;color:var(--ink)">${money(p.price)}</span>${p.old?` <span style="color:#b0b6b3;text-decoration:line-through;margin-left:6px">${money(p.old)}</span>`:''}${off>0?` <span style="background:var(--amber);color:#fff;padding:2px 8px;border-radius:7px;font-size:12px;font-weight:700;margin-left:6px">-${off}%</span>`:''}</div></div>${inStock(p)?`<div style="display:flex;gap:10px;margin-top:6px"><button class="add" style="flex:1" onclick="changeQty(${p.id},1)">Add to Cart</button><button class="btn-primary" style="flex:1;margin:0" onclick="buyNow(${p.id})">Buy Now</button></div>`:`<div style="margin-top:6px"><button class="add" disabled style="width:100%;background:#f1f4f2;color:#9aa4a0;border-color:#e3e8e5;cursor:not-allowed">Out of stock</button></div>`}`; openModal('productModal'); }
 function openZoom(id){
   var p=findP(id); if(!p) return;
+  if(!p.img){ toast('\ud83d\udcf7','Is product ki photo abhi nahi lagi'); return; }
   var im=document.getElementById('zoomImg'); if(!im) return;
-  im.src=imgUrl(p); im.alt=p.name||'';
+  im.src=p.img; im.alt=p.name||'';
   openModal('zoomModal');
 }
 function buyNow(id){
@@ -3718,7 +3777,7 @@ function renderProductsAdmin(){
   var rowHtml=function(p){
     var thumb=p.img
       ? '<img class="pthumb" src="'+p.img+'">'
-      : '<div style="position:relative;flex:none"><img class="pthumb" src="'+imgUrl(p)+'"><span style="position:absolute;left:0;bottom:-3px;background:#d97706;color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:5px;letter-spacing:.3px">AUTO</span></div>';
+      : '<div style="position:relative;flex:none;cursor:pointer" onclick="pickProductImg('+p.id+')" title="Photo lagayen"><span class="pthumb" style="background:'+(CAT_BG[p.cat]||'#eef2f0')+'">'+emojiOf(p)+'</span><span style="position:absolute;left:0;bottom:-3px;background:#dc2626;color:#fff;font-size:8px;font-weight:800;padding:1px 4px;border-radius:5px;letter-spacing:.3px">PHOTO?</span></div>';
     var stockCol=hasStock(p)?p.stock:'';
     var needSet=!hasStock(p);
     var stColor=hasStock(p)?(p.stock>lowStockLimit()?'#0f766e':(p.stock>0?'#d97706':'#dc2626')):'#9ca3af';

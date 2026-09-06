@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.teetoo9.www.twa",
-        "sha256_cert_fingerprints": ["DC:E7:81:72:29:60:54:74:00:71:1D:FE:4C:17:23:53:AA:EF:BB:C1:C0:DF:75:C6:49:65:05:62:60:BE:79:4D"]
-      }
-    }]

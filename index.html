@@ -6,6 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content" />
 <meta name="theme-color" content="#16a34a" />
 <title>TEETOO — Fresh Grocery</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#f57224">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -4335,6 +4339,9 @@ function markAllMyOrdersSeen(){
   try{ syncMyOrdersUI(); checkOrderUpdates(); }catch(e){ console.warn('myOrders init',e); }
   setInterval(function(){ try{ updateMyOrdBadge(); }catch(e){} }, 4000);
 })();
+</script>
+<script>
+if('serviceWorker' in navigator){ window.addEventListener('load',function(){ navigator.serviceWorker.register('/sw.js').catch(function(e){ console.warn('SW',e); }); }); }
 </script>
 </body>
 </html>
